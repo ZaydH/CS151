@@ -15,6 +15,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.SpringLayout;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 
@@ -151,6 +152,15 @@ public class SlideShowContentsPanel extends JPanel implements ActionListener {
 			return;
 		}
 		
+	}
+	
+	/**
+	 * Adds a list selection listener to the list contain the set of images.
+	 * 
+	 * @param listener Listener to be tied to the list in this panel.
+	 */
+	public void addListSelectionListener(ListSelectionListener listener){
+		slideShowList.addListSelectionListener(listener);
 	}
 	
 	

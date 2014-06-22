@@ -54,17 +54,8 @@ public class SlideShowImagePanel extends JPanel implements DocumentListener {
 	 */
 	public void paint(Graphics g){
 
-
-		//---- Create a border on this Panel.
-		g.setColor(Color.BLACK);		
-		g.fillRect(0, 0, this.getWidth(), this.getHeight());
-		
-		//---- Redraw the entire panel.
-		g.setColor(Color.WHITE);
-		g.fillRect((int)Math.ceil(panelBorder/2), (int)Math.ceil(panelBorder/2), this.getWidth()-panelBorder, this.getHeight()-panelBorder);
-		
-
-
+		//----- Always draw the background when repainting.
+		drawImagePanelBackground(g);
 		
 		if(imagePath.equals("")) return;
 		
@@ -95,11 +86,26 @@ public class SlideShowImagePanel extends JPanel implements DocumentListener {
 		}
 		catch(FileNotFoundException ex){
 			JOptionPane.showMessageDialog(null, "Error: The file \"" + imagePath + "\" does not exist.");
+			//----- Need to redraw the background due to the JOptionPane.
+			drawImagePanelBackground(g);			
 		}
 		catch(IOException ex){
 			JOptionPane.showMessageDialog(null, "Error: There was an unrecoverable error loading the image at location \"" + imagePath + "\".");
+			//----- Need to redraw the background due to the JOptionPane.
+			drawImagePanelBackground(g);
 		}			
 
+	}
+	
+	
+	private void drawImagePanelBackground(Graphics g){
+		//---- Create a border on this Panel.
+		g.setColor(Color.BLACK);		
+		g.fillRect(0, 0, this.getWidth(), this.getHeight());
+		
+		//---- Redraw the entire panel.
+		g.setColor(Color.WHITE);
+		g.fillRect((int)Math.ceil(panelBorder/2), (int)Math.ceil(panelBorder/2), this.getWidth()-panelBorder, this.getHeight()-panelBorder);
 	}
 	
 		

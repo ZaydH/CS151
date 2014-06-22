@@ -7,11 +7,14 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.Spring;
 import javax.swing.SpringLayout;
 import javax.swing.event.DocumentListener;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 
@@ -164,6 +167,23 @@ public class FileBrowserPanel extends JPanel  implements ActionListener {
 			filePathTextField.setText("");			
 		}
 		
+	}
+	
+	
+	/**
+	 * Parses a list selection event from the list of images and updates the file path.
+	 * 
+	 * @author Zayd
+	 *
+	 */
+	public static class FilePathListSectionListener implements ListSelectionListener {
+	    public void valueChanged(ListSelectionEvent e) {
+	    	JList imageList = (JList)(e.getSource()); //---- Get the list of images
+	    	
+	    	SlideShowImageInstance imageInstance = (SlideShowImageInstance)imageList.getSelectedValue();
+	    	filePathTextField.setText(imageInstance.getImagePath());
+	    	
+	    }
 	}
 
 	

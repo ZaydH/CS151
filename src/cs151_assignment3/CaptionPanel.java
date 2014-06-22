@@ -6,11 +6,14 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.Spring;
 import javax.swing.SpringLayout;
 import javax.swing.event.DocumentListener;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 public class CaptionPanel extends JPanel  {
 
@@ -108,6 +111,24 @@ public class CaptionPanel extends JPanel  {
 			captionTextField.setText("");
 		}
 		
+	}
+	
+	
+	
+	/**
+	 * Helper class to monitor for changes in the list of images and then to update the caption box.
+	 * 
+	 * @author Zayd
+	 *
+	 */
+	public static class FilePathListSectionListener implements ListSelectionListener {
+	    public void valueChanged(ListSelectionEvent e) {
+	    	JList imageList = (JList)(e.getSource()); //---- Get the list of images
+	    	
+	    	SlideShowImageInstance imageInstance = (SlideShowImageInstance)imageList.getSelectedValue();
+	    	captionTextField.setText(imageInstance.getImageCaption());
+	    	
+	    }
 	}
 	
 	
