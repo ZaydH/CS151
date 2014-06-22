@@ -5,6 +5,19 @@ public class SlideShowImageInstance {
 	private String imagePath;
 	private String imageCaption;
 	
+	public static final int PARAMETERS_PER_IMAGE_INSTANCE = 2;
+	
+	/**
+	 * Constructor to specify a slide show using an array.
+	 * 
+	 * @param imageParameters	Array of size PARAMETERS_PER_IMAGE_INSTANCE that contains the information on the Slide Show Image. Parameter 0  is the image path. Parameter 1 is the image caption.
+	 */
+	public SlideShowImageInstance(String[] imageParameters){
+		imagePath = imageParameters[0];
+		imageCaption = imageParameters[1];
+	}
+	
+	
 	/**
 	 * Creates a new slide show instance with the specified file path and caption information.
 	 * 
@@ -14,6 +27,21 @@ public class SlideShowImageInstance {
 	public SlideShowImageInstance(String imagePath, String imageCaption){
 		this.imagePath = imagePath;
 		this.imageCaption = imageCaption;
+	}
+	
+	
+	/**
+	 * Returns all parameters regarding an image in an array.  Used in the exporter for the images.
+	 * 
+	 * @return Array of Image Instance Parameters. Parameter 0 is the file path. Parameter 1 is the image caption.
+	 */
+	public String[] getAllImageInstanceParameters(){
+		
+		String[] imageParameters = new String[PARAMETERS_PER_IMAGE_INSTANCE];
+		imageParameters[0] = imagePath;
+		imageParameters[1] = imageCaption;
+		
+		return imageParameters;
 	}
 	
 	
