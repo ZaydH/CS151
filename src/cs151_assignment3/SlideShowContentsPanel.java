@@ -4,16 +4,19 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javafx.stage.FileChooser;
-
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.SpringLayout;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
 
 public class SlideShowContentsPanel extends JPanel implements ActionListener {
 
@@ -28,6 +31,8 @@ public class SlideShowContentsPanel extends JPanel implements ActionListener {
 	private static JScrollPane slideShowListPane;
 	private static SlideShowFileContents slideShowFileContents;
 	private static JButton addNewButton;
+	private static String captionText;
+	private static String fileBrowserText;
 	
 	
 	private static final String SAVE_BUTTON_COMMAND_NAME = "SAVE_CONTENT";
@@ -159,6 +164,17 @@ public class SlideShowContentsPanel extends JPanel implements ActionListener {
 		}
 		else if(e.getActionCommand().equals(SAVE_BUTTON_COMMAND_NAME)){
 			//TODO fix the lack of a save button command support.
+			int selectedIndex = slideShowList.getSelectedIndex();
+			//---- Check if any image was selected.
+			if(selectedIndex  == -1){
+				JOptionPane.showMessageDialog(null, "No image was selected to save.  Select an image and try again.");
+				return;
+			}
+			
+			//----- Update the image instance information
+			slideShowFileContents.setImageInstance(selectedIndex, fileBrowserText, captionText);
+			slideShowListModel.setElementAt("Image " + (selectedIndex+1) + ": " + captionText, selectedIndex);
+			
 		}
 		
 	}
@@ -185,7 +201,6 @@ public class SlideShowContentsPanel extends JPanel implements ActionListener {
 		slideShowList.setSelectedIndex(nextImageNumber); //---- Uses base 0 so subtract one
 		slideShowList.ensureIndexIsVisible(nextImageNumber); 
 	}
-	
 
 	
 	/**
@@ -254,5 +269,96 @@ public class SlideShowContentsPanel extends JPanel implements ActionListener {
 	}		
 	
 	
+	
+	/**
+	 * 
+	 * DocumentListener class to get changes in the Caption Text Field
+	 * 
+	 * @author Zayd
+	 *
+	 */
+	public static class CaptionListener implements DocumentListener { 
+		/**
+		 * Function handles document updates (specifically insertions) from a JTextField in the Caption Panel.
+		 */
+		public void insertUpdate(DocumentEvent e){
+			extractDocumentText(e);	
+		}
+	
+		/**
+		 * Function handles document updates (specifically removals) from a TextField in the Caption Panel.
+		 */
+		public void removeUpdate(DocumentEvent e){
+			extractDocumentText(e);
+		}
+		
+		
+		/**
+		 *  changedUpdate does not Apply for Text Fields.  
+		 *  This function is implemented due to the interface type's requirements. It does nothing.
+		 */
+		public void changedUpdate(DocumentEvent e){
+		}		
+		
+		/**
+		 * Helper method used to handle document update actions.
+		 * 
+		 * @param e DocumentEvent passed by removeUpdate or insertUpdate methods.
+		 */
+		private void extractDocumentText(DocumentEvent e){
+			Document doc = e.getDocument();
+			try {
+				captionText = doc.getText(0, doc.getLength());
+			} catch (BadLocationException e1) {
+				e1.printStackTrace();
+			}			
+		}
+	}
+	
+	
+	/**
+	 * 
+	 * DocumentListener class to get changes in the FileBrowser Text Field
+	 * 
+	 * @author Zayd
+	 *
+	 */
+	public static class FileBrowserListener implements DocumentListener { 
+		/**
+		 * Function handles document updates (specifically insertions) from a JTextField in the File Browser  Panel.
+		 */
+		public void insertUpdate(DocumentEvent e){
+			extractDocumentText(e);	
+		}
+	
+		/**
+		 * Function handles document updates (specifically removals) from a TextField in the File Browser Panel.
+		 */
+		public void removeUpdate(DocumentEvent e){
+			extractDocumentText(e);
+		}
+		
+		
+		/**
+		 *  changedUpdate does not Apply for Text Fields.  
+		 *  This function is implemented due to the interface type's requirements. It does nothing.
+		 */
+		public void changedUpdate(DocumentEvent e){
+		}		
+		
+		/**
+		 * Helper method used to handle document update actions.
+		 * 
+		 * @param e DocumentEvent passed by removeUpdate or insertUpdate methods.
+		 */
+		private void extractDocumentText(DocumentEvent e){
+			Document doc = e.getDocument();
+			try {
+				fileBrowserText = doc.getText(0, doc.getLength());
+			} catch (BadLocationException e1) {
+				e1.printStackTrace();
+			}			
+		}
+	}	
 	
 }

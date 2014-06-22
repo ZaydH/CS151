@@ -10,6 +10,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.Spring;
 import javax.swing.SpringLayout;
+import javax.swing.event.DocumentListener;
 
 public class CaptionPanel extends JPanel  {
 
@@ -74,6 +75,17 @@ public class CaptionPanel extends JPanel  {
 		SpringLayout.Constraints captionTextFieldConstraints = captionSpringLayout.getConstraints(captionTextField);
 		captionTextFieldConstraints.setWidth( Spring.constant( captionTextFieldDimension.width ) ); 
 		
+	}
+	
+	
+	
+	/**
+	 * Add a listener for changes in the Caption JTextField.  Since it is a DocumentListener, it can get the resulting text.
+	 * 
+	 * @param listener An object that implements the DocumentListener Interface that will listen for changes in the JTextField containing the Image Caption.
+	 */
+	public void addDocumentListenerForCaption(DocumentListener listener){
+		captionTextField.getDocument().addDocumentListener(listener);
 	}
 	
 	

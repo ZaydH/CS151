@@ -29,9 +29,7 @@ public class SlideShowGUI {
 	//---- Enumerate constants regarding GUI Height
 	private static final int TOP_MENU_HEIGHT = 23;
 	private static final int PANELS_HEIGHT = 700;
-	//private static final int GUI_HEIGHT = PANELS_HEIGHT+TOP_MENU_HEIGHT;
 	private static final int GUI_HEIGHT = PANELS_HEIGHT;
-	//private static final int MENU_BAR_HEIGHT = 20;
 	private static final int FILE_BROWSER_PANEL_HEIGHT = 37;
 	private static final int CAPTION_BROWSER_PANEL_HEIGHT = 37; 
 	private static final int LEFT_PANEL_SPACING_BETWEEN_MENU_BAR = 5 * STANDARD_PADDING;
@@ -143,6 +141,8 @@ public class SlideShowGUI {
 		//----- Setup the listeners
 		fileContentsPanel.addActionListener(new CaptionPanel.ResetCaptionListener(), SlideShowContentsPanel.ADD_NEW_IMAGE_LISTENER); 			//---- Listen for New Image Button
 		fileContentsPanel.addActionListener(new FileBrowserPanel.ResetFileBrowserListener(), SlideShowContentsPanel.ADD_NEW_IMAGE_LISTENER);	//---- Listen for New Image Button
+		fileBrowserPanel.addDocumentListenerForFile(new SlideShowContentsPanel.FileBrowserListener());											//---- Listen for changes in the file browser.
+		captionPanel.addDocumentListenerForCaption(new SlideShowContentsPanel.CaptionListener()); 												//---- Listen for changes in the caption
 		topMenu.addActionListener(new SlideShowContentsPanel.ResetContentsPaneListener(), SlideShowJMenuBar.ListenerObject.NEW_FILE);			//---- Listen for New File Actions on MenuBar
 		topMenu.addActionListener(new SlideShowContentsPanel.OpenFileContentsPaneListener(), SlideShowJMenuBar.ListenerObject.OPEN_FILE);			//---- Listen for New File Actions on MenuBar
 		topMenu.addActionListener(new SlideShowContentsPanel.SaveFileContentsPaneListener(), SlideShowJMenuBar.ListenerObject.SAVE_FILE);			//---- Listen for New File Actions on MenuBar	

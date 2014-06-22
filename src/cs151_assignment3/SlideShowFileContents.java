@@ -69,6 +69,20 @@ public class SlideShowFileContents {
 	}
 	
 	
+	/**
+	 * Update an image instance in the file contents data structure.
+	 * 
+	 * @param index			Index of the image to be updated
+	 * @param imagePath		Path to the image file
+	 * @param imageCaption	Caption for the image file.
+	 */
+	public void setImageInstance(int index, String imagePath, String imageCaption){
+		
+		allImages.set(index, new SlideShowImageInstance( imagePath, imageCaption ) );
+		
+	}
+	
+	
 	
 	
 	/**
