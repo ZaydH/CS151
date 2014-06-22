@@ -5,11 +5,11 @@ import javax.swing.JOptionPane;
 
 public class SlideShowStorageFile {
 
-	private ArrayList<ImageFile> allImages;
+	private ArrayList<SlideShowImageInstance> allImages;
 	
 	
 	public SlideShowStorageFile(){
-		allImages = new ArrayList<ImageFile>(); //---- Create an array list of images.
+		allImages = new ArrayList<SlideShowImageInstance>(); //---- Create an array list of images.
 	}
 	
 	public static void openSlideShowFile(String filePath){
