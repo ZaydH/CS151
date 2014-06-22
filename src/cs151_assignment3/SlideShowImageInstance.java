@@ -2,6 +2,7 @@ package cs151_assignment3;
 
 public class SlideShowImageInstance {
 
+	private int id;
 	private String imagePath;
 	private String imageCaption;
 	
@@ -12,23 +13,34 @@ public class SlideShowImageInstance {
 	 * 
 	 * @param imageParameters	Array of size PARAMETERS_PER_IMAGE_INSTANCE that contains the information on the Slide Show Image. Parameter 0  is the image path. Parameter 1 is the image caption.
 	 */
-	public SlideShowImageInstance(String[] imageParameters){
-		imagePath = imageParameters[0];
-		imageCaption = imageParameters[1];
+	public SlideShowImageInstance(int id, String[] imageParameters){
+		this.id = id;
+		this.imagePath = imageParameters[0];
+		this.imageCaption = imageParameters[1];
 	}
 	
 	
 	/**
 	 * Creates a new slide show instance with the specified file path and caption information.
 	 * 
-	 * @param imagePath			File path for thie new image.
+	 * @param imagePath			File path for the new image.
 	 * @param imageCaption		Caption for the new image.
 	 */
-	public SlideShowImageInstance(String imagePath, String imageCaption){
+	public SlideShowImageInstance(int id, String imagePath, String imageCaption){
+		this.id = id;
 		this.imagePath = imagePath;
 		this.imageCaption = imageCaption;
 	}
 	
+	
+	/** 
+	 * Method to make the class object a string.
+	 */
+	@Override
+	public String toString(){
+		String outputString = "Image: " + id + ": " + imageCaption;
+		return outputString;
+	}
 	
 	/**
 	 * Returns all parameters regarding an image in an array.  Used in the exporter for the images.

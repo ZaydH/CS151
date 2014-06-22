@@ -28,7 +28,7 @@ public class SlideShowFileContents {
 	 * Adds a new image instance with no data.
 	 */
 	public void addNewImageInstance(){
-		allImages.add(new SlideShowImageInstance("",""));
+		allImages.add(new SlideShowImageInstance(allImages.size()+1,"",""));
 	}
 	
 	
@@ -78,7 +78,7 @@ public class SlideShowFileContents {
 	 */
 	public void setImageInstance(int index, String imagePath, String imageCaption){
 		
-		allImages.set(index, new SlideShowImageInstance( imagePath, imageCaption ) );
+		allImages.set(index, new SlideShowImageInstance(index + 1, imagePath, imageCaption ) );
 		
 	}
 	
@@ -139,7 +139,7 @@ public class SlideShowFileContents {
 				}
 				
 				//---- Add the item to the list.
-				bufferImageList.add(new SlideShowImageInstance(imageFileParamters));
+				bufferImageList.add(new SlideShowImageInstance(i+1, imageFileParamters));
 			}
 			
 			

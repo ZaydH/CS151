@@ -26,7 +26,7 @@ public class SlideShowContentsPanel extends JPanel implements ActionListener {
 	private static final long serialVersionUID = -7959030969928938285L;
 	
 	private static JButton saveButton;
-	private static DefaultListModel<String> slideShowListModel;
+	private static DefaultListModel<SlideShowImageInstance> slideShowListModel;
 	private static JList slideShowList;
 	private static JScrollPane slideShowListPane;
 	private static SlideShowFileContents slideShowFileContents;
@@ -86,7 +86,7 @@ public class SlideShowContentsPanel extends JPanel implements ActionListener {
 		
 		
 		//----- Create the storage list for the slide show images.
-		slideShowListModel = new DefaultListModel<String>();
+		slideShowListModel = new DefaultListModel<SlideShowImageInstance>();
 		slideShowFileContents = new SlideShowFileContents();
 		slideShowList = new JList(slideShowListModel);
 		slideShowList.setLayoutOrientation(JList.VERTICAL); 				 //----- One item per row.	
@@ -127,7 +127,8 @@ public class SlideShowContentsPanel extends JPanel implements ActionListener {
 		
 		//---- Load the SlideShow from the Image Instances in the Container class.
 		for(int i = 0; i < slideShowFileContents.getNumberOfImageInstances(); i++){
-			addElementToListModel(slideShowFileContents.getImageInstanceCaption(i), false); //---- Load the ListModel with image instance "i", but do not select it.
+			//addElementToListModel(slideShowFileContents.getImageInstanceCaption(i), false); //---- Load the ListModel with image instance "i", but do not select it.
+			slideShowListModel.addElement(slideShowFileContents.getImageInstance(i));
 		}
 		
 	}
@@ -159,8 +160,16 @@ public class SlideShowContentsPanel extends JPanel implements ActionListener {
 	public void actionPerformed(ActionEvent e){
 		
 		if(e.getActionCommand().equals(ADD_NEW_BUTTON_COMMAND_NAME)){
-			slideShowFileContents.addNewImageInstance();	//---- Create a new image.
-			addElementToListModel(""); 						//---- No caption since its new.
+			
+			
+			//---- Create a new image
+			slideShowFileContents.addNewImageInstance();		
+			int newImageIndex = slideShowFileContents.getNumberOfImageInstances()-1;
+			
+			//--- Add the element and select it and make sure it is visible.
+			slideShowListModel.addElement(slideShowFileContents.getImageInstance(newImageIndex));
+			slideShowList.setSelectedIndex(newImageIndex); //---- Uses base 0 so subtract one
+			slideShowList.ensureIndexIsVisible(newImageIndex); 
 		}
 		else if(e.getActionCommand().equals(SAVE_BUTTON_COMMAND_NAME)){
 			//TODO fix the lack of a save button command support.
@@ -173,33 +182,10 @@ public class SlideShowContentsPanel extends JPanel implements ActionListener {
 			
 			//----- Update the image instance information
 			slideShowFileContents.setImageInstance(selectedIndex, fileBrowserText, captionText);
-			slideShowListModel.setElementAt("Image " + (selectedIndex+1) + ": " + captionText, selectedIndex);
+			slideShowListModel.setElementAt(slideShowFileContents.getImageInstance(selectedIndex), selectedIndex);
 			
 		}
 		
-	}
-	
-	/**
-	 * Adds an image with a particular caption to the list and selects it.
-	 * 
-	 * @param imageCaption	Caption of the image being added to the slide show.
-	 */
-	private void addElementToListModel(String imageCaption){
-		addElementToListModel(imageCaption, true);
-	}
-	
-	
-	/**
-	 * Add an image's caption to the list and decide whether to select it.
-	 * 
-	 * @param imageCaption	Caption for the image.
-	 * @param selectImage	Boolean whether the image will be selected.
-	 */
-	private static void addElementToListModel(String imageCaption, boolean selectImage){
-		int nextImageNumber = slideShowListModel.getSize();
-		slideShowListModel.addElement("Image " + (nextImageNumber+1) + ": " + imageCaption);
-		slideShowList.setSelectedIndex(nextImageNumber); //---- Uses base 0 so subtract one
-		slideShowList.ensureIndexIsVisible(nextImageNumber); 
 	}
 
 	
