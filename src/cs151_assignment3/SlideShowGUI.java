@@ -6,6 +6,7 @@ import java.awt.Dimension;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.Spring;
 import javax.swing.SpringLayout;
 
 
@@ -14,6 +15,7 @@ public class SlideShowGUI {
 
 	
 	private static JFrame mainGUI;
+	private static SpringLayout mainGUILayout;
 	private static SlideShowJMenuBar topMenu;
 	
 	private static JPanel leftGUIPanel;
@@ -26,18 +28,22 @@ public class SlideShowGUI {
 	private static final int STANDARD_PADDING = 5;
 	
 	//---- Enumerate constants regarding GUI Height
-	private static final int GUI_HEIGHT = 700;
+	private static final int TOP_MENU_HEIGHT = 23;
+	private static final int PANELS_HEIGHT = 700;
+	private static final int GUI_HEIGHT = PANELS_HEIGHT+TOP_MENU_HEIGHT;
+	//private static final int MENU_BAR_HEIGHT = 20;
 	private static final int FILE_BROWSER_PANEL_HEIGHT = 37;
 	private static final int CAPTION_BROWSER_PANEL_HEIGHT = 37; 
-	private static final int LEFT_PANEL_SPACING_BETWEEN_MENU_BAR = 10 * STANDARD_PADDING;
+	private static final int LEFT_PANEL_SPACING_BETWEEN_MENU_BAR = 5 * STANDARD_PADDING;
 	private static final int LEFT_PANEL_VERTICAL_SPACING = 3 * STANDARD_PADDING;
-	private static final int FILE_CONTENTS_PANEL_HEIGHT = GUI_HEIGHT - FILE_BROWSER_PANEL_HEIGHT - CAPTION_BROWSER_PANEL_HEIGHT 
-														  - LEFT_PANEL_SPACING_BETWEEN_MENU_BAR - 3*LEFT_PANEL_VERTICAL_SPACING;
+	private static final int FILE_CONTENTS_PANEL_HEIGHT = PANELS_HEIGHT - FILE_BROWSER_PANEL_HEIGHT - CAPTION_BROWSER_PANEL_HEIGHT 
+														  - LEFT_PANEL_SPACING_BETWEEN_MENU_BAR - 3*LEFT_PANEL_VERTICAL_SPACING - 30;
 
 	
 	//---- Enumerate constants regarding GUI Width
 	private static final int LEFT_PANEL_WIDTH = 400;
-	private static final int GUI_WIDTH = LEFT_PANEL_WIDTH + GUI_HEIGHT;
+	private static final int BROWSE_BUTTON_WIDTH = LEFT_PANEL_WIDTH/4;
+	private static final int GUI_WIDTH = LEFT_PANEL_WIDTH + PANELS_HEIGHT;
 	private static final int RIGHT_PANEL_WIDTH = GUI_WIDTH-LEFT_PANEL_WIDTH;
 	private static final int LEFT_PANEL_LABEL_WIDTH = 70;
 	
@@ -46,13 +52,19 @@ public class SlideShowGUI {
 	
 	public static void main(String args[]){
 		
-		//----- Initialize the main variables
 		mainGUI = new JFrame();
-		setupMainGUIWindow();
 		
-		//----- Make the menu bar;
+		//----- Make the menu bar. Needs to be done first to get its height.
 		topMenu = new SlideShowJMenuBar();
-		mainGUI.setJMenuBar(topMenu);
+		Dimension menuDimension = new Dimension(GUI_WIDTH, TOP_MENU_HEIGHT);
+		topMenu.setSize(menuDimension);
+		topMenu.setPreferredSize(menuDimension);
+		topMenu.setMinimumSize(menuDimension);
+		topMenu.setMaximumSize(menuDimension);
+		mainGUI.setJMenuBar(topMenu);		
+		
+		//----- Initialize the main variables
+		setupMainGUIWindow();
 		
 		//---- Create the left panel of the GUI
 		createLeftPanel();
@@ -75,7 +87,9 @@ public class SlideShowGUI {
 		mainGUI.setSize(GUI_WIDTH, GUI_HEIGHT);
 		mainGUI.setResizable(false);
 		
-		mainGUI.setLayout(new BorderLayout());
+		//mainGUI.setLayout(new BorderLayout());
+		mainGUILayout = new SpringLayout();
+		mainGUI.setLayout(mainGUILayout);
 
 	}
 
@@ -84,7 +98,7 @@ public class SlideShowGUI {
 		
 		//----- Create the left panel
 		leftGUIPanel = new JPanel();
-		Dimension panelDimension = new Dimension (LEFT_PANEL_WIDTH, GUI_HEIGHT);
+		Dimension panelDimension = new Dimension (LEFT_PANEL_WIDTH, PANELS_HEIGHT);
 		leftGUIPanel.setSize(panelDimension);
 		leftGUIPanel.setMinimumSize(panelDimension);
 		leftGUIPanel.setPreferredSize(panelDimension);
@@ -94,12 +108,11 @@ public class SlideShowGUI {
 		
 		//---- Add the fileBrowserPanel
 		fileBrowserPanel = new FileBrowserPanel(LEFT_PANEL_WIDTH, FILE_BROWSER_PANEL_HEIGHT, LEFT_PANEL_LABEL_WIDTH,  
-												STANDARD_PADDING, 100);
+												STANDARD_PADDING, BROWSE_BUTTON_WIDTH);
 		topMenu.addActionListener(new FileBrowserPanel.ResetFileBrowserListener(), SlideShowJMenuBar.ListenerObject.NEW_FILE);		//---- Listen for New File Actions on MenuBar
 		topMenu.addActionListener(new FileBrowserPanel.ResetFileBrowserListener(), SlideShowJMenuBar.ListenerObject.OPEN_FILE);		//---- Listen for Open File Actions on MenuBar
-		
 		leftGUIPanel.add(fileBrowserPanel);	
-		//----- Set the position of the file browser padding 
+		//----- Set the position of the file browser padding
 		leftPanelLayout.putConstraint( SpringLayout.NORTH, fileBrowserPanel, LEFT_PANEL_SPACING_BETWEEN_MENU_BAR, SpringLayout.NORTH, leftGUIPanel);
 		leftPanelLayout.putConstraint( SpringLayout.HORIZONTAL_CENTER, fileBrowserPanel, 0, SpringLayout.HORIZONTAL_CENTER, leftGUIPanel);
 		
@@ -107,7 +120,8 @@ public class SlideShowGUI {
 		//----- Make the Pane storing the caption information		
 		captionPanel = new CaptionPanel(LEFT_PANEL_WIDTH, CAPTION_BROWSER_PANEL_HEIGHT, LEFT_PANEL_LABEL_WIDTH, STANDARD_PADDING);
 		topMenu.addActionListener(new CaptionPanel.ResetCaptionListener(), SlideShowJMenuBar.ListenerObject.NEW_FILE);		//---- Listen for New File Actions on MenuBar
-		topMenu.addActionListener(new CaptionPanel.ResetCaptionListener(), SlideShowJMenuBar.ListenerObject.OPEN_FILE);		//---- Listen for Open File Actions on MenuBar		
+		topMenu.addActionListener(new CaptionPanel.ResetCaptionListener(), SlideShowJMenuBar.ListenerObject.OPEN_FILE);		//---- Listen for Open File Actions on MenuBar	
+		fileBrowserPanel.addBrowseFileChooserListener(new CaptionPanel.ResetCaptionListener()); 							//---- Reset the Caption when browsing for a new file.
 		leftGUIPanel.add(captionPanel);
 		//----- Set the position of the file browser padding 
 		leftPanelLayout.putConstraint( SpringLayout.NORTH, captionPanel, LEFT_PANEL_VERTICAL_SPACING, SpringLayout.SOUTH, fileBrowserPanel);
@@ -119,22 +133,36 @@ public class SlideShowGUI {
 		leftGUIPanel.add(fileContentsPanel);
 		//----- Set the position of the file browser padding 
 		leftPanelLayout.putConstraint( SpringLayout.NORTH, fileContentsPanel, LEFT_PANEL_VERTICAL_SPACING, SpringLayout.SOUTH, captionPanel);
-		leftPanelLayout.putConstraint( SpringLayout.HORIZONTAL_CENTER, fileContentsPanel, 0, SpringLayout.HORIZONTAL_CENTER, leftGUIPanel);		
+		leftPanelLayout.putConstraint( SpringLayout.HORIZONTAL_CENTER, fileContentsPanel, 0, SpringLayout.HORIZONTAL_CENTER, leftGUIPanel);
+		//----- Setup the listeners
+		fileContentsPanel.addActionListener(new CaptionPanel.ResetCaptionListener(), SlideShowContentsPanel.ADD_NEW_IMAGE_LISTENER); 			//---- Listen for New Image Button
+		fileContentsPanel.addActionListener(new FileBrowserPanel.ResetFileBrowserListener(), SlideShowContentsPanel.ADD_NEW_IMAGE_LISTENER);	//---- Listen for New Image Button
+		topMenu.addActionListener(new SlideShowContentsPanel.ResetContentsPaneListener(), SlideShowJMenuBar.ListenerObject.NEW_FILE);			//---- Listen for New File Actions on MenuBar
+		topMenu.addActionListener(new SlideShowContentsPanel.OpenFileContentsPaneListener(), SlideShowJMenuBar.ListenerObject.OPEN_FILE);			//---- Listen for New File Actions on MenuBar
+		topMenu.addActionListener(new SlideShowContentsPanel.SaveFileContentsPaneListener(), SlideShowJMenuBar.ListenerObject.SAVE_FILE);			//---- Listen for New File Actions on MenuBar	
 		
 		//---- Add the Left GUI Panel to the GUI.
-		mainGUI.add(leftGUIPanel, BorderLayout.WEST);
+		mainGUI.add(leftGUIPanel);
+		mainGUILayout.putConstraint(SpringLayout.NORTH, leftGUIPanel, 0, SpringLayout.NORTH, mainGUI);
+		mainGUILayout.putConstraint(SpringLayout.WEST, leftGUIPanel, 0, SpringLayout.WEST, mainGUI);
 		
 	}
 	
 
 
 	
-	//---- This creates the left panel where the image is.
+	/**
+	 *  Creates the left panel where the image is.
+	 */
 	public static void createImagePanel(){
 		
-		imagePanel = new SlideShowImagePanel(LEFT_PANEL_WIDTH, GUI_HEIGHT, 2 * STANDARD_PADDING);
+		//---- Add the Image Panel on the right
+		imagePanel = new SlideShowImagePanel(RIGHT_PANEL_WIDTH, PANELS_HEIGHT, 2 * STANDARD_PADDING);
 		fileBrowserPanel.addDocumentListenerForFile(imagePanel);
 		mainGUI.add(imagePanel);
+		//---- Setup the location of the panel
+		mainGUILayout.putConstraint(SpringLayout.NORTH, imagePanel, 0, SpringLayout.NORTH, mainGUI);
+		mainGUILayout.putConstraint(SpringLayout.WEST, imagePanel, 0, SpringLayout.EAST, leftGUIPanel);
 		
 	}
 	

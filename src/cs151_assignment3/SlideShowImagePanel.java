@@ -142,9 +142,4 @@ public class SlideShowImagePanel extends JPanel implements DocumentListener {
 		}			
 	}
 	
-	
-//	public void addActionListener(ActionListener listener){
-//		this.addActionListener(listener);
-//	}
-	
 }

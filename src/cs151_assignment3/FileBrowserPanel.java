@@ -7,7 +7,6 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.Spring;
@@ -112,6 +111,14 @@ public class FileBrowserPanel extends JPanel  implements ActionListener {
 		filePathTextField.getDocument().addDocumentListener(listener);
 	}
 	
+	/**
+	 * Add a new listener to the browse file chooser.
+	 * 
+	 * @param listener New listener to be added to the browse file chooser
+	 */
+	public void addBrowseFileChooserListener(ActionListener listener){
+		fileChooser.addActionListener(listener);
+	}
 	
 	
 	/**

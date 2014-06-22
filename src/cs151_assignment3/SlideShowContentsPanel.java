@@ -1,16 +1,21 @@
 package cs151_assignment3;
 
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javafx.stage.FileChooser;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.SpringLayout;
 
-public class SlideShowContentsPanel extends JPanel {
+public class SlideShowContentsPanel extends JPanel implements ActionListener {
 
 	/**
 	 * Auto generate UID for this panel.
@@ -27,7 +32,11 @@ public class SlideShowContentsPanel extends JPanel {
 	
 	private static final String SAVE_BUTTON_COMMAND_NAME = "SAVE_CONTENT";
 	private static final String ADD_NEW_BUTTON_COMMAND_NAME = "ADD_NEW_CONTENT";
-	
+
+	//----- Add final variables to connect listeners.
+	public static final int ADD_NEW_IMAGE_LISTENER = 0;
+	public static final int SAVE_IMAGE_LISTENER = 1;
+
 	
 	public SlideShowContentsPanel(int width, int height, int padding, int buttonHeight){
 		
@@ -45,6 +54,7 @@ public class SlideShowContentsPanel extends JPanel {
 		//----- Setup the save button 
 		saveButton = new JButton("Save Image");
 		saveButton.setActionCommand(SAVE_BUTTON_COMMAND_NAME);
+		saveButton.addActionListener(this);
 		//---- Define the button sizes
 		Dimension buttonDimension = new Dimension (width - 2*padding, buttonHeight);
 		saveButton.setSize(buttonDimension);
@@ -58,6 +68,7 @@ public class SlideShowContentsPanel extends JPanel {
 		//---- Setup the Add New Button
 		addNewButton = new JButton("Add New Image");
 		addNewButton.setActionCommand(ADD_NEW_BUTTON_COMMAND_NAME);
+		addNewButton.addActionListener(this);
 		//---- Define the button sizes
 		buttonDimension = new Dimension (width - 2*padding, buttonHeight);
 		addNewButton.setSize(buttonDimension);
@@ -65,7 +76,8 @@ public class SlideShowContentsPanel extends JPanel {
 		addNewButton.setMinimumSize(buttonDimension);
 		addNewButton.setMaximumSize(buttonDimension);
 		//--- Add button to this panel.
-		this.add(addNewButton);		
+		this.add(addNewButton);	
+		
 		
 		
 		//----- Create the storage list for the slide show images.
@@ -104,16 +116,142 @@ public class SlideShowContentsPanel extends JPanel {
 	/**
 	 * Helper method to load the Slide Show List from the object "slideShowFileContents".  This code is needed a couple of times so made a function.
 	 */
-	private void loadSlideShowListFromFileContents(){
+	private static void loadSlideShowListFromFileContents(){
 		
 		slideShowListModel.clear(); //--- Empty the slideShowList.
 		
 		//---- Load the SlideShow from the Image Instances in the Container class.
 		for(int i = 0; i < slideShowFileContents.getNumberOfImageInstances(); i++){
-			slideShowListModel.addElement(slideShowFileContents.getImageInstanceCaption(i)); //---- Load the ListModel with image instance "i";
+			addElementToListModel(slideShowFileContents.getImageInstanceCaption(i), false); //---- Load the ListModel with image instance "i", but do not select it.
 		}
 		
 	}
+	
+	
+	/**
+	 * Allows for outside objects to listen on the addNewImage and saveImageButtons.
+	 * 
+	 * @param listener		Listener to be added to the selected button.
+	 * @param listenerType	Button Type to be Listened On.
+	 */
+	public static void addActionListener(ActionListener listener, int listenerType){
+		
+		if(listenerType == ADD_NEW_IMAGE_LISTENER ){
+			addNewButton.addActionListener(listener);
+			return;
+		}
+		else if(listenerType == SAVE_IMAGE_LISTENER ){
+			saveButton.addActionListener(listener);
+			return;
+		}
+		
+	}
+	
+	
+	/**
+	 * Internal function to handle action listeners in this class.
+	 */
+	public void actionPerformed(ActionEvent e){
+		
+		if(e.getActionCommand().equals(ADD_NEW_BUTTON_COMMAND_NAME)){
+			slideShowFileContents.addNewImageInstance();	//---- Create a new image.
+			addElementToListModel(""); 						//---- No caption since its new.
+		}
+		else if(e.getActionCommand().equals(SAVE_BUTTON_COMMAND_NAME)){
+			
+		}
+		
+	}
+	
+	/**
+	 * Adds an image with a particular caption to the list and selects it.
+	 * 
+	 * @param imageCaption	Caption of the image being added to the slide show.
+	 */
+	private void addElementToListModel(String imageCaption){
+		addElementToListModel(imageCaption, true);
+	}
+	
+	
+	/**
+	 * Add an image's caption to the list and decide whether to select it.
+	 * 
+	 * @param imageCaption	Caption for the image.
+	 * @param selectImage	Boolean whether the image will be selected.
+	 */
+	private static void addElementToListModel(String imageCaption, boolean selectImage){
+		int nextImageNumber = slideShowFileContents.getNumberOfImageInstances();
+		slideShowListModel.addElement("Image " + nextImageNumber + ": " + imageCaption);
+		slideShowList.setSelectedIndex(nextImageNumber - 1); //---- Uses base 0 so subtract one
+		slideShowList.ensureIndexIsVisible(nextImageNumber - 1); 
+	}
+	
+
+	
+	/**
+	 * 
+	 * Listener used to reset the ContentPane.
+	 * 
+	 * @author Zayd
+	 *
+	 */
+	public static class ResetContentsPaneListener implements ActionListener {
+		
+		public void actionPerformed(ActionEvent e){
+			slideShowFileContents.clear();		//---- Clear the file contents
+			slideShowListModel.clear(); 		//--- Empty the slideShowList.
+		}
+		
+	}
+	
+	
+	/**
+	 * 
+	 * Listener used to Open a SlideShowFile.
+	 * 
+	 * @author Zayd
+	 *
+	 */
+	public static class OpenFileContentsPaneListener implements ActionListener {
+		
+		public void actionPerformed(ActionEvent e){
+
+			//---- Do not do anything on an cancelled command
+			if(e.getSource() instanceof JFileChooser && e.getActionCommand().equals(JFileChooser.CANCEL_SELECTION) ){
+				return;
+			}			
+			
+			final JFileChooser fc = (JFileChooser)e.getSource();//---- Get the file chooser.
+			if(slideShowFileContents.readSlideShowFile(fc.getSelectedFile())){
+				loadSlideShowListFromFileContents();
+			}
+		}
+		
+	}	
+	
+	
+	/**
+	 * 
+	 * Listener used to Save a SlideShow to a File.
+	 * 
+	 * @author Zayd
+	 *
+	 */
+	public static class SaveFileContentsPaneListener implements ActionListener {
+		
+		public void actionPerformed(ActionEvent e){
+
+			//---- Do not do anything on an cancelled command
+			if(e.getSource() instanceof JFileChooser && e.getActionCommand().equals(JFileChooser.CANCEL_SELECTION) ){
+				return;
+			}			
+			
+			final JFileChooser fc = (JFileChooser)e.getSource();//---- Get the file chooser.
+			slideShowFileContents.writeSlideShowFile(fc.getSelectedFile());
+		}
+		
+	}		
+	
 	
 	
 }

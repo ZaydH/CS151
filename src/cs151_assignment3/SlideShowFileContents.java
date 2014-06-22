@@ -1,5 +1,7 @@
 package cs151_assignment3;
 
+import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -21,6 +23,13 @@ public class SlideShowFileContents {
 		allImages = new ArrayList<SlideShowImageInstance>(); //---- Create an array list of images.
 	}
 	
+	
+	/*
+	 * Adds a new image instance with no data.
+	 */
+	public void addNewImageInstance(){
+		allImages.add(new SlideShowImageInstance("",""));
+	}
 	
 	
 	/**
@@ -61,13 +70,23 @@ public class SlideShowFileContents {
 	
 	
 	
+	
+	/**
+	 * Empty the list of images.
+	 */
+	public void clear(){
+		allImages.clear();
+	}
+	
+	
+	
 	/**
 	 * Imports Slide show information from a file.
 	 * 
 	 * @param filePath		Path of the SlideShow File to read.
 	 * @return				If the file read was success, returns true.  Otherwise, it returns false.
 	 */
-	public boolean readSlideShowFile(String filePath){
+	public boolean readSlideShowFile(File filePath){
 		
 		Scanner fileIn;
 		int numberImageFiles;
@@ -136,12 +155,15 @@ public class SlideShowFileContents {
 	 * 
 	 * @param filePath		File Path to write the Slide Show File to.
 	 */
-	public void writeSlideShowFile(String filePath){
+	public void writeSlideShowFile(File file){
 		
 		try{
-			FileWriter fileOut = new FileWriter(filePath);
+			BufferedWriter fileOut = new BufferedWriter(new FileWriter(file.getAbsolutePath()));
 			
-			fileOut.write(allImages.size()); //---- First line is the number of images.
+			//---- Write to a file.
+			String outputStr;
+			outputStr = Integer.toString(allImages.size());
+			fileOut.write(outputStr,0,outputStr.length()); //---- First line is the number of images.
 			
 			//---- Iterate through all the images.
 			for(int i = 0; i < allImages.size(); i++){
@@ -151,7 +173,8 @@ public class SlideShowFileContents {
 				
 				//---- Iterate through all image parameters
 				for(int j = 0; j < imageParameters.length; j++){
-					fileOut.write("\n" + imageParameters[j]);//---- Precede with a new line to ensure no blank line at the end of the file.
+					fileOut.newLine();
+					fileOut.write(imageParameters[j], 0, imageParameters[j].length());//---- Precede with a new line to ensure no blank line at the end of the file.
 				}
 			}
 			
