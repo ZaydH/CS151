@@ -3,12 +3,12 @@ package cs151_assignment3;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.Image;
 
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.Spring;
 import javax.swing.SpringLayout;
-import javax.swing.SwingUtilities;
 
 
 
@@ -84,6 +84,9 @@ public class SlideShowGUI {
 		
 		//---- Add the fileBrowserPanel
 		fileBrowserPanel = new FileBrowserPanel(LEFT_PANEL_WIDTH, FILE_BROWSER_PANEL_HEIGHT, 70, STANDARD_PADDING, 100);
+		topMenu.addActionListener(new CaptionPanel.ResetCaptionListener(), SlideShowJMenuBar.ListenerObject.NEW_FILE);		//---- Listen for New File Actions on MenuBar
+		topMenu.addActionListener(new CaptionPanel.ResetCaptionListener(), SlideShowJMenuBar.ListenerObject.OPEN_FILE);	//---- Listen for Open File Actions on MenuBar
+		
 		leftGUIPanel.add(fileBrowserPanel);	
 		//----- Set the position of the file browser padding 
 		leftPanelLayout.putConstraint( SpringLayout.NORTH, fileBrowserPanel, 10*STANDARD_PADDING, SpringLayout.NORTH, leftGUIPanel);

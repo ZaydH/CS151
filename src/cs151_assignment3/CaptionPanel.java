@@ -1,14 +1,17 @@
 package cs151_assignment3;
 
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.Spring;
 import javax.swing.SpringLayout;
 
-public class CaptionPanel extends JPanel {
+public class CaptionPanel extends JPanel  {
 
 		
 	/**
@@ -18,6 +21,10 @@ public class CaptionPanel extends JPanel {
 	private static JTextField captionTextField;
 	private static JLabel captionLabel;
 	
+	
+	public CaptionPanel(){
+		
+	}
 	
 	public CaptionPanel(int panelWidth, int panelHeight, int labelWidth, int padding){
 				
@@ -47,7 +54,7 @@ public class CaptionPanel extends JPanel {
 		
 		
 		//---- Create and Add the Caption Field
-		captionTextField = new JTextField("", JTextField.TRAILING);
+		captionTextField = new JTextField("Initializing", JTextField.TRAILING);
 		this.add(captionTextField);
 		
 
@@ -66,9 +73,25 @@ public class CaptionPanel extends JPanel {
 	}
 	
 	
-	
-	public void initialize(){
-		captionTextField.setText(""); //---- Empty the TextArea
+	/**
+	 * Listener class for CaptionPanel to receive actions (New File, Open File, etc.)
+	 * 
+	 * @author Zayd
+	 *
+	 */
+	public static class ResetCaptionListener implements ActionListener {
+		
+		public void actionPerformed(ActionEvent e){
+			
+			//---- Do not do anything on an cancelled command
+			if(e.getSource() instanceof JFileChooser && e.getActionCommand().equals(JFileChooser.CANCEL_SELECTION) ){
+				return;
+			}
+			
+			//---- If not reset, then reset.
+			captionTextField.setText("");
+		}
+		
 	}
 	
 	
