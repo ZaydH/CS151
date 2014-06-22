@@ -47,7 +47,7 @@ public class FileBrowserPanel extends JPanel  implements ActionListener {
 				
 		
 		//---- Setup the File Path Text Field
-		filePathTextField = new JTextField("", JTextField.TRAILING);
+		filePathTextField = new JTextField("Initializing", JTextField.TRAILING);
 		filePathTextField.setEditable(false); //----- This field is either set by Browse or by the GUI on a reset
 		this.add(filePathTextField);
 		
@@ -104,15 +104,29 @@ public class FileBrowserPanel extends JPanel  implements ActionListener {
 				String selectedFile = fileChooser.getSelectedFile().toString();
 				
 				//---- Unlock the file path text field, edit it, then
-				filePathTextField.setEditable(false);
 				filePathTextField.setText(selectedFile);
-				filePathTextField.setEditable(true);
 				
 				JOptionPane.showMessageDialog(this, "Need to implement the Open option of the file chooser." 
 													+ " The selected file was \"" + selectedFile+ "\".");
 				return;
 			}
 			
+		}
+		
+	}
+	
+	
+	
+	public static class ResetFileBrowserListener implements ActionListener {
+		
+		public void actionPerformed( ActionEvent e ){
+			//---- Do not do anything on an cancelled command
+			if(e.getSource() instanceof JFileChooser && e.getActionCommand().equals(JFileChooser.CANCEL_SELECTION) ){
+				return;
+			}
+			
+			//---- If not reset, then reset.
+			filePathTextField.setText("");			
 		}
 		
 	}
