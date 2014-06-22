@@ -46,6 +46,21 @@ public class SlideShowFileContents {
 		return allImages.get(index);
 	}
 	
+	
+	/**
+	 * Gets the caption for the image at the specified index.
+	 * 
+	 * @param index		Index of the image instance
+	 * @return			Caption for image at the "index"
+	 */
+	public String getImageInstanceCaption(int index){
+		if( index < 0 || index >= allImages.size()) return null;
+		
+		return allImages.get(index).getImageCaption();
+	}
+	
+	
+	
 	/**
 	 * Imports Slide show information from a file.
 	 * 
