@@ -187,7 +187,7 @@ public class SlideShowContentsPanel extends JPanel implements ActionListener {
 			//---- Check if any image was selected.
 			if(selectedIndex  == -1){
 				JOptionPane.showMessageDialog(null, "Before a changes can be saved to a slideshow, a specific image must be selected \n"
-													+ "from the list of images.  Please select an image and try again.");
+													+ "from the list of images.  Please select an image from the list, and try again.");
 				return;
 			}
 			
