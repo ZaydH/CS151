@@ -110,7 +110,7 @@ public class SlideShowGUI {
 		topMenu.addActionListener(new CaptionPanel.ResetCaptionListener(), SlideShowJMenuBar.ListenerObject.OPEN_FILE);		//---- Listen for Open File Actions on MenuBar		
 		leftGUIPanel.add(captionPanel);
 		//----- Set the position of the file browser padding 
-		leftPanelLayout.putConstraint( SpringLayout.NORTH, captionPanel, 3*STANDARD_PADDING, SpringLayout.SOUTH, fileBrowserPanel);
+		leftPanelLayout.putConstraint( SpringLayout.NORTH, captionPanel, LEFT_PANEL_VERTICAL_SPACING, SpringLayout.SOUTH, fileBrowserPanel);
 		leftPanelLayout.putConstraint( SpringLayout.HORIZONTAL_CENTER, captionPanel, 0, SpringLayout.HORIZONTAL_CENTER, leftGUIPanel);
 
 		
@@ -118,7 +118,7 @@ public class SlideShowGUI {
 		fileContentsPanel = new SlideShowContentsPanel(LEFT_PANEL_WIDTH, FILE_CONTENTS_PANEL_HEIGHT, STANDARD_PADDING, FILE_BROWSER_PANEL_HEIGHT - 2*STANDARD_PADDING );
 		leftGUIPanel.add(fileContentsPanel);
 		//----- Set the position of the file browser padding 
-		leftPanelLayout.putConstraint( SpringLayout.NORTH, fileContentsPanel, 3*STANDARD_PADDING, SpringLayout.SOUTH, captionPanel);
+		leftPanelLayout.putConstraint( SpringLayout.NORTH, fileContentsPanel, LEFT_PANEL_VERTICAL_SPACING, SpringLayout.SOUTH, captionPanel);
 		leftPanelLayout.putConstraint( SpringLayout.HORIZONTAL_CENTER, fileContentsPanel, 0, SpringLayout.HORIZONTAL_CENTER, leftGUIPanel);		
 		
 		//---- Add the Left GUI Panel to the GUI.

@@ -25,8 +25,8 @@ public class SlideShowContentsPanel extends JPanel {
 	private static JButton addNewButton;
 	
 	
-	private static final String saveButtonCommandName = "SAVE_CONTENT";
-	private static final String addNewButtonCommandName = "ADD_NEW_CONTENT";
+	private static final String SAVE_BUTTON_COMMAND_NAME = "SAVE_CONTENT";
+	private static final String ADD_NEW_BUTTON_COMMAND_NAME = "ADD_NEW_CONTENT";
 	
 	
 	public SlideShowContentsPanel(int width, int height, int padding, int buttonHeight){
@@ -43,31 +43,40 @@ public class SlideShowContentsPanel extends JPanel {
 		this.setMaximumSize(panelDimension);
 		
 		//----- Setup the save button 
-		JButton[] panelButtons = {addNewButton, saveButton};
-		String[]  buttonText = { "Add New Image", "Save Image" };
-		String[]  buttonActionCommands = { addNewButtonCommandName, saveButtonCommandName };
-		for(int i = 0; i < panelButtons.length; i++){
-			panelButtons[i] = new JButton(buttonText[i]);
-			panelButtons[i].setActionCommand(buttonActionCommands[i]);
-			
-			//---- Define the button sizes
-			Dimension buttonDimension = new Dimension (width - 2*padding, height);
-			panelButtons[i].setSize(buttonDimension);
-			panelButtons[i].setPreferredSize(buttonDimension);
-			panelButtons[i].setMinimumSize(buttonDimension);
-			panelButtons[i].setMaximumSize(buttonDimension);
-		}	
+		saveButton = new JButton("Save Image");
+		saveButton.setActionCommand(SAVE_BUTTON_COMMAND_NAME);
+		//---- Define the button sizes
+		Dimension buttonDimension = new Dimension (width - 2*padding, buttonHeight);
+		saveButton.setSize(buttonDimension);
+		saveButton.setPreferredSize(buttonDimension);
+		saveButton.setMinimumSize(buttonDimension);
+		saveButton.setMaximumSize(buttonDimension);
+		//--- Add button to this panel.
+		this.add(saveButton);
+		
+		
+		//---- Setup the Add New Button
+		addNewButton = new JButton("Add New Image");
+		addNewButton.setActionCommand(ADD_NEW_BUTTON_COMMAND_NAME);
+		//---- Define the button sizes
+		buttonDimension = new Dimension (width - 2*padding, buttonHeight);
+		addNewButton.setSize(buttonDimension);
+		addNewButton.setPreferredSize(buttonDimension);
+		addNewButton.setMinimumSize(buttonDimension);
+		addNewButton.setMaximumSize(buttonDimension);
+		//--- Add button to this panel.
+		this.add(addNewButton);		
 		
 		
 		//----- Create the storage list for the slide show images.
 		slideShowListModel = new DefaultListModel<String>();
+		slideShowFileContents = new SlideShowFileContents();
 		slideShowList = new JList(slideShowListModel);
 		slideShowList.setLayoutOrientation(JList.VERTICAL); 				 //----- One item per row.	
 		slideShowList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION); //---- Allow only one image to be selected at a time.
 		loadSlideShowListFromFileContents();
 		
 		//---- Create the pane containing the List of Images.
-		slideShowFileContents = new SlideShowFileContents();
 		slideShowListPane = new JScrollPane(slideShowList);
 		int scrollPaneHeight = height - 2*buttonHeight - 4 * padding;//---- 2 * buttonHeight since two buttons.  4 * padding since padding on top and bottom of each button.
 		Dimension listPaneDimension = new Dimension (width - 2*padding, scrollPaneHeight);
@@ -75,17 +84,18 @@ public class SlideShowContentsPanel extends JPanel {
 		slideShowListPane.setPreferredSize(listPaneDimension);
 		slideShowListPane.setMinimumSize(listPaneDimension);
 		slideShowListPane.setMaximumSize(listPaneDimension);
+		this.add(slideShowListPane);
 		
 		
 		//---- Setup the locations of the buttons and objects.
 		contentsPanelLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, saveButton, 0, SpringLayout.HORIZONTAL_CENTER, this);
 		contentsPanelLayout.putConstraint(SpringLayout.NORTH, saveButton, padding, SpringLayout.NORTH, this);
 		
-		contentsPanelLayout.putConstraint(SpringLayout.NORTH, slideShowListPane, 0, SpringLayout.SOUTH, saveButton);
+		contentsPanelLayout.putConstraint(SpringLayout.NORTH, slideShowListPane, padding, SpringLayout.SOUTH, saveButton);
 		contentsPanelLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, slideShowListPane, 0, SpringLayout.HORIZONTAL_CENTER, this);
 		
 		contentsPanelLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, addNewButton, 0, SpringLayout.HORIZONTAL_CENTER, this);
-		contentsPanelLayout.putConstraint(SpringLayout.SOUTH, addNewButton, padding, SpringLayout.SOUTH, this);
+		contentsPanelLayout.putConstraint(SpringLayout.NORTH, addNewButton, padding, SpringLayout.SOUTH, slideShowListPane);
 		
 		
 	}

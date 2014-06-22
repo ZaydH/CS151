@@ -97,8 +97,8 @@ public class FileBrowserPanel extends JPanel  implements ActionListener {
 		
 		//---- Create the file chooser.
 		fileChooser = new JFileChooser();
-		fileChooser.setFileFilter(new FileNameExtensionFilter("Image Files", "jpg", "jpeg", "gif",
-																			 "png" ));
+		fileChooser.setFileFilter(new FileNameExtensionFilter("Image Files (*.jpg, *.jpeg, *.gif, *.png)", 
+															  "jpg", "jpeg", "gif", "png" ));
 		
 		
 	}
