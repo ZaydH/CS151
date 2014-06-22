@@ -103,7 +103,7 @@ public class SlideShowFileContents {
 			}
 
 			//---- Get the number of files in the list.
-			numberImageFiles =fileIn.nextInt();
+			numberImageFiles = Integer.parseInt(fileIn.nextLine());
 			bufferImageList = new ArrayList<SlideShowImageInstance>(numberImageFiles);
 			
 			//----- Read the image information from the file.
@@ -125,12 +125,12 @@ public class SlideShowFileContents {
 				}
 				
 				//---- Add the item to the list.
-				bufferImageList.set(i, new SlideShowImageInstance(imageFileParamters));
+				bufferImageList.add(new SlideShowImageInstance(imageFileParamters));
 			}
 			
 			
 			//---- Ensure the file length is as expected.  If there is more text, thats a problem so ignore the file.
-			if(!fileIn.hasNextLine()){
+			if(fileIn.hasNextLine()){
 				JOptionPane.showMessageDialog(null, "The slideshow file appears to have too much data or is corrupted.\n"
 													+ "Please specify a new file and try again.");				
 				fileIn.close();

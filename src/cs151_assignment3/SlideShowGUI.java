@@ -1,12 +1,11 @@
 package cs151_assignment3;
 
 
-import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.Insets;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.Spring;
 import javax.swing.SpringLayout;
 
 
@@ -30,14 +29,15 @@ public class SlideShowGUI {
 	//---- Enumerate constants regarding GUI Height
 	private static final int TOP_MENU_HEIGHT = 23;
 	private static final int PANELS_HEIGHT = 700;
-	private static final int GUI_HEIGHT = PANELS_HEIGHT+TOP_MENU_HEIGHT;
+	//private static final int GUI_HEIGHT = PANELS_HEIGHT+TOP_MENU_HEIGHT;
+	private static final int GUI_HEIGHT = PANELS_HEIGHT;
 	//private static final int MENU_BAR_HEIGHT = 20;
 	private static final int FILE_BROWSER_PANEL_HEIGHT = 37;
 	private static final int CAPTION_BROWSER_PANEL_HEIGHT = 37; 
 	private static final int LEFT_PANEL_SPACING_BETWEEN_MENU_BAR = 5 * STANDARD_PADDING;
 	private static final int LEFT_PANEL_VERTICAL_SPACING = 3 * STANDARD_PADDING;
 	private static final int FILE_CONTENTS_PANEL_HEIGHT = PANELS_HEIGHT - FILE_BROWSER_PANEL_HEIGHT - CAPTION_BROWSER_PANEL_HEIGHT 
-														  - LEFT_PANEL_SPACING_BETWEEN_MENU_BAR - 3*LEFT_PANEL_VERTICAL_SPACING - 30;
+														  - LEFT_PANEL_SPACING_BETWEEN_MENU_BAR - 3*LEFT_PANEL_VERTICAL_SPACING;
 
 	
 	//---- Enumerate constants regarding GUI Width
@@ -73,7 +73,9 @@ public class SlideShowGUI {
 		createImagePanel();
 		
 		//---- Make the GUI visible
+		mainGUI.pack();
 		mainGUI.setVisible(true);//---- Make the GUI visible
+
 	}
 	
 	
@@ -84,13 +86,17 @@ public class SlideShowGUI {
 		mainGUI.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //---- Ensure the execution ends when the GUI is closed.
 		
 		//---- Set GUI sizing information
-		mainGUI.setSize(GUI_WIDTH, GUI_HEIGHT);
+		Dimension contentPaneDimension = new Dimension(GUI_WIDTH, GUI_HEIGHT);
+		mainGUI.getContentPane().setSize( contentPaneDimension );
+		mainGUI.getContentPane().setPreferredSize( contentPaneDimension );
+		mainGUI.getContentPane().setMinimumSize( contentPaneDimension );
+		mainGUI.getContentPane().setMaximumSize( contentPaneDimension );
+		//mainGUI.setUndecorated(true);
 		mainGUI.setResizable(false);
 		
 		//mainGUI.setLayout(new BorderLayout());
 		mainGUILayout = new SpringLayout();
 		mainGUI.setLayout(mainGUILayout);
-
 	}
 
 	

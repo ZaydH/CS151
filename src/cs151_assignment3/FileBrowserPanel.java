@@ -58,7 +58,7 @@ public class FileBrowserPanel extends JPanel  implements ActionListener {
 				
 		
 		//---- Setup the File Path Text Field
-		filePathTextField = new JTextField("Initializing", JTextField.TRAILING);
+		filePathTextField = new JTextField("", JTextField.TRAILING);
 		filePathTextField.setEditable(false); //----- This field is either set by Browse or by the GUI on a reset
 		this.add(filePathTextField);
 		

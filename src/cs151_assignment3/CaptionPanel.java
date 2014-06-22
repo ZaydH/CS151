@@ -58,7 +58,7 @@ public class CaptionPanel extends JPanel  {
 		
 		
 		//---- Create and Add the Caption Field
-		captionTextField = new JTextField("Initializing", JTextField.TRAILING);
+		captionTextField = new JTextField("", JTextField.TRAILING);
 		this.add(captionTextField);
 		
 

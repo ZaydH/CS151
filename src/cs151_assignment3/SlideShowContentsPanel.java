@@ -134,7 +134,7 @@ public class SlideShowContentsPanel extends JPanel implements ActionListener {
 	 * @param listener		Listener to be added to the selected button.
 	 * @param listenerType	Button Type to be Listened On.
 	 */
-	public static void addActionListener(ActionListener listener, int listenerType){
+	public void addActionListener(ActionListener listener, int listenerType){
 		
 		if(listenerType == ADD_NEW_IMAGE_LISTENER ){
 			addNewButton.addActionListener(listener);
@@ -158,7 +158,7 @@ public class SlideShowContentsPanel extends JPanel implements ActionListener {
 			addElementToListModel(""); 						//---- No caption since its new.
 		}
 		else if(e.getActionCommand().equals(SAVE_BUTTON_COMMAND_NAME)){
-			
+			//TODO fix the lack of a save button command support.
 		}
 		
 	}
@@ -180,10 +180,10 @@ public class SlideShowContentsPanel extends JPanel implements ActionListener {
 	 * @param selectImage	Boolean whether the image will be selected.
 	 */
 	private static void addElementToListModel(String imageCaption, boolean selectImage){
-		int nextImageNumber = slideShowFileContents.getNumberOfImageInstances();
-		slideShowListModel.addElement("Image " + nextImageNumber + ": " + imageCaption);
-		slideShowList.setSelectedIndex(nextImageNumber - 1); //---- Uses base 0 so subtract one
-		slideShowList.ensureIndexIsVisible(nextImageNumber - 1); 
+		int nextImageNumber = slideShowListModel.getSize();
+		slideShowListModel.addElement("Image " + (nextImageNumber+1) + ": " + imageCaption);
+		slideShowList.setSelectedIndex(nextImageNumber); //---- Uses base 0 so subtract one
+		slideShowList.ensureIndexIsVisible(nextImageNumber); 
 	}
 	
 
@@ -224,6 +224,7 @@ public class SlideShowContentsPanel extends JPanel implements ActionListener {
 			final JFileChooser fc = (JFileChooser)e.getSource();//---- Get the file chooser.
 			if(slideShowFileContents.readSlideShowFile(fc.getSelectedFile())){
 				loadSlideShowListFromFileContents();
+				slideShowList.clearSelection();
 			}
 		}
 		
