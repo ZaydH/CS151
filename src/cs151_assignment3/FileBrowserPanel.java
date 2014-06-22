@@ -28,6 +28,17 @@ public class FileBrowserPanel extends JPanel  implements ActionListener {
 	private final static String BROWSE_COMMAND_NAME = "FileBrowse";
 	private static final long serialVersionUID = 5421452027701678411L;
 	
+	
+	/**
+	 * 
+	 * Sole constructor for the FileBrowserPanel we are using.  
+	 * 
+	 * @param panelWidth 			The width of this panel.
+	 * @param panelHeight			The height of this panel
+	 * @param labelWidth			Width of the File Path Label
+	 * @param padding				Padding Between elements and the border
+	 * @param browseButtonWidth		Width of the browse button.
+	 */
 	public FileBrowserPanel(int panelWidth, int panelHeight, int labelWidth, int padding, int browseButtonWidth){
 		
 		//---- Use Spring Layout
@@ -102,6 +113,10 @@ public class FileBrowserPanel extends JPanel  implements ActionListener {
 	}
 	
 	
+	
+	/**
+	 * Helper class used to update the the File Path Text Field Once the Browse Button is Pressed.
+	 */
 	public void actionPerformed(ActionEvent e){
 		
 		if(e.getActionCommand().equals(BROWSE_COMMAND_NAME)){
@@ -110,14 +125,10 @@ public class FileBrowserPanel extends JPanel  implements ActionListener {
 			
 			//----- Select OK in the File Chooser
 			if(chooserSelection == JFileChooser.APPROVE_OPTION){
-				//TODO: Implement the file chooser option.
 				String selectedFile = fileChooser.getSelectedFile().toString();
 				
-				//---- Unlock the file path text field, edit it, then
+				//---- Update the file path text field.
 				filePathTextField.setText(selectedFile);
-				
-				JOptionPane.showMessageDialog(null, "Need to implement the Open option of the file chooser." 
-													+ " The selected file was \"" + selectedFile+ "\".");
 				return;
 			}
 			
@@ -126,7 +137,14 @@ public class FileBrowserPanel extends JPanel  implements ActionListener {
 	}
 	
 	
-	
+	/**
+	 * 
+	 * Helper class that implements the "ActionListener" interface.  Simply resets the TextField for the FileBrowser.  
+	 * This is used in case something else (e.g. the menu bar) is changed requiring this field to be reset.
+	 * 
+	 * @author Zayd
+	 *
+	 */
 	public static class ResetFileBrowserListener implements ActionListener {
 		
 		public void actionPerformed( ActionEvent e ){
