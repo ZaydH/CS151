@@ -3,9 +3,9 @@ package cs151_assignment3;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SpringLayout;
@@ -113,17 +113,36 @@ public class SlideShowGUI {
 		
 	}
 	
+
+
 	
 	
 	public static void createImagePanel(){
 		
 		imagePanel = new SlideShowImagePanel(LEFT_PANEL_WIDTH, GUI_HEIGHT, STANDARD_PADDING);
-		fileBrowserPanel.addDocumentListenerForFile(imagePanel);		
+		fileBrowserPanel.addDocumentListenerForFile(imagePanel);
+		//imagePanel.addActionListener(new RedrawGUIListener());
 		mainGUI.add(imagePanel);//, BorderLayout.EAST);
 		
 	}
 	
 	
+//	/**
+//	 * 
+//	 * This class is used to redraw the GUI when the Image Panel is changed. 
+//	 * 
+//	 * @author Zayd
+//	 *
+//	 */
+//	public static class RedrawGUIListener implements ActionListener {
+//		
+//		public void actionPerformed(ActionEvent e){
+//			mainGUI.revalidate();
+//			mainGUI.repaint();
+//		}
+//		
+//	}
+		
 	
-	
+
 }
