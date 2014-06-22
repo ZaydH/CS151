@@ -2,6 +2,7 @@ package cs151_assignment3;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Toolkit;
@@ -11,6 +12,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.event.DocumentEvent;
@@ -27,22 +29,37 @@ public class SlideShowImagePanel extends JPanel implements DocumentListener {
 	private static final long serialVersionUID = 6847898081534233006L;
 	private int panelBorder; 
 	private String imagePath;
+	private String captionText;
+	private JLabel captionLabel;
 	
 
-	public SlideShowImagePanel(int width, int height, int border){
+	public SlideShowImagePanel(int panelWidth, int panelHeight, int panelBorder, int captionWidth, int captionHeight){
 		
 		//---- Fix the size of the image panel
-		Dimension panelDimension = new Dimension(width, height);
+		Dimension panelDimension = new Dimension(panelWidth, panelHeight);
 		this.setSize(panelDimension);
 		this.setPreferredSize(panelDimension);
 		this.setMinimumSize(panelDimension);
 		this.setMaximumSize(panelDimension);
 		
 		//---- Store the panel border
-		panelBorder = border;
+		this.panelBorder = panelBorder;
 		
 		//---- No image by default.
 		imagePath = "";
+		
+		//---- Set up a blank label.
+		captionText = "";
+		captionLabel = new JLabel("", JLabel.CENTER);
+		captionLabel.setOpaque(true);
+		captionLabel.setForeground(Color.BLACK);
+		//----- Define the caption's size
+		Dimension captionLabelDimension = new Dimension( captionWidth, captionHeight );
+		captionLabel.setSize(captionLabelDimension);
+		captionLabel.setPreferredSize(captionLabelDimension);
+		captionLabel.setMinimumSize(captionLabelDimension);
+		captionLabel.setMaximumSize(captionLabelDimension);
+		
 		
 	}
 	
@@ -52,6 +69,7 @@ public class SlideShowImagePanel extends JPanel implements DocumentListener {
 	 * Method to redraw the SlideShowImagePanel.  If an image is specified, it resizes it (if necessary) then draws it to the panel.
 	 * If no image is specified, it draws a blank panel.
 	 */
+	@Override
 	public void paint(Graphics g){
 
 		//----- Always draw the background when repainting.
@@ -98,6 +116,12 @@ public class SlideShowImagePanel extends JPanel implements DocumentListener {
 	}
 	
 	
+	
+	/**
+	 * Help function to redraw the background for the image panel with a black border and white center.
+	 * 
+	 * @param g		Graphics that comes from the panel's "paint" method.
+	 */
 	private void drawImagePanelBackground(Graphics g){
 		//---- Create a border on this Panel.
 		g.setColor(Color.BLACK);		
@@ -108,7 +132,7 @@ public class SlideShowImagePanel extends JPanel implements DocumentListener {
 		g.fillRect((int)Math.ceil(panelBorder/2), (int)Math.ceil(panelBorder/2), this.getWidth()-panelBorder, this.getHeight()-panelBorder);
 	}
 	
-		
+
 	/**
 	 * Function handles document updates (specifically insertions) from a TextField in the FileBrowserPanel.
 	 */
@@ -140,12 +164,85 @@ public class SlideShowImagePanel extends JPanel implements DocumentListener {
 		Document doc = e.getDocument();
 		try {
 			imagePath = doc.getText(0, doc.getLength());
-			revalidate();
-			repaint();
+			this.revalidate();
+			this.repaint();
 			this.invalidate();
 		} catch (BadLocationException e1) {
 			e1.printStackTrace();
 		}			
 	}
+	
+	
+	
+	
+	/**
+	 * 
+	 * @return	Anonymous DocumentListener for
+	 */
+	public DocumentListener createCaptionDocumentListener(){
+		
+		return new DocumentListener(){
+			/**
+			 * Function handles document updates (specifically insertions) from a TextField in the CaptionPanel.
+			 */
+			public void insertUpdate(DocumentEvent e){
+				updateCaptionAndRepaint(e);	
+			}
+
+			/**
+			 * Function handles document updates (specifically removals) from a TextField in the CaptionPanel.
+			 */
+			public void removeUpdate(DocumentEvent e){
+				updateCaptionAndRepaint(e);
+			}
+			
+			
+			/**
+			 *  changedUpdate does not Apply for Text Fields.  
+			 *  This function is implemented due to the interface type's requirements. It does nothing.
+			 */
+			public void changedUpdate(DocumentEvent e){
+			}		
+			
+			/**
+			 * Helper method used to handle document update actions.
+			 * 
+			 * @param e DocumentEvent passed by removeUpdate or insertUpdate methods.
+			 */
+			private void updateCaptionAndRepaint(DocumentEvent e){
+				Document doc = e.getDocument();
+				try {
+					//--- Get the caption text.
+					captionText = doc.getText(0, doc.getLength());
+					captionLabel.setText(captionText);
+					
+					//---- Calculate the font parameters
+					Font captionLabelFont = captionLabel.getFont();
+					
+					//----- Determine if any changes are needed to font due to the width
+					int captionLabelTextWidth = captionLabel.getFontMetrics(captionLabelFont).stringWidth(captionText);
+					int captionFixedWidth = captionLabel.getWidth();
+					double widthFontRatio = (double)captionLabelTextWidth/captionFixedWidth;
+					int widthFontSize = (int)Math.floor(widthFontRatio * captionLabelFont.getSize()); //---- Calculate the new font size if only width is considered
+					
+					//----- Use the smaller of component height or 
+					int newFontSize = (widthFontSize < captionLabel.getHeight())? widthFontSize : captionLabel.getHeight() ;
+					captionLabel.setFont( new Font(captionLabelFont.getFontName(), Font.PLAIN, newFontSize) ); //--- Update the font with the new size.
+					
+					revalidate();
+					repaint();
+					invalidate();
+				} catch (BadLocationException e1) {
+					e1.printStackTrace();
+				}			
+			}			
+			
+		};
+		
+		
+	}
+	
+
+	
 	
 }
