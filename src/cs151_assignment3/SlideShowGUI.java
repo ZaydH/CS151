@@ -34,9 +34,11 @@ public class SlideShowGUI {
 	private static final int CAPTION_BROWSER_PANEL_HEIGHT = 37; 
 	private static final int LEFT_PANEL_SPACING_BETWEEN_MENU_BAR = 5 * STANDARD_PADDING;
 	private static final int LEFT_PANEL_VERTICAL_SPACING = 3 * STANDARD_PADDING;
+	private static final int IMAGE_CAPTION_HEIGHT = 40;
 	private static final int FILE_CONTENTS_PANEL_HEIGHT = PANELS_HEIGHT - FILE_BROWSER_PANEL_HEIGHT - CAPTION_BROWSER_PANEL_HEIGHT 
 														  - LEFT_PANEL_SPACING_BETWEEN_MENU_BAR - 3*LEFT_PANEL_VERTICAL_SPACING;
 
+	
 	
 	//---- Enumerate constants regarding GUI Width
 	private static final int LEFT_PANEL_WIDTH = 400;
@@ -44,6 +46,7 @@ public class SlideShowGUI {
 	private static final int GUI_WIDTH = LEFT_PANEL_WIDTH + PANELS_HEIGHT;
 	private static final int RIGHT_PANEL_WIDTH = GUI_WIDTH-LEFT_PANEL_WIDTH;
 	private static final int LEFT_PANEL_LABEL_WIDTH = 70;
+	private static final int IMAGE_CAPTION_WIDTH = RIGHT_PANEL_WIDTH - 200;
 	
 	
 
@@ -173,8 +176,9 @@ public class SlideShowGUI {
 	public static void createImagePanel(){
 		
 		//---- Add the Image Panel on the right
-		imagePanel = new SlideShowImagePanel(RIGHT_PANEL_WIDTH, PANELS_HEIGHT, 2 * STANDARD_PADDING);
-		fileBrowserPanel.addDocumentListenerForFile(imagePanel);
+		imagePanel = new SlideShowImagePanel(RIGHT_PANEL_WIDTH, PANELS_HEIGHT, 2 * STANDARD_PADDING, IMAGE_CAPTION_WIDTH, IMAGE_CAPTION_HEIGHT);
+		fileBrowserPanel.addDocumentListenerForFile(imagePanel.createImagePathDocumentListener());
+		captionPanel.addDocumentListenerForCaption(imagePanel.createCaptionDocumentListener());
 		mainGUI.add(imagePanel);
 		//---- Setup the location of the panel
 		mainGUILayout.putConstraint(SpringLayout.NORTH, imagePanel, 0, SpringLayout.NORTH, mainGUI);
