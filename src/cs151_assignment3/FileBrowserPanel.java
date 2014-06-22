@@ -12,6 +12,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.Spring;
 import javax.swing.SpringLayout;
+import javax.swing.event.DocumentListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 
@@ -91,6 +92,15 @@ public class FileBrowserPanel extends JPanel  implements ActionListener {
 		
 	}
 	
+	/**
+	 * Add a listener for changes in the TextField change.  Since it is a DocumentListener, it can get the resulting text.
+	 * 
+	 * @param listener An object that implements the DocumentListener Interface that will listen for changes in the JTextField containing the image path.
+	 */
+	public void addDocumentListenerForFile(DocumentListener listener){
+		filePathTextField.getDocument().addDocumentListener(listener);
+	}
+	
 	
 	public void actionPerformed(ActionEvent e){
 		
@@ -106,7 +116,7 @@ public class FileBrowserPanel extends JPanel  implements ActionListener {
 				//---- Unlock the file path text field, edit it, then
 				filePathTextField.setText(selectedFile);
 				
-				JOptionPane.showMessageDialog(this, "Need to implement the Open option of the file chooser." 
+				JOptionPane.showMessageDialog(null, "Need to implement the Open option of the file chooser." 
 													+ " The selected file was \"" + selectedFile+ "\".");
 				return;
 			}

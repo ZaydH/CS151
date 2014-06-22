@@ -22,6 +22,8 @@ public class SlideShowGUI {
 	private static CaptionPanel captionPanel;
 	private static FileBrowserPanel fileBrowserPanel;
 	
+	private static SlideShowImagePanel imagePanel;
+	
 	//---- Enumerate constants regarding GUI Height
 	private static final int FILE_BROWSER_PANEL_HEIGHT = 37;
 	private static final int CAPTION_BROWSER_PANEL_HEIGHT = 37;
@@ -49,6 +51,9 @@ public class SlideShowGUI {
 		
 		//---- Create the left panel of the GUI
 		createLeftPanel();
+		
+		//----- Create the right panel of the GUI
+		createImagePanel();
 		
 		//---- Make the GUI visible
 		mainGUI.setVisible(true);//---- Make the GUI visible
@@ -86,6 +91,7 @@ public class SlideShowGUI {
 		fileBrowserPanel = new FileBrowserPanel(LEFT_PANEL_WIDTH, FILE_BROWSER_PANEL_HEIGHT, 70, STANDARD_PADDING, 100);
 		topMenu.addActionListener(new FileBrowserPanel.ResetFileBrowserListener(), SlideShowJMenuBar.ListenerObject.NEW_FILE);		//---- Listen for New File Actions on MenuBar
 		topMenu.addActionListener(new FileBrowserPanel.ResetFileBrowserListener(), SlideShowJMenuBar.ListenerObject.OPEN_FILE);		//---- Listen for Open File Actions on MenuBar
+		
 		leftGUIPanel.add(fileBrowserPanel);	
 		//----- Set the position of the file browser padding 
 		leftPanelLayout.putConstraint( SpringLayout.NORTH, fileBrowserPanel, 10*STANDARD_PADDING, SpringLayout.NORTH, leftGUIPanel);
@@ -104,6 +110,16 @@ public class SlideShowGUI {
 		
 		//---- Add the Left GUI Panel to the GUI.
 		mainGUI.add(leftGUIPanel, BorderLayout.WEST);
+		
+	}
+	
+	
+	
+	public static void createImagePanel(){
+		
+		imagePanel = new SlideShowImagePanel(LEFT_PANEL_WIDTH, GUI_HEIGHT, STANDARD_PADDING);
+		fileBrowserPanel.addDocumentListenerForFile(imagePanel);		
+		mainGUI.add(imagePanel);//, BorderLayout.EAST);
 		
 	}
 	
