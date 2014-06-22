@@ -9,6 +9,7 @@ public class SlideShowContentsPanel extends JPanel {
 
 	private static JButton saveButton;
 	private static JList slideShowList;
+	private static SlideShowFileContents slideShowFileContents;
 	private static JButton addNewButton;
 	
 	
@@ -16,7 +17,7 @@ public class SlideShowContentsPanel extends JPanel {
 	private static final String addNewButtonCommandName = "ADD_NEW_CONTENT";
 	
 	
-	public SlideShowContentsPanel(int width, int height, int padding){
+	public SlideShowContentsPanel(int width, int height, int padding, int buttonHeight){
 		
 		slideShowList = new JList();
 		slideShowList.setLayoutOrientation(JList.VERTICAL); 				 //----- One item per row.	
@@ -24,7 +25,13 @@ public class SlideShowContentsPanel extends JPanel {
 		
 		
 		
+		
 	}
+	
+	
+	
+	
+	private 
 	
 	
 }

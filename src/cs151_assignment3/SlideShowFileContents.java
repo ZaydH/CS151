@@ -3,12 +3,12 @@ package cs151_assignment3;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
-public class SlideShowStorageFile {
+public class SlideShowFileContents {
 
 	private ArrayList<SlideShowImageInstance> allImages;
 	
 	
-	public SlideShowStorageFile(){
+	public SlideShowFileContents(){
 		allImages = new ArrayList<SlideShowImageInstance>(); //---- Create an array list of images.
 	}
 	
