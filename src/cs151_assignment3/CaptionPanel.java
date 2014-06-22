@@ -125,6 +125,9 @@ public class CaptionPanel extends JPanel  {
 	    public void valueChanged(ListSelectionEvent e) {
 	    	JList imageList = (JList)(e.getSource()); //---- Get the list of images
 	    	
+	    	//---- If nothing is selected, then do nothing
+	    	if(imageList.getSelectedIndex() == -1) return;
+	    	
 	    	SlideShowImageInstance imageInstance = (SlideShowImageInstance)imageList.getSelectedValue();
 	    	captionTextField.setText(imageInstance.getImageCaption());
 	    	

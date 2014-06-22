@@ -180,6 +180,9 @@ public class FileBrowserPanel extends JPanel  implements ActionListener {
 	    public void valueChanged(ListSelectionEvent e) {
 	    	JList imageList = (JList)(e.getSource()); //---- Get the list of images
 	    	
+	    	//---- If nothing is selected, then do nothing
+	    	if(imageList.getSelectedIndex() == -1) return;
+	    	
 	    	SlideShowImageInstance imageInstance = (SlideShowImageInstance)imageList.getSelectedValue();
 	    	filePathTextField.setText(imageInstance.getImagePath());
 	    	

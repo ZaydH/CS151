@@ -47,7 +47,11 @@ public class SlideShowGUI {
 	
 	
 
-	
+	/**
+	 * Main input into the Slide Show Gui.
+	 * 
+	 * @param args Not used.
+	 */
 	public static void main(String args[]){
 		
 		mainGUI = new JFrame();
@@ -78,7 +82,9 @@ public class SlideShowGUI {
 	
 	
 	
-	
+	/**
+	 * Sets the parameters for the GUI JFrame including its size and layout.
+	 */
 	private static void setupMainGUIWindow(){
 		
 		mainGUI.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //---- Ensure the execution ends when the GUI is closed.
@@ -97,7 +103,9 @@ public class SlideShowGUI {
 		mainGUI.setLayout(mainGUILayout);
 	}
 
-	
+	/**
+	 * Creates the JPanels on the left side of the GUI including the Caption Panel, File Browser Panel, and the File Contents/Image List Panel.
+	 */
 	private static void createLeftPanel(){
 		
 		//----- Create the left panel
@@ -113,8 +121,8 @@ public class SlideShowGUI {
 		//---- Add the fileBrowserPanel
 		fileBrowserPanel = new FileBrowserPanel(LEFT_PANEL_WIDTH, FILE_BROWSER_PANEL_HEIGHT, LEFT_PANEL_LABEL_WIDTH,  
 												STANDARD_PADDING, BROWSE_BUTTON_WIDTH);
-		topMenu.addActionListener(new FileBrowserPanel.ResetFileBrowserListener(), SlideShowJMenuBar.ListenerObject.NEW_FILE);		//---- Listen for New File Actions on MenuBar
-		topMenu.addActionListener(new FileBrowserPanel.ResetFileBrowserListener(), SlideShowJMenuBar.ListenerObject.OPEN_FILE);		//---- Listen for Open File Actions on MenuBar
+		topMenu.addActionListener(new FileBrowserPanel.ResetFileBrowserListener(), SlideShowJMenuBar.NEW_FILE_LISTENER);		//---- Listen for New File Actions on MenuBar
+		topMenu.addActionListener(new FileBrowserPanel.ResetFileBrowserListener(), SlideShowJMenuBar.OPEN_FILE_LISTENER);		//---- Listen for Open File Actions on MenuBar
 		leftGUIPanel.add(fileBrowserPanel);	
 		//----- Set the position of the file browser padding
 		leftPanelLayout.putConstraint( SpringLayout.NORTH, fileBrowserPanel, LEFT_PANEL_SPACING_BETWEEN_MENU_BAR, SpringLayout.NORTH, leftGUIPanel);
@@ -123,9 +131,9 @@ public class SlideShowGUI {
 		
 		//----- Make the Pane storing the caption information		
 		captionPanel = new CaptionPanel(LEFT_PANEL_WIDTH, CAPTION_BROWSER_PANEL_HEIGHT, LEFT_PANEL_LABEL_WIDTH, STANDARD_PADDING);
-		topMenu.addActionListener(new CaptionPanel.ResetCaptionListener(), SlideShowJMenuBar.ListenerObject.NEW_FILE);		//---- Listen for New File Actions on MenuBar
-		topMenu.addActionListener(new CaptionPanel.ResetCaptionListener(), SlideShowJMenuBar.ListenerObject.OPEN_FILE);		//---- Listen for Open File Actions on MenuBar	
-		fileBrowserPanel.addBrowseFileChooserListener(new CaptionPanel.ResetCaptionListener()); 							//---- Reset the Caption when browsing for a new file.
+		topMenu.addActionListener(new CaptionPanel.ResetCaptionListener(), SlideShowJMenuBar.NEW_FILE_LISTENER);		//---- Listen for New File Actions on MenuBar
+		topMenu.addActionListener(new CaptionPanel.ResetCaptionListener(), SlideShowJMenuBar.OPEN_FILE_LISTENER);		//---- Listen for Open File Actions on MenuBar	
+		//fileBrowserPanel.addBrowseFileChooserListener(new CaptionPanel.ResetCaptionListener()); 							//---- Reset the Caption when browsing for a new file.
 		leftGUIPanel.add(captionPanel);
 		//----- Set the position of the file browser padding 
 		leftPanelLayout.putConstraint( SpringLayout.NORTH, captionPanel, LEFT_PANEL_VERTICAL_SPACING, SpringLayout.SOUTH, fileBrowserPanel);
@@ -145,9 +153,9 @@ public class SlideShowGUI {
 		fileContentsPanel.addListSelectionListener(new CaptionPanel.FilePathListSectionListener());												//---- Listen for an Image to Be Selected from the List
 		fileBrowserPanel.addDocumentListenerForFile(new SlideShowContentsPanel.FileBrowserListener());											//---- Listen for changes in the file browser.
 		captionPanel.addDocumentListenerForCaption(new SlideShowContentsPanel.CaptionListener()); 												//---- Listen for changes in the caption
-		topMenu.addActionListener(new SlideShowContentsPanel.ResetContentsPaneListener(), SlideShowJMenuBar.ListenerObject.NEW_FILE);			//---- Listen for New File Actions on MenuBar
-		topMenu.addActionListener(new SlideShowContentsPanel.OpenFileContentsPaneListener(), SlideShowJMenuBar.ListenerObject.OPEN_FILE);			//---- Listen for New File Actions on MenuBar
-		topMenu.addActionListener(new SlideShowContentsPanel.SaveFileContentsPaneListener(), SlideShowJMenuBar.ListenerObject.SAVE_FILE);			//---- Listen for New File Actions on MenuBar	
+		topMenu.addActionListener(new SlideShowContentsPanel.ResetContentsPaneListener(), SlideShowJMenuBar.NEW_FILE_LISTENER);			//---- Listen for New File Actions on MenuBar
+		topMenu.addActionListener(new SlideShowContentsPanel.OpenFileContentsPaneListener(), SlideShowJMenuBar.OPEN_FILE_LISTENER);		//---- Listen for New File Actions on MenuBar
+		topMenu.addActionListener(new SlideShowContentsPanel.SaveFileContentsPaneListener(), SlideShowJMenuBar.SAVE_FILE_LISTENER);		//---- Listen for New File Actions on MenuBar	
 		
 		//---- Add the Left GUI Panel to the GUI.
 		mainGUI.add(leftGUIPanel);

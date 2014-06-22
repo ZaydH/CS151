@@ -24,6 +24,14 @@ public class SlideShowJMenuBar extends JMenuBar implements ActionListener {
 	private static JFileChooser saveFileChooser;
 	
 	
+	public static final int NEW_FILE_LISTENER = 0;
+	public static final int OPEN_FILE_LISTENER = 1;
+	public static final int SAVE_FILE_LISTENER = 2;
+	
+	
+	/**
+	 * Constructor for the Slide Show GUI Menu Bar.
+	 */
 	public SlideShowJMenuBar(){
 		
 
@@ -61,31 +69,33 @@ public class SlideShowJMenuBar extends JMenuBar implements ActionListener {
 	
 	
 	
-	public void addActionListener( ActionListener listener, ListenerObject objectType ){
+	public void addActionListener( ActionListener listener, int objectType ){
 		
 		switch(objectType){
-			case NEW_FILE:
+			case NEW_FILE_LISTENER:
 				//---- Iterate through all the menu items
 				for(Component menuComponent : fileMenu.getMenuComponents()){
 					
 					JMenuItem menuItem = (JMenuItem)menuComponent;
 					//---- Check if the "New" Menu Item
-					if(objectType == ListenerObject.NEW_FILE && menuItem.getText().toLowerCase().equals("new")){
+					if(objectType == NEW_FILE_LISTENER && menuItem.getText().toLowerCase().equals("new")){
 						menuItem.addActionListener(listener);
 						return;
 					}
 				}
 				return;
-			case OPEN_FILE:
+			case OPEN_FILE_LISTENER:
 				openFileChooser.addActionListener(listener);
 				return;
-			case SAVE_FILE:
+			case SAVE_FILE_LISTENER:
 				saveFileChooser.addActionListener(listener);
 				return;
 		}
 	}
 		
-	
+	/**
+	 * Action Listener for the Menu bar.  Menu items that have effects are Open, Save, and Exit.
+	 */
 	public void actionPerformed(ActionEvent e){
 		if(e.getActionCommand().equals("fileMenuNew")){
 		}
@@ -100,13 +110,12 @@ public class SlideShowJMenuBar extends JMenuBar implements ActionListener {
 		}		
 	}
 	
+	
+	/**
+	 * Closes the entire GUI.
+	 */
 	private void menuExitAction(){
 		System.exit(0); //---- Kill the program
 	}	
-	
-	public enum ListenerObject{
-		NEW_FILE, OPEN_FILE, SAVE_FILE
-	}
-	
 	
 }
