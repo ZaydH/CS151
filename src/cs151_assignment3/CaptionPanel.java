@@ -15,17 +15,21 @@ public class CaptionPanel extends JPanel  {
 
 		
 	/**
-	 * 
+	 * UID required to extended JPanel.  System generated.
 	 */
 	private static final long serialVersionUID = -8073474470479993782L;
 	private static JTextField captionTextField;
 	private static JLabel captionLabel;
 	
 	
-	public CaptionPanel(){
-		
-	}
-	
+	/**
+	 * Primary constructor for the Panel Containing the Picture Caption and the Caption Label ("Caption:").
+	 * 
+	 * @param panelWidth	Width of this Panel
+	 * @param panelHeight	Height of this Panel
+	 * @param labelWidth	Width of the left label for this panel.
+	 * @param padding		Spacing between items in the Panel.
+	 */
 	public CaptionPanel(int panelWidth, int panelHeight, int labelWidth, int padding){
 				
 

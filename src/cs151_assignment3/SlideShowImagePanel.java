@@ -1,5 +1,6 @@
 package cs151_assignment3;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -11,14 +12,13 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
-import javax.swing.JFrame;
+import javax.swing.BorderFactory;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
-import javax.swing.JFrame;
 
 
 public class SlideShowImagePanel extends JPanel implements DocumentListener {
@@ -50,12 +50,23 @@ public class SlideShowImagePanel extends JPanel implements DocumentListener {
 	
 	
 
-	
+	/**
+	 * Method to redraw the SlideShowImagePanel.  If an image is specified, it resizes it (if necessary) then draws it to the panel.
+	 * If no image is specified, it draws a blank panel.
+	 */
 	public void paint(Graphics g){
 
-		//---- Redraw the entire panel.
-		g.setColor(Color.GRAY);
+
+		//---- Create a border on this Panel.
+		g.setColor(Color.BLACK);		
 		g.fillRect(0, 0, this.getWidth(), this.getHeight());
+		
+		//---- Redraw the entire panel.
+		g.setColor(Color.WHITE);
+		g.fillRect((int)Math.ceil(panelBorder/2), (int)Math.ceil(panelBorder/2), this.getWidth()-panelBorder, this.getHeight()-panelBorder);
+		
+
+
 		
 		if(imagePath.equals("")) return;
 		
