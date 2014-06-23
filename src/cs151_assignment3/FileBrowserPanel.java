@@ -18,12 +18,22 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 
+
+/**
+ * 
+ * One of four helper panels.  This panel contains the "Image:" JLabel, the FilePath text field, and the "Browse" button.
+ * 
+ * @author Zayd
+ *
+ */
+
 public class FileBrowserPanel extends JPanel  implements ActionListener {
 	
 
 	private static JFileChooser fileChooser;
 	private static JButton browseButton;
 	private static JTextField filePathTextField;
+	private static final String FILE_PATH_LABEL_STRING = "Image:";
 	private static JLabel filePathLabel;
 	private SpringLayout browserLayout;
 	
@@ -54,7 +64,7 @@ public class FileBrowserPanel extends JPanel  implements ActionListener {
 		
 		
 		//---- Setup the layout
-		filePathLabel = new JLabel("Image:");
+		filePathLabel = new JLabel(FILE_PATH_LABEL_STRING);
 		this.add(filePathLabel);
 		SpringLayout.Constraints fileLabelConstraints = browserLayout.getConstraints(filePathLabel);
 		fileLabelConstraints.setX( Spring.constant(labelWidth - fileLabelConstraints.getWidth().getValue() ) ); //---- Set the position of the of the file path label.

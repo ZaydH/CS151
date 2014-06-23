@@ -15,6 +15,16 @@ import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+
+
+/**
+ * 
+ * One of four helper panels.  This one contains the "Capttion:" j
+ * 
+ * @author Zayd
+ *
+ */
+
 public class CaptionPanel extends JPanel  {
 
 		
@@ -23,6 +33,7 @@ public class CaptionPanel extends JPanel  {
 	 */
 	private static final long serialVersionUID = -8073474470479993782L;
 	private static JTextField captionTextField;
+	private static final String CAPTION_LABEL_STRING = "Caption:";
 	private static JLabel captionLabel;
 	
 	
@@ -53,7 +64,7 @@ public class CaptionPanel extends JPanel  {
 		
 		//----- Create the captions
 		captionLabel = new JLabel();
-		captionLabel.setText("Caption:");
+		captionLabel.setText(CAPTION_LABEL_STRING);
 		this.add(captionLabel);
 		
 		//----- Set the captions layout constraints

@@ -19,6 +19,14 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 
+
+/**
+ * Helper panel that contains the slide show list and buttons to add and save items in the list.
+ * 
+ * @author Zayd
+ *
+ */
+
 public class SlideShowContentsPanel extends JPanel implements ActionListener {
 
 	/**
@@ -43,7 +51,15 @@ public class SlideShowContentsPanel extends JPanel implements ActionListener {
 	public static final int ADD_NEW_IMAGE_LISTENER = 0;
 	public static final int SAVE_IMAGE_LISTENER = 1;
 
-	
+	/**
+	 * 
+	 * Sole constructor for the Slide Show Contents Panel.
+	 * 
+	 * @param width			Width of the Slide Show Contents Panel
+	 * @param height		Height of the Slide Show Contents Panel.
+	 * @param padding		Padding (i.e. spacing) between items in the panel.
+	 * @param buttonHeight	Height of any JButtons in this Panel
+	 */
 	public SlideShowContentsPanel(int width, int height, int padding, int buttonHeight){
 		
 		//---- Use the SpringLayout for this Panel

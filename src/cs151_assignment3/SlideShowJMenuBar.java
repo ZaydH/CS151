@@ -11,11 +11,19 @@ import javax.swing.JMenuItem;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+
+/**
+ * Containing class for the JMenuBar.
+ * 
+ * @author Zayd
+ *
+ */
+
 public class SlideShowJMenuBar extends JMenuBar implements ActionListener {
 
 	
 	/**
-	 * 
+	 * Auto-generated UID for this JPanel.
 	 */
 	private static final long serialVersionUID = 1686924456234878847L;
 	private static JMenu fileMenu;
@@ -68,7 +76,13 @@ public class SlideShowJMenuBar extends JMenuBar implements ActionListener {
 	}
 	
 	
-	
+	/**
+	 * 
+	 * Allows for ActionListeners to be added to the Menu Bar.  Menu Items that support listeners are "New", "Open", and "Save".
+	 * 
+	 * @param listener		ActionListener to be added.
+	 * @param objectType	Type of Listener to be added.  
+	 */
 	public void addActionListener( ActionListener listener, int objectType ){
 		
 		switch(objectType){

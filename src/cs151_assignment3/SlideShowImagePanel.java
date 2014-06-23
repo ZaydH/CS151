@@ -15,12 +15,20 @@ import javax.imageio.ImageIO;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-//import javax.swing.SpringLayout;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 
+
+
+/**
+ * 
+ * Displays the selected image and caption on the screen as specified by the user.
+ * 
+ * @author Zayd
+ *
+ */
 
 public class SlideShowImagePanel extends JPanel {
 

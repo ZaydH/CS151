@@ -11,6 +11,14 @@ import java.util.Scanner;
 
 import javax.swing.JOptionPane;
 
+
+/**
+ * This class the set of images for the class and manages their import and export.
+ * 
+ * @author Zayd
+ *
+ */
+
 public class SlideShowFileContents {
 
 	private ArrayList<SlideShowImageInstance> allImages;

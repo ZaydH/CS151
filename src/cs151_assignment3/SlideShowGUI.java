@@ -2,13 +2,20 @@ package cs151_assignment3;
 
 
 import java.awt.Dimension;
-import java.awt.Insets;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SpringLayout;
 
 
+
+/**
+ * 
+ * Main class that runs and loads the GUI.
+ * 
+ * @author Zayd
+ *
+ */
 
 public class SlideShowGUI {
 

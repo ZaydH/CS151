@@ -1,5 +1,14 @@
 package cs151_assignment3;
 
+
+/**
+ * 
+ * This file represents a single image instance.  It is how image list files are stored.
+ * 
+ * @author Zayd
+ *
+ */
+
 public class SlideShowImageInstance {
 
 	private int id;
