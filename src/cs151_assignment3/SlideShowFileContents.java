@@ -126,7 +126,9 @@ public class SlideShowFileContents {
 			}
 
 			//---- Get the number of files in the list.
-			numberImageFiles = Integer.parseInt(fileIn.nextLine());
+			//numberImageFiles = Integer.parseInt(fileIn.nextLine());
+			numberImageFiles = fileIn.nextInt();
+			fileIn.nextLine();//---- Read the newline.
 			bufferImageList = new ArrayList<SlideShowImageInstance>(numberImageFiles);
 			
 			//----- Read the image information from the file.
@@ -144,6 +146,7 @@ public class SlideShowFileContents {
 					else{
 						//---- Load image parameters.
 						imageFileParamters[j] = fileIn.nextLine();
+						if(imageFileParamters[j].equals(" ")) imageFileParamters[j] = "";//---- Handle the null space case needed by the parser
 					}
 				}
 				
@@ -205,7 +208,13 @@ public class SlideShowFileContents {
 				//---- Iterate through all image parameters
 				for(int j = 0; j < imageParameters.length; j++){
 					fileOut.newLine();
-					fileOut.write(imageParameters[j], 0, imageParameters[j].length());//---- Precede with a new line to ensure no blank line at the end of the file.
+					if(!imageParameters[j].equals("")){
+						fileOut.write(imageParameters[j], 0, imageParameters[j].length());//---- Precede with a new line to ensure no blank line at the end of the file.
+					}
+					else{
+						fileOut.write(" ", 0, 1);//---- Precede with a new line to ensure no blank line at the end of the file.
+					}
+						
 				}
 			}
 			

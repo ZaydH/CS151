@@ -15,6 +15,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.SpringLayout;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
@@ -109,6 +110,7 @@ public class SlideShowContentsPanel extends JPanel implements ActionListener {
 		slideShowList.setLayoutOrientation(JList.VERTICAL); 				 //----- One item per row.	
 		slideShowList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION); //---- Allow only one image to be selected at a time.
 		loadSlideShowListFromFileContents();
+		slideShowList.addListSelectionListener(new RepaintListSelectionListener());
 		
 		//---- Create the pane containing the List of Images.
 		slideShowListPane = new JScrollPane(slideShowList);
@@ -377,5 +379,19 @@ public class SlideShowContentsPanel extends JPanel implements ActionListener {
 			}			
 		}
 	}	
+	
+	
+	/**
+	 * 
+	 * Allows for the panel to be repainted on a list selection.
+	 * 
+	 * @author Zayd
+	 *
+	 */
+	final public class RepaintListSelectionListener implements ListSelectionListener {
+	    public void valueChanged(ListSelectionEvent e) {
+	    	repaint();
+	    }		
+	}
 	
 }

@@ -39,8 +39,10 @@ public class SlideShowImagePanel extends JPanel {
 	private static final long serialVersionUID = 6847898081534233006L;
 	private int panelBorder; 
 	private String imagePath;
+	private String previousImagePath;
 	private String captionText;
 	private JLabel captionLabel;
+
 	
 
 	/**
@@ -71,6 +73,7 @@ public class SlideShowImagePanel extends JPanel {
 		
 		//---- No image by default.
 		imagePath = "";
+		previousImagePath="";
 		
 		//---- Set up a blank label.
 		captionText = "";
@@ -139,12 +142,18 @@ public class SlideShowImagePanel extends JPanel {
 			return;
 		}
 		catch(FileNotFoundException ex){
-			JOptionPane.showMessageDialog(null, "Error: The file \"" + imagePath + "\" does not exist.");
+			if(!previousImagePath.equals(imagePath)){
+				previousImagePath = imagePath;
+				JOptionPane.showMessageDialog(null, "Error: The file \"" + imagePath + "\" does not exist.");				
+			}
 			//----- Need to redraw the background due to the JOptionPane.
 			drawImagePanelBackground(g);			
 		}
 		catch(IOException ex){
-			JOptionPane.showMessageDialog(null, "Error: There was an unrecoverable error loading the image at location \"" + imagePath + "\".");
+			if(!previousImagePath.equals(imagePath)){
+				previousImagePath = imagePath;
+				JOptionPane.showMessageDialog(null, "Error: There was an unrecoverable error loading the image at location \"" + imagePath + "\".");				
+			}			
 			//----- Need to redraw the background due to the JOptionPane.
 			drawImagePanelBackground(g);
 		}			
@@ -217,6 +226,7 @@ public class SlideShowImagePanel extends JPanel {
 							private void updatePathAndRepaint(DocumentEvent e){
 								Document doc = e.getDocument();
 								try {
+									previousImagePath = "";
 									imagePath = doc.getText(0, doc.getLength());
 									revalidate();
 									repaint();
@@ -284,7 +294,7 @@ public class SlideShowImagePanel extends JPanel {
 					int widthFontSize = (int)Math.floor(widthFontRatio * captionLabelFont.getSize()); //---- Calculate the new font size if only width is considered
 					
 					//----- Use the smaller of component height or font size
-					int newFontSize = (widthFontSize < captionLabel.getHeight())? widthFontSize : captionLabel.getHeight() ;
+					int newFontSize = (widthFontSize < captionLabel.getHeight())? widthFontSize : (int)(0.8*captionLabel.getHeight()) ;
 					newFontSize *= 0.9;//---- Give extra padding on the sides.
 					captionLabel.setFont( new Font(captionLabelFont.getFontName(), Font.PLAIN, newFontSize) ); //--- Update the font with the new size.
 					
