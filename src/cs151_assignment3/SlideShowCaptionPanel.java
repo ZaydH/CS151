@@ -25,7 +25,7 @@ import javax.swing.event.ListSelectionListener;
  *
  */
 
-public class CaptionPanel extends JPanel  {
+public class SlideShowCaptionPanel extends JPanel  {
 
 		
 	/**
@@ -45,7 +45,7 @@ public class CaptionPanel extends JPanel  {
 	 * @param labelWidth	Width of the left label for this panel.
 	 * @param padding		Spacing between items in the Panel.
 	 */
-	public CaptionPanel(int panelWidth, int panelHeight, int labelWidth, int padding){
+	public SlideShowCaptionPanel(int panelWidth, int panelHeight, int labelWidth, int padding){
 				
 
 		

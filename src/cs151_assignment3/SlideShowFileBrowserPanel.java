@@ -27,7 +27,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  *
  */
 
-public class FileBrowserPanel extends JPanel  implements ActionListener {
+public class SlideShowFileBrowserPanel extends JPanel  implements ActionListener {
 	
 
 	private static JFileChooser fileChooser;
@@ -51,7 +51,7 @@ public class FileBrowserPanel extends JPanel  implements ActionListener {
 	 * @param padding				Padding Between elements and the border
 	 * @param browseButtonWidth		Width of the browse button.
 	 */
-	public FileBrowserPanel(int panelWidth, int panelHeight, int labelWidth, int padding, int browseButtonWidth){
+	public SlideShowFileBrowserPanel(int panelWidth, int panelHeight, int labelWidth, int padding, int browseButtonWidth){
 		
 		//---- Use Spring Layout
 		Dimension panelDimension = new Dimension(panelWidth, panelHeight);
