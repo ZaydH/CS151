@@ -64,7 +64,8 @@ public class SlideShowJMenuBar extends JMenuBar implements ActionListener {
 		this.add(fileMenu);
 		
 		//----- Create the open file chooser
-		FileFilter fileNameExtensionFiter = new FileNameExtensionFilter("Slide Show Files (*.show)", "show" );//---- File extension is "show". Use for all file tools
+		FileFilter fileNameExtensionFiter = new FileNameExtensionFilter("Slide Show Files (*." + SlideShowFileContents.FILE_EXTENSION + ")", 
+																		SlideShowFileContents.FILE_EXTENSION );//---- File extension is "show". Use for all file tools
 		openFileChooser = new JFileChooser();
 		openFileChooser.setFileFilter( fileNameExtensionFiter );		
 	

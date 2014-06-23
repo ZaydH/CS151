@@ -22,6 +22,7 @@ import javax.swing.JOptionPane;
 public class SlideShowFileContents {
 
 	private ArrayList<SlideShowImageInstance> allImages;
+	public static final String FILE_EXTENSION = "show";
 	
 	
 	/**
@@ -180,7 +181,15 @@ public class SlideShowFileContents {
 	public void writeSlideShowFile(File file){
 		
 		try{
-			BufferedWriter fileOut = new BufferedWriter(new FileWriter(file.getAbsolutePath()));
+			
+			//---- Automatically add a file extension if it is not there.
+			String filePath = file.getAbsolutePath();
+			if(!filePath.toLowerCase().endsWith("." + FILE_EXTENSION.toLowerCase())){
+				filePath += "." + FILE_EXTENSION;
+			}
+			
+			//---- Open the file out
+			BufferedWriter fileOut = new BufferedWriter(new FileWriter(filePath));
 			
 			//---- Write to a file.
 			String outputStr;
