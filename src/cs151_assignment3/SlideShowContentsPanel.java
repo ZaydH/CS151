@@ -253,6 +253,10 @@ public class SlideShowContentsPanel extends JPanel implements ActionListener {
 			if(slideShowFileContents.readSlideShowFile(fc.getSelectedFile())){
 				loadSlideShowListFromFileContents();
 				slideShowList.clearSelection();
+				//---- Per the use case select the first image in the list.
+				if(slideShowList.getModel().getSize() > 0){
+					slideShowList.setSelectedIndex(0);
+				}
 			}
 		}
 		
