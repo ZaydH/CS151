@@ -390,6 +390,9 @@ public class SlideShowContentsPanel extends JPanel implements ActionListener {
 	 */
 	final public class RepaintListSelectionListener implements ListSelectionListener {
 	    public void valueChanged(ListSelectionEvent e) {
+	    	slideShowListPane.revalidate();
+	    	slideShowListPane.repaint();
+	    	revalidate();
 	    	repaint();
 	    }		
 	}
