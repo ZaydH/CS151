@@ -15,8 +15,7 @@ import javax.imageio.ImageIO;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.Spring;
-import javax.swing.SpringLayout;
+//import javax.swing.SpringLayout;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
@@ -28,6 +27,7 @@ public class SlideShowImagePanel extends JPanel {
 	/**
 	 * Auto generated UID from the system
 	 */
+	//SpringLayout imagePanelLayout;
 	private static final long serialVersionUID = 6847898081534233006L;
 	private int panelBorder; 
 	private String imagePath;
@@ -47,6 +47,10 @@ public class SlideShowImagePanel extends JPanel {
 	 */
 	public SlideShowImagePanel(int panelWidth, int panelHeight, int panelBorder, int captionWidth, int captionHeight){
 		
+		//---- Setup the panel's layout.
+		super();
+		this.setLayout(null);
+		
 		//---- Fix the size of the image panel
 		Dimension panelDimension = new Dimension(panelWidth, panelHeight);
 		this.setSize(panelDimension);
@@ -62,16 +66,22 @@ public class SlideShowImagePanel extends JPanel {
 		
 		//---- Set up a blank label.
 		captionText = "";
-		captionLabel = new JLabel("HELLO WORLD!", JLabel.CENTER);
-		captionLabel.setOpaque(true);
+		captionLabel = new JLabel(captionText, JLabel.CENTER);
+		captionLabel.setOpaque(false);
 		captionLabel.setForeground(Color.BLACK);
+		captionLabel.setVisible(true);
 		this.add(captionLabel);
+		
 		//----- Define the caption's size
 		Dimension captionLabelDimension = new Dimension( captionWidth, captionHeight );
 		captionLabel.setSize(captionLabelDimension);
 		captionLabel.setPreferredSize(captionLabelDimension);
 		captionLabel.setMinimumSize(captionLabelDimension);
 		captionLabel.setMaximumSize(captionLabelDimension);
+		//imagePanelLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, captionLabel, 0, SpringLayout.HORIZONTAL_CENTER, this);
+		
+
+		this.setLayout(null);
 		
 	}
 	
@@ -114,7 +124,10 @@ public class SlideShowImagePanel extends JPanel {
 				g.drawImage(newImage, (this.getWidth() - newImage.getWidth())/2, (this.getHeight() - newImage.getHeight())/2,  null);
 			}
 			
+			captionLabel.revalidate();
 			captionLabel.repaint();
+			//captionLabel.paint(g);
+			super.paintComponents(g);
 			return;
 		}
 		catch(FileNotFoundException ex){
@@ -138,6 +151,7 @@ public class SlideShowImagePanel extends JPanel {
 	 * @param g		Graphics that comes from the panel's "paint" method.
 	 */
 	private void drawImagePanelBackground(Graphics g){
+		
 		//---- Create a border on this Panel.
 		g.setColor(Color.BLACK);		
 		g.fillRect(0, 0, this.getWidth(), this.getHeight());
@@ -147,8 +161,13 @@ public class SlideShowImagePanel extends JPanel {
 		g.fillRect((int)Math.ceil(panelBorder/2), (int)Math.ceil(panelBorder/2), this.getWidth()-panelBorder, this.getHeight()-panelBorder);
 		
 		captionLabel.setLocation((this.getWidth() - captionLabel.getWidth())/2, this.getHeight() - captionLabel.getHeight() - 3 * panelBorder);
-		captionLabel.repaint();
+		captionLabel.setBounds((this.getWidth() - captionLabel.getWidth())/2, this.getHeight() - captionLabel.getHeight() - 3 * panelBorder, 
+							   captionLabel.getWidth(), captionLabel.getHeight());
 		
+		captionLabel.revalidate();
+		captionLabel.repaint();
+		//captionLabel.paint(g);
+		super.paintComponents(g);
 	}
 
 	/**
