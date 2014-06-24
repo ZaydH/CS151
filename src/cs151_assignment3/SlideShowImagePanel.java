@@ -40,6 +40,7 @@ public class SlideShowImagePanel extends JPanel {
 	private int panelBorder; 
 	private String imagePath;
 	private String previousImagePath;
+	private boolean imagePathIsValid;
 	private String captionText;
 	private JLabel captionLabel;
 
@@ -91,7 +92,9 @@ public class SlideShowImagePanel extends JPanel {
 		captionLabel.setMaximumSize(captionLabelDimension);
 		//imagePanelLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, captionLabel, 0, SpringLayout.HORIZONTAL_CENTER, this);
 		
-
+		//---- By default the image is invalid.
+		imagePathIsValid = false;
+		
 		this.setLayout(null);
 		
 	}
@@ -108,7 +111,7 @@ public class SlideShowImagePanel extends JPanel {
 		//----- Always draw the background when repainting.
 		drawImagePanelBackground(g);
 		
-		if(imagePath.equals("")) return;
+		if(!imagePathIsValid) return;
 		
 		//---- Load an Image from file
 		try{
@@ -141,21 +144,13 @@ public class SlideShowImagePanel extends JPanel {
 			super.paintComponents(g);
 			return;
 		}
-		catch(FileNotFoundException ex){
-			if(!previousImagePath.equals(imagePath)){
-				previousImagePath = imagePath;
-				JOptionPane.showMessageDialog(null, "Error: The file \"" + imagePath + "\" does not exist.");				
-			}
-			//----- Need to redraw the background due to the JOptionPane.
-			drawImagePanelBackground(g);			
-		}
 		catch(IOException ex){
-			if(!previousImagePath.equals(imagePath)){
-				previousImagePath = imagePath;
-				JOptionPane.showMessageDialog(null, "Error: There was an unrecoverable error loading the image at location \"" + imagePath + "\".");				
-			}			
-			//----- Need to redraw the background due to the JOptionPane.
 			drawImagePanelBackground(g);
+			captionLabel.revalidate();
+			captionLabel.repaint();
+			//captionLabel.paint(g);
+			super.paintComponents(g);
+			return;
 		}			
 
 	}
@@ -226,8 +221,25 @@ public class SlideShowImagePanel extends JPanel {
 							private void updatePathAndRepaint(DocumentEvent e){
 								Document doc = e.getDocument();
 								try {
-									previousImagePath = "";
+									//---- Verify you are able to read the document text.
 									imagePath = doc.getText(0, doc.getLength());
+									
+									//---- Once you have read back the image information, verify if the image is a valid one.
+									if(imagePath.equals("")){
+										imagePathIsValid = false;
+									}
+									else if(!imagePath.equals(previousImagePath)){
+										try{
+											ImageIO.read(new File(imagePath)); //---- Try to read the image.
+											imagePathIsValid = true;
+										}
+										catch(IOException imageBufferingError){
+											JOptionPane.showMessageDialog(null, "Error: There was an unrecoverable error loading the image at location \"" + imagePath + "\".");
+											imagePathIsValid = false;
+										}
+									}
+									previousImagePath = imagePath;
+
 									revalidate();
 									repaint();
 									invalidate();

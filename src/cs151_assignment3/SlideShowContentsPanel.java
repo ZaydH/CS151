@@ -394,6 +394,7 @@ public class SlideShowContentsPanel extends JPanel implements ActionListener {
 	    	slideShowListPane.repaint();
 	    	revalidate();
 	    	repaint();
+	    	slideShowListPane.paintAll(slideShowListPane.getGraphics());
 	    }		
 	}
 	
