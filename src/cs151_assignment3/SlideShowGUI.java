@@ -180,7 +180,7 @@ public class SlideShowGUI {
 	/**
 	 *  Creates the left panel where the image is.
 	 */
-	public static void createImagePanel(){
+	private static void createImagePanel(){
 		
 		//---- Add the Image Panel on the right
 		imagePanel = new SlideShowImagePanel(RIGHT_PANEL_WIDTH, PANELS_HEIGHT, 2 * STANDARD_PADDING, IMAGE_CAPTION_WIDTH, IMAGE_CAPTION_HEIGHT);
