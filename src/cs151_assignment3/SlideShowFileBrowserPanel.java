@@ -3,11 +3,15 @@ package cs151_assignment3;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.Spring;
@@ -146,9 +150,20 @@ public class SlideShowFileBrowserPanel extends JPanel  implements ActionListener
 			//----- Select OK in the File Chooser
 			if(chooserSelection == JFileChooser.APPROVE_OPTION){
 				String selectedFile = fileChooser.getSelectedFile().toString();
-				
-				//---- Update the file path text field.
-				filePathTextField.setText(selectedFile);
+				//---- Ensure the file is valid.
+				try{
+					ImageIO.read(new File(selectedFile)); //---- Try to read the image.
+					//---- Update the file path text field.
+					filePathTextField.setText(selectedFile);
+					this.revalidate();
+					this.repaint();					
+				}
+				catch(IOException imageBufferingError){
+					filePathTextField.setText("");
+					JOptionPane.showMessageDialog(null, "Error: There was an unrecoverable error loading the image at location \"" + selectedFile + "\".");
+					this.revalidate();
+					this.repaint();
+				}
 				return;
 			}
 			
