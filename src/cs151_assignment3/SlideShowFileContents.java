@@ -128,8 +128,11 @@ public class SlideShowFileContents {
 			//---- Get the number of files in the list.
 			//numberImageFiles = Integer.parseInt(fileIn.nextLine());
 			numberImageFiles = fileIn.nextInt();
-			fileIn.nextLine();//---- Read the newline.
-			bufferImageList = new ArrayList<SlideShowImageInstance>(numberImageFiles);
+			if(numberImageFiles > 0) fileIn.nextLine();//---- Read the newline.
+			
+			//---- Create the ArrayList.
+			if(numberImageFiles > 0) bufferImageList = new ArrayList<SlideShowImageInstance>(numberImageFiles);
+			else bufferImageList = new ArrayList<SlideShowImageInstance>();
 			
 			//----- Read the image information from the file.
 			for(int i = 0; i < numberImageFiles; i++){
