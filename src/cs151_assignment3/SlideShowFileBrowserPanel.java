@@ -124,15 +124,15 @@ public class SlideShowFileBrowserPanel extends JPanel  implements ActionListener
 		filePathTextField.getDocument().addDocumentListener(listener);
 	}
 	
-	/**
-	 * Add a new listener to the browse file chooser.
-	 * 
-	 * @param listener New listener to be added to the browse file chooser
-	 */
-	public void addBrowseFileChooserListener(ActionListener listener){
-		fileChooser.addActionListener(listener);
-	}
-	
+//	/**
+//	 * Add a new listener to the browse file chooser.
+//	 * 
+//	 * @param listener New listener to be added to the browse file chooser
+//	 */
+//	public void addBrowseFileChooserListener(ActionListener listener){
+//		fileChooser.addActionListener(listener);
+//	}
+//	
 	
 	/**
 	 * Helper class used to update the the File Path Text Field Once the Browse Button is Pressed.
@@ -186,7 +186,7 @@ public class SlideShowFileBrowserPanel extends JPanel  implements ActionListener
 	 * @author Zayd
 	 *
 	 */
-	public static class FilePathListSectionListener implements ListSelectionListener {
+	public static class FilePathListSelectionListener implements ListSelectionListener {
 	    public void valueChanged(ListSelectionEvent e) {
 	    	JList imageList = (JList)(e.getSource()); //---- Get the list of images
 	    	

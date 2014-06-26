@@ -19,7 +19,7 @@ import javax.swing.event.ListSelectionListener;
 
 /**
  * 
- * One of four helper panels.  This one contains the "Capttion:" j
+ * One of four helper panels.  This one contains the "Caption:" JLabel and the caption JTextField
  * 
  * @author Zayd
  *
@@ -132,7 +132,7 @@ public class SlideShowCaptionPanel extends JPanel  {
 	 * @author Zayd
 	 *
 	 */
-	public static class FilePathListSectionListener implements ListSelectionListener {
+	public static class CaptionListSelectionListener implements ListSelectionListener {
 	    public void valueChanged(ListSelectionEvent e) {
 	    	JList imageList = (JList)(e.getSource()); //---- Get the list of images
 	    	
