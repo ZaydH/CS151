@@ -74,6 +74,11 @@ public class SlideShowContentsPanel extends JPanel implements ActionListener {
 		this.setMinimumSize(panelDimension);
 		this.setMaximumSize(panelDimension);
 		
+		
+		//---- Caption and path are blank by default.
+		captionText = "";
+		fileBrowserText = "";
+		
 		//----- Setup the save button 
 		saveButton = new JButton("Save Image");
 		saveButton.setActionCommand(SAVE_BUTTON_COMMAND_NAME);
