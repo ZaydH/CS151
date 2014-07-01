@@ -115,7 +115,7 @@ public class SlideShowImagePanel extends JPanel {
 		
 		//--- Get the file MIME type
 		MimetypesFileTypeMap mtftp = new MimetypesFileTypeMap();
-		mtftp.addMimeTypes("image png tif jpg jpeg bmp");
+		mtftp.addMimeTypes("image png gif jpg jpeg");
 		String mimeType = mtftp.getContentType(new File(imagePath));
 		String[] types = mimeType.split("/");
 		if(!types[0].equals("image")) return;
@@ -143,7 +143,7 @@ public class SlideShowImagePanel extends JPanel {
 			}
 			else{
 				//---- Center with respect to both width and height as the image is smaller than the panel.
-				g.drawImage(newImage, (this.getWidth() - newImage.getWidth())/2, (this.getHeight() - newImage.getHeight())/2,  null);
+				g.drawImage(newImage, (this.getWidth() - newImage.getWidth())/2, (this.getHeight() - newImage.getHeight())/2,  this);
 			}
 			
 			captionLabel.revalidate();

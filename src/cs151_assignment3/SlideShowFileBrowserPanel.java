@@ -155,7 +155,7 @@ public class SlideShowFileBrowserPanel extends JPanel  implements ActionListener
 				
 				//--- Get the file MIME type
 				MimetypesFileTypeMap mtftp = new MimetypesFileTypeMap();
-				mtftp.addMimeTypes("image png tif jpg jpeg bmp");
+				mtftp.addMimeTypes("image png jpg jpeg gif");
 				String mimeType = mtftp.getContentType(new File(selectedFile));
 				String[] types = mimeType.split("/");
 				
