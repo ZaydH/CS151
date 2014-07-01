@@ -1,11 +1,13 @@
 package cs151_assignment3;
 
 import java.awt.Dimension;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 import java.io.IOException;
+import java.io.File;
 
+import javax.activation.MimetypesFileTypeMap;
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -150,21 +152,40 @@ public class SlideShowFileBrowserPanel extends JPanel  implements ActionListener
 			//----- Select OK in the File Chooser
 			if(chooserSelection == JFileChooser.APPROVE_OPTION){
 				String selectedFile = fileChooser.getSelectedFile().toString();
-				//---- Ensure the file is valid.
-				try{
-					ImageIO.read(new File(selectedFile)); //---- Try to read the image.
-					//---- Update the file path text field.
-					filePathTextField.setText(selectedFile);
-					this.revalidate();
-					this.repaint();					
+				
+				//--- Get the file MIME type
+				MimetypesFileTypeMap mtftp = new MimetypesFileTypeMap();
+				mtftp.addMimeTypes("image png tif jpg jpeg bmp");
+				String mimeType = mtftp.getContentType(new File(selectedFile));
+				String[] types = mimeType.split("/");
+				
+				//---- If the file is an image, then load it.
+				if(types[0].equals("image")){
+					//---- Ensure the file is valid.
+					try{
+						Image image = ImageIO.read(new File(selectedFile)); //---- Try to read the image.
+						if(image.getWidth(null) > 0){
+							//---- Update the file path text field.
+							filePathTextField.setText(selectedFile);
+						}
+						else{
+							JOptionPane.showMessageDialog(null, "Error: There was an unrecoverable error loading the image at location \"" + selectedFile + "\".");
+						}
+						this.revalidate();
+						this.repaint();
+						return;
+					}
+					catch(IOException imageBufferingError){
+					}
 				}
-				catch(IOException imageBufferingError){
-					filePathTextField.setText("");
-					JOptionPane.showMessageDialog(null, "Error: There was an unrecoverable error loading the image at location \"" + selectedFile + "\".");
-					this.revalidate();
-					this.repaint();
-				}
+				
+				//---- Fall back return condition
+				filePathTextField.setText("");
+				JOptionPane.showMessageDialog(null, "Error: There was an unrecoverable error loading the image at location \"" + selectedFile + "\".");
+				this.revalidate();
+				this.repaint();
 				return;
+
 			}
 			
 		}

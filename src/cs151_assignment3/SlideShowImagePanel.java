@@ -8,9 +8,9 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import javax.activation.MimetypesFileTypeMap;
 import javax.imageio.ImageIO;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -112,6 +112,14 @@ public class SlideShowImagePanel extends JPanel {
 		drawImagePanelBackground(g);
 		
 		if(!imagePathIsValid) return;
+		
+		//--- Get the file MIME type
+		MimetypesFileTypeMap mtftp = new MimetypesFileTypeMap();
+		mtftp.addMimeTypes("image png tif jpg jpeg bmp");
+		String mimeType = mtftp.getContentType(new File(imagePath));
+		String[] types = mimeType.split("/");
+		if(!types[0].equals("image")) return;
+		
 		
 		//---- Load an Image from file
 		try{
