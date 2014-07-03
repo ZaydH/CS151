@@ -115,6 +115,15 @@ public class SlideShowFileContents {
 		int numberImageFiles;
 		ArrayList<SlideShowImageInstance> bufferImageList;
 		String[] imageFileParamters = new String[2];
+		
+		//---- Check to see if the file extension is correct.
+		String lowercaseFilePath = filePath.toString().toLowerCase();
+		if(!lowercaseFilePath.endsWith(".show")){
+			JOptionPane.showMessageDialog(null, "Incorrect File Extension.  Please specify a valid file and try again.");
+			return false;
+		}
+		
+		//----- Once the file extension has been verified, try opening the file.
 		try{
 			fileIn = new Scanner(new FileReader(filePath));
 			
