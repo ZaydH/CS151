@@ -1,4 +1,4 @@
-package cs151_assignment3;
+package cs151_assignment4;
 
 
 /**
@@ -14,6 +14,8 @@ public class SlideShowImageInstance {
 	private int id;
 	private String imagePath;
 	private String imageCaption;
+	private int imageCaptionX;
+	private int imageCaptionY;
 	
 	public static final int PARAMETERS_PER_IMAGE_INSTANCE = 2;
 	

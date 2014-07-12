@@ -1,4 +1,4 @@
-package cs151_assignment3;
+package cs151_assignment4;
 
 import java.awt.Component;
 import java.awt.event.ActionEvent;

@@ -1,4 +1,4 @@
-package cs151_assignment3;
+package cs151_assignment4;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -14,6 +14,7 @@ import java.io.IOException;
 import javax.activation.MimetypesFileTypeMap;
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -99,11 +100,7 @@ public class SlideShowImagePanel extends JPanel {
 		
 		//---- Set the caption label position
 		CAPTION_OUTER_WIDTH = panelBorder;
-		captionX = (this.getWidth() - captionLabel.getWidth())/2;
-		captionY = this.getHeight() - captionLabel.getHeight() - 3 * CAPTION_OUTER_WIDTH;
-		captionLabel.setLocation( captionX, captionY);
-		captionLabel.setBounds((this.getWidth() - captionLabel.getWidth())/2, this.getHeight() - captionLabel.getHeight() - 3 * panelBorder, 
-							   captionLabel.getWidth(), captionLabel.getHeight());
+
 		this.addMouseInputListenerToCaption();
 		
 		
@@ -343,6 +340,22 @@ public class SlideShowImagePanel extends JPanel {
 	}
 	
 	
+	/**
+	 * This function resets the caption location 
+	 */
+	private void resetCaptionLocation(){
+		
+		//---- Calculate the default X and Y locations for the caption
+		captionX = (this.getWidth() - captionLabel.getWidth())/2;
+		captionY = this.getHeight() - captionLabel.getHeight() - 3 * CAPTION_OUTER_WIDTH;
+		
+		
+		captionLabel.setLocation( captionX, captionY);
+		captionLabel.setBounds((this.getWidth() - captionLabel.getWidth())/2, this.getHeight() - captionLabel.getHeight() - 3 * panelBorder, 
+							   captionLabel.getWidth(), captionLabel.getHeight());		
+	}
+	
+	
 	
 	
 	private void addMouseInputListenerToCaption(){
@@ -350,79 +363,7 @@ public class SlideShowImagePanel extends JPanel {
 		SlideShowImagePanel thisImagePanel = this;
 	
 		MouseInputAdapter captionListener = new MouseInputAdapter(){
-			
-						//---- Store initial information about the caption
-						private int initialCaptionX;
-						private int initialCaptionY;
-						//---- Store the last mouse position
-						private int lastX;
-						private int lastY;
-						private boolean captionMoved;
-						
-						@Override
-						public void mousePressed(MouseEvent e){
-							
-							initialCaptionX = captionLabel.getX();
-							initialCaptionY = captionLabel.getY();
-							
-							//----- Get the mouse location information
-							lastX = e.getXOnScreen();
-							lastY = e.getYOnScreen();
-							//---- By default caption not moved 
-							captionMoved = false; 
-						}
-						
-						@Override
-						public void mouseDragged(MouseEvent e){
-							
-							//---- Get the newX location for the caption label
-							int newX = captionX + (e.getXOnScreen() - lastX);
-							
-							//---- Make sure newX is not too far to the left
-							if( newX < CAPTION_OUTER_WIDTH){
-								newX = CAPTION_OUTER_WIDTH;
-							}
-							//--- Make sure the new X location is not too far to the right
-							else if( newX > getWidth() - CAPTION_OUTER_WIDTH - captionLabel.getWidth()){
-								newX = getWidth() - CAPTION_OUTER_WIDTH - captionLabel.getWidth();
-							}
-							else{
-								lastX = e.getXOnScreen() ; //-----Since X is in the valid area, update it.
-							}
-							
-							
-							//---- Get the newY location for the caption label
-							int newY = captionY + (e.getYOnScreen() - lastY);
-							//---- Make sure newX is not too far to the left
-							if( newY < CAPTION_OUTER_WIDTH){
-								newY = CAPTION_OUTER_WIDTH;
-							}
-							//--- Make sure the new X location is not too far to the right
-							else if( newY > getHeight() - CAPTION_OUTER_WIDTH - captionLabel.getHeight()){
-								newY = getHeight() - CAPTION_OUTER_WIDTH - captionLabel.getHeight();
-							}
-							else{
-								lastY = e.getYOnScreen(); //-----Since Y is in the valid area, update it.
-							}
-							
-							//----- Check if the caption moved.  May not move if you are at the boundary.
-							if(captionX != newX || captionY != newY){
-								captionMoved = true; //---- Mark caption moved.
-								captionX = newX; //---- Update the caption's X location								
-								captionY = newY; //---- Update the caption's Y location
-							}
-							
-							//----- 
-							captionLabel.setLocation( captionX, captionY);
-							
-						}
-						
-						@Override
-						public void mouseReleased(MouseEvent e){
-							if(captionMoved){
-								//TODO Need to create an action for the caption moved.
-							}
-						}
+
 
 				};
 	
@@ -430,6 +371,132 @@ public class SlideShowImagePanel extends JPanel {
 		//----- Create the mouse listener
 		captionLabel.addMouseListener(captionListener);
 		captionLabel.addMouseMotionListener(captionListener);
+		
+	}
+	
+	
+	
+	
+	public class CaptionLocation extends JComponent {
+
+		/**
+		 * Serial version UID for the JComponent
+		 */
+		private static final long serialVersionUID = -6429569634708601620L;
+		
+		int previousCaptionX;
+		int previousCaptionY;
+		
+		
+		
+		
+	}
+	
+	
+	
+	public abstract class CaptionMouseInputAdapter extends MouseInputAdapter{
+
+		
+		//---- Store initial information about the caption
+		private int initialCaptionX;
+		private int initialCaptionY;
+		//---- Store the last mouse position
+		private int lastX;
+		private int lastY;
+		private boolean captionMoved;
+		
+		
+		/**
+		 * Stores the initial X and Y location when the mouse is pressed.
+		 */
+		@Override
+		public void mousePressed(MouseEvent e){
+			
+			initialCaptionX = captionLabel.getX();
+			initialCaptionY = captionLabel.getY();
+			
+			//----- Get the mouse location information
+			lastX = e.getXOnScreen();
+			lastY = e.getYOnScreen();
+			//---- By default caption not moved 
+			captionMoved = false; 
+		}
+		
+		@Override
+		public void mouseDragged(MouseEvent e){
+			
+			//---- Get the newX location for the caption label
+			int newX = captionX + (e.getXOnScreen() - lastX);
+			
+			//---- Make sure newX is not too far to the left
+			if( newX < CAPTION_OUTER_WIDTH){
+				newX = CAPTION_OUTER_WIDTH;
+			}
+			//--- Make sure the new X location is not too far to the right
+			else if( newX > getWidth() - CAPTION_OUTER_WIDTH - captionLabel.getWidth()){
+				newX = getWidth() - CAPTION_OUTER_WIDTH - captionLabel.getWidth();
+			}
+			else{
+				lastX = e.getXOnScreen() ; //-----Since X is in the valid area, update it.
+			}
+			
+			
+			//---- Get the newY location for the caption label
+			int newY = captionY + (e.getYOnScreen() - lastY);
+			//---- Make sure newX is not too far to the left
+			if( newY < CAPTION_OUTER_WIDTH){
+				newY = CAPTION_OUTER_WIDTH;
+			}
+			//--- Make sure the new X location is not too far to the right
+			else if( newY > getHeight() - CAPTION_OUTER_WIDTH - captionLabel.getHeight()){
+				newY = getHeight() - CAPTION_OUTER_WIDTH - captionLabel.getHeight();
+			}
+			else{
+				lastY = e.getYOnScreen(); //-----Since Y is in the valid area, update it.
+			}
+			
+			//----- Check if the caption moved.  May not move if you are at the boundary.
+			if(captionX != newX || captionY != newY){
+				captionMoved = true; //---- Mark caption moved.
+				captionX = newX; //---- Update the caption's X location								
+				captionY = newY; //---- Update the caption's Y location
+			}
+			
+		}
+		
+		/**
+		 * This function is used to determine the initial X position before any mouse movement.
+		 * 
+		 * @return Initial X location when the mouse was clicked
+		 */
+		public int getInitalX(){ return initialCaptionX; };
+		
+		/**
+		 * This function is used to determine the initial Y position before any mouse movement.
+		 * 
+		 * @return Initial Y location when the mouse was clicked
+		 */		
+		public int getInitalY(){ return initialCaptionY; };
+		
+		/**
+		 * This function is used to determine the final X position after any mouse movement.
+		 * 
+		 * @return Final X location when the mouse was released
+		 */	
+		public int getFinalX(){ return lastX; };
+		
+		/**
+		 * This function is used to determine the final Y position after any mouse movement.
+		 * 
+		 * @return Final Y location when the mouse was released
+		 */		
+		public int getFinalY(){ return lastY; };	
+		
+		/**
+		 * After the mouse has been released, this function is used to determine whether the caption moved. 
+		 * @return Boolean value of whether the caption moved during the mouse dragging
+		 */
+		public boolean getDidCaptionMove(){ return captionMoved; }
 		
 	}
 	
