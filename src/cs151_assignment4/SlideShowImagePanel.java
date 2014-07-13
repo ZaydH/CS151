@@ -86,7 +86,7 @@ public class SlideShowImagePanel extends JPanel {
 		
 		//---- Set up a blank label.
 		captionText = "";
-		captionLabel = new ImagePanelCaption(captionText, JLabel.CENTER, this, panelBorder);
+		captionLabel = new ImagePanelCaption(captionText, JLabel.CENTER, this, panelBorder/2);
 		captionLabel.setOpaque(true);
 		captionLabel.setForeground(Color.BLACK);
 		captionLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
@@ -453,6 +453,18 @@ public class SlideShowImagePanel extends JPanel {
 			else if(newX > captionLabel.getMaximumXLocation()){
 				newX = captionLabel.getMaximumXLocation();
 			}
+			else{
+				Point mousePositionInPanel = getMousePosition(true);
+				if(mousePositionInPanel != null){
+					int componentShiftDistance = (int)mousePositionInPanel.getX() - newX;
+					if( componentShiftDistance < 0){
+						newX -= componentShiftDistance;
+					}
+					else if( componentShiftDistance > captionLabel.getWidth()){
+						newX += componentShiftDistance;
+					}
+				}
+			}			
 			lastMouseX = e.getXOnScreen();
 			latestCaptionX = newX;
 			
@@ -460,9 +472,31 @@ public class SlideShowImagePanel extends JPanel {
 			//---- Update Y location
 			if(newY < captionLabel.getMinimumYLocation()){
 				newY = captionLabel.getMinimumYLocation();
+				latestCaptionY = newY;
 			}
 			else if(newY > captionLabel.getMaximumYLocation()){
 				newY = captionLabel.getMaximumYLocation();
+				latestCaptionY = newY;
+			}
+			else{
+				Point mousePositionInPanel = getMousePosition(true);
+				if(mousePositionInPanel != null){
+					int componentShiftDistance = (int)mousePositionInPanel.getY() - newY;
+					if( componentShiftDistance < 0){
+						newY -= componentShiftDistance;
+					}
+					else if( componentShiftDistance > captionLabel.getHeight()){
+						newY += componentShiftDistance;
+					}
+					if(newY < captionLabel.getMinimumYLocation()){
+						newY = captionLabel.getMinimumYLocation();
+						latestCaptionY = newY;
+					}
+					else if(newY > captionLabel.getMaximumYLocation()){
+						newY = captionLabel.getMaximumYLocation();
+						latestCaptionY = newY;
+					}
+				}
 			}
 			lastMouseY = e.getYOnScreen();
 			latestCaptionY = newY;			
@@ -474,8 +508,9 @@ public class SlideShowImagePanel extends JPanel {
 			//---- Check if the mouse left the valid area
 			if(getMousePosition(true) == null) 
 				mouseOutsideValidArea = true;
-			else
+			else{
 				mouseOutsideValidArea = false;
+			}
 		}
 		
 		/**
