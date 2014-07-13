@@ -528,15 +528,20 @@ public class SlideShowContentsPanel extends JPanel implements ActionListener {
 		@Override
 		public void execute() {
 			slideShowFileContents.setImageInstance(newImageInstance);
-			slideShowListModel.setElementAt(slideShowFileContents.getImageInstance(newImageInstance.getImageID()), 
-											newImageInstance.getImageID());
+			slideShowListModel.setElementAt(slideShowFileContents.getImageInstance(newImageInstance.getImageID()-1), 
+											newImageInstance.getImageID()-1);
 		}
 
 		@Override
 		public void undo() {			
 			slideShowFileContents.setImageInstance(previousImageInstance);
-			slideShowListModel.setElementAt(slideShowFileContents.getImageInstance(previousImageInstance.getImageID()), 
-											previousImageInstance.getImageID());			
+			slideShowListModel.setElementAt(slideShowFileContents.getImageInstance(previousImageInstance.getImageID()-1), 
+											previousImageInstance.getImageID()-1);
+			//---- Deselect then reselect the list item to get GUI to refresh
+			if(previousImageInstance.getImageID() - 1 == slideShowList.getSelectedIndex()){
+				slideShowList.clearSelection();
+				slideShowList.setSelectedIndex(previousImageInstance.getImageID() - 1);
+			}
 		}
 		
 	}
