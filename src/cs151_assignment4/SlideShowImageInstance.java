@@ -17,17 +17,21 @@ public class SlideShowImageInstance {
 	private int imageCaptionX;
 	private int imageCaptionY;
 	
-	public static final int PARAMETERS_PER_IMAGE_INSTANCE = 2;
+	public static final int PARAMETERS_PER_IMAGE_INSTANCE = 4;
 	
 	/**
 	 * Constructor to specify a slide show using an array.
 	 * 
-	 * @param imageParameters	Array of size PARAMETERS_PER_IMAGE_INSTANCE that contains the information on the Slide Show Image. Parameter 0  is the image path. Parameter 1 is the image caption.
+	 * @param imageParameters	Array of size PARAMETERS_PER_IMAGE_INSTANCE that contains the information on the Slide Show Image. 
+	 * 							Parameter 0 is the image path. Parameter 1 is the image caption. 
+	 * 							Parameter 2 is the caption's X location. Parameter 3 is the caption's Y location
 	 */
 	public SlideShowImageInstance(int id, String[] imageParameters){
 		this.id = id;
 		this.imagePath = imageParameters[0];
 		this.imageCaption = imageParameters[1];
+		this.imageCaptionX = Integer.valueOf(imageParameters[2]);
+		this.imageCaptionY = Integer.valueOf(imageParameters[3]);
 	}
 	
 	
@@ -63,6 +67,8 @@ public class SlideShowImageInstance {
 		String[] imageParameters = new String[PARAMETERS_PER_IMAGE_INSTANCE];
 		imageParameters[0] = imagePath;
 		imageParameters[1] = imageCaption;
+		imageParameters[2] = Integer.toString(imageCaptionX);
+		imageParameters[3] = Integer.toString(imageCaptionY);
 		
 		return imageParameters;
 	}

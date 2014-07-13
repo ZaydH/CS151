@@ -190,6 +190,7 @@ public class SlideShowGUI {
 		//---- Setup the location of the panel
 		mainGUILayout.putConstraint(SpringLayout.NORTH, imagePanel, 0, SpringLayout.NORTH, mainGUI);
 		mainGUILayout.putConstraint(SpringLayout.WEST, imagePanel, 0, SpringLayout.EAST, leftGUIPanel);
+		topMenu.addActionListener(imagePanel.createResetCaptionLocationListener(), SlideShowJMenuBar.NEW_FILE_LISTENER);
 		
 	}
 	
