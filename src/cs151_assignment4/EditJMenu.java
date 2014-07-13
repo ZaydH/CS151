@@ -179,7 +179,7 @@ public class EditJMenu extends JMenu {
 			E itemtoReturn = bufferItems.get(bufferHead);
 			
 			//---- If necessary roll back across the head of the 
-			bufferHead = ((--bufferHead) < 0 ) ? bufferHead : bufferItems.size() - 1 ;
+			bufferHead = ((--bufferHead) > 0 ) ? bufferHead : bufferItems.size() - 1 ;
 			
 			//---- Decrement the number of items in the buffer
 			bufferItemCount--;
