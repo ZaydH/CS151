@@ -138,4 +138,14 @@ public class SlideShowJMenuBar extends JMenuBar implements ActionListener {
 		System.exit(0); //---- Kill the program
 	}	
 	
+	
+	/**
+	 * Enables the adding of commands to the undo buffer.
+	 * 
+	 * @param newCommand	Command to be added to the UndoBuffer.
+	 */
+	public void addCommandToUndoBuffer(GUICommand newCommand){
+		editMenu.addCommandToUndo(newCommand);
+	}
+	
 }

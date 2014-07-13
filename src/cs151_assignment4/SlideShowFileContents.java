@@ -93,6 +93,17 @@ public class SlideShowFileContents {
 		
 	}
 	
+	/**
+	 * Sets an image instance based off a passed in image instance.
+	 * 
+	 * @param newInstance New Image instance to be used to override the previous instance
+	 */
+	public void setImageInstance(SlideShowImageInstance newInstance){
+		
+		allImages.set(newInstance.getImageID(), newInstance );
+		
+	}
+	
 	
 	
 	

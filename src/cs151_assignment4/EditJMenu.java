@@ -10,6 +10,10 @@ import javax.swing.JMenuItem;
 
 public class EditJMenu extends JMenu {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -871826944474861418L;
 	public static final int UNDO_DEPTH  = 10;
 	public static JMenuItem undoMenuItem;
 	public static UndoBuffer<GUICommand> undoBuffer; 
@@ -23,10 +27,40 @@ public class EditJMenu extends JMenu {
 		undoMenuItem = new JMenuItem(undoMenuItemName);
 		undoMenuItem.setEnabled(false); //---- By default enable is disabled
 		undoMenuItem.setActionCommand("editMenu" + undoMenuItemName);
+		createUndoActionListener();//---- Creates an ActionListener for when the "Undo" menu item is pressed.
 		this.add(undoMenuItem); //---- Add the menu item to the list
 		
 		//---- Initialize the undo buffer
 		undoBuffer = new UndoBuffer<GUICommand>(UNDO_DEPTH);
+		
+	}
+	
+	
+	/**
+	 * Creates an ActionListener for the Undo Menu Item and then adds it to the menu item.
+	 */
+	private void createUndoActionListener(){
+		
+		ActionListener undoActionListener = new ActionListener(){
+			
+									/**
+									 * Gets the last action performed and then undoes it.
+									 */
+									@Override
+									public void actionPerformed(ActionEvent e){
+										GUICommand lastCommand = undoBuffer.remove();
+										lastCommand.undo();
+										
+										//---- If the buffer is empty, disable the menu item.
+										if(undoBuffer.isEmpty()){
+											undoMenuItem.setEnabled(false);
+										}
+									}
+										
+							};
+							
+		//--- Add the ActionListener
+		undoMenuItem.addActionListener(undoActionListener);
 		
 	}
 	
@@ -142,23 +176,18 @@ public class EditJMenu extends JMenu {
 			//---- Decrement the number of items in the buffer
 			bufferItemCount--;
 			
-			//---- If the buffer is empty, disable it.
-			if(isEmpty()){
-				undoMenuItem.setEnabled(false);
-			}
-			
 			//---- return the value
 			return itemtoReturn;
 		}
 		
-		/**
-		 * Gets the number of items currently in the buffer
-		 * 
-		 * @return Number of items in the buffer
-		 */
-		public int getBufferItemCount(){
-			return bufferItemCount;
-		}
+//		/**
+//		 * Gets the number of items currently in the buffer
+//		 * 
+//		 * @return Number of items in the buffer
+//		 */
+//		public int getBufferItemCount(){
+//			return bufferItemCount;
+//		}
 		
 		/**
 		 * Gets whether the buffer has any elements in it.

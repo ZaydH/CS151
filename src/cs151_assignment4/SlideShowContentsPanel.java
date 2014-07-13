@@ -223,10 +223,22 @@ public class SlideShowContentsPanel extends JPanel implements ActionListener {
 				return;
 			}
 			
-			//----- Update the image instance information
-			slideShowFileContents.setImageInstance(selectedIndex, fileBrowserText, captionText, 
-												   (int)captionLocation.getX(), (int)captionLocation.getY());
-			slideShowListModel.setElementAt(slideShowFileContents.getImageInstance(selectedIndex), selectedIndex);
+			//----- Store the previous image instance
+			SlideShowImageInstance previousImageInstance = slideShowFileContents.getImageInstance(selectedIndex);
+			SlideShowImageInstance newImageInstance = new SlideShowImageInstance( selectedIndex, fileBrowserText, captionText,
+																				  captionLocation);
+			
+			//---- If no change in the image instance, do nothing.  Do not add to undo queue.
+			if(previousImageInstance == newImageInstance) return;
+			
+			//----- Create a command for executing and undoing the save command.
+			GUICommand newSaveImageCommand = new SaveGUICommand(newImageInstance, previousImageInstance);
+			newSaveImageCommand.execute();
+			
+//			//----- Update the image instance information
+//			slideShowFileContents.setImageInstance(selectedIndex, fileBrowserText, captionText, 
+//												   (int)captionLocation.getX(), (int)captionLocation.getY());
+//			slideShowListModel.setElementAt(slideShowFileContents.getImageInstance(selectedIndex), selectedIndex);
 			
 		}
 		
@@ -438,9 +450,7 @@ public class SlideShowContentsPanel extends JPanel implements ActionListener {
 		
 	}	
 	
-	
-	
-	
+
 	
 	
 	
@@ -474,6 +484,50 @@ public class SlideShowContentsPanel extends JPanel implements ActionListener {
 										}
 									};
 		addListSelectionListener(contentsPanelListSelectionListener);
+	}
+	
+	
+	
+	
+	/**
+	 * 
+	 * This class is used to Save and Unsave Image Instance Saves.
+	 * 
+	 * @author Zayd
+	 *
+	 */
+	private class SaveGUICommand implements GUICommand{
+		
+		private SlideShowImageInstance previousImageInstance;
+		private SlideShowImageInstance newImageInstance;
+		
+		/**
+		 * 
+		 * @param newImageInstance		New Image Image Instance to be set.
+		 * @param previousImageInstance	Previous Image Image Instance to be set.
+		 */
+		public SaveGUICommand(SlideShowImageInstance newImageInstance, 
+							  SlideShowImageInstance previousImageInstance){
+			//---- Copy make clones of the input parameters.
+			this.newImageInstance = (SlideShowImageInstance)(newImageInstance.clone());
+			this.previousImageInstance = (SlideShowImageInstance)(newImageInstance.clone());
+		}
+
+		@Override
+		public void execute() {
+			slideShowFileContents.setImageInstance(newImageInstance);
+			slideShowFileContents.setImageInstance(newImageInstance);
+			slideShowListModel.setElementAt(slideShowFileContents.getImageInstance(newImageInstance.getImageID()), 
+											newImageInstance.getImageID());
+		}
+
+		@Override
+		public void undo() {			
+			slideShowFileContents.setImageInstance(previousImageInstance);
+			slideShowListModel.setElementAt(slideShowFileContents.getImageInstance(previousImageInstance.getImageID()), 
+											previousImageInstance.getImageID());			
+		}
+		
 	}
 	
 }

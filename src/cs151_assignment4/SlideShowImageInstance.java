@@ -41,6 +41,7 @@ public class SlideShowImageInstance {
 	/**
 	 * Creates a new slide show instance with the specified file path and caption information.
 	 * 
+	 * @param id				Image ID Number
 	 * @param imagePath			File path for the new image.
 	 * @param imageCaption		Caption for the new image.
 	 * @param captionXLocation	X location of the image caption.
@@ -53,6 +54,22 @@ public class SlideShowImageInstance {
 		this.imageCaption = imageCaption;
 		this.captionXLocation = captionXLocation;
 		this.captionYLocation = captionYLocation;
+	}
+	
+	/**
+	 * Alternate constructor for SlideShowImageInstance that takes the caption location as a point instead of as two integers.
+	 * 
+	 * @param id				Image ID Number
+	 * @param imagePath			File path for the new image.
+	 * @param imageCaption		Caption for the new image.
+	 * @param captionLocation	Point containing the top left corner of the caption,
+	 */
+	public SlideShowImageInstance(int id, String imagePath, String imageCaption, Point captionLocation ){
+		this.id = id;
+		this.imagePath = imagePath;
+		this.imageCaption = imageCaption;
+		this.captionXLocation = (int)captionLocation.getX();
+		this.captionYLocation = (int)captionLocation.getY();
 	}
 	
 	
@@ -188,6 +205,7 @@ public class SlideShowImageInstance {
 	
 	/**
 	 * Overrides the equals method for the SlideShowImageInstance.
+	 * @return True if the two objects are equal false otherwide.
 	 */
 	@Override
 	public boolean equals(Object other){
@@ -213,6 +231,19 @@ public class SlideShowImageInstance {
 		if( !this.getImageCaptionLocation().equals( castedOther.getImageCaptionLocation() ) ) return false;
 		
 		return true;
+	}
+	
+
+	/**
+	 * Override the clone default clone method of the object. Performs a deep copy.
+	 * @return Deep copy of the SlideShowImageInstance	
+	 */
+	@Override
+	public Object clone(){
+		
+		SlideShowImageInstance newImageInstance = new SlideShowImageInstance(id, imagePath, imageCaption, 
+																			 captionXLocation, captionYLocation );
+		return (Object)newImageInstance;
 	}
 	
 	
