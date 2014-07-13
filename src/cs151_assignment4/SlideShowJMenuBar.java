@@ -27,7 +27,7 @@ public class SlideShowJMenuBar extends JMenuBar implements ActionListener {
 	 */
 	private static final long serialVersionUID = 1686924456234878847L;
 	private static JMenu fileMenu;
-	private static JMenu editMenu;
+	private static EditJMenu editMenu;
 	
 	private static JFileChooser openFileChooser;
 	private static JFileChooser saveFileChooser;
@@ -58,23 +58,6 @@ public class SlideShowJMenuBar extends JMenuBar implements ActionListener {
 			fileMenu.add(menuItem); //---- Add the menu item to the list
 		}
 		this.add(fileMenu); //---- Add "File" to the menu bar
-		
-		//----- Create the Edit JMenu and define its menu items
-		editMenu = new JMenu("Edit");
-		String[] editMenuLabels = { "Undo" };
-		//----- Add the menu items to the File Menu
-		for(int i = 0; i < editMenuLabels.length; i++){
-			
-			JMenuItem menuItem = new JMenuItem(editMenuLabels[i]);
-			menuItem.setEnabled(false); //---- By default enable is disabled
-			menuItem.setActionCommand("editMenu" + editMenuLabels[i]);
-			menuItem.addActionListener(this); //---- The class is its own action listener
-			
-			editMenu.add(menuItem); //---- Add the menu item to the list
-		}
-		this.add(editMenu); //---- Add "Edit" to the menu bar
-
-		
 		//----- Create the open file chooser
 		FileFilter fileNameExtensionFiter = new FileNameExtensionFilter("Slide Show Files (*." + SlideShowFileContents.FILE_EXTENSION + ")", 
 																		SlideShowFileContents.FILE_EXTENSION );//---- File extension is "show". Use for all file tools
@@ -84,6 +67,16 @@ public class SlideShowJMenuBar extends JMenuBar implements ActionListener {
 		//----- Create the Save File Chooser
 		saveFileChooser = new JFileChooser();
 		saveFileChooser.setFileFilter( fileNameExtensionFiter );
+		
+		
+		//----- Create the Edit JMenu and define its menu items
+		editMenu = new EditJMenu("Edit", "Undo");
+		this.add(editMenu); //---- Add "Edit" to the menu bar
+		//---- Clear Undo Queue on New Show.
+		addActionListener(editMenu.generateClearUndoBufferActionListener(), NEW_FILE_LISTENER);		
+		//---- Generate action listeners for the edit menu to clear the undo buffer when a new show is opened or saved.
+		addActionListener(editMenu.generateFileChooserClearUndoBufferActionListener(), OPEN_FILE_LISTENER);
+		addActionListener(editMenu.generateFileChooserClearUndoBufferActionListener(), SAVE_FILE_LISTENER);
 		
 		
 	}

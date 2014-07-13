@@ -130,9 +130,8 @@ public class SlideShowGUI {
 		
 		//---- Add the fileBrowserPanel
 		fileBrowserPanel = new SlideShowFileBrowserPanel(LEFT_PANEL_WIDTH, FILE_BROWSER_PANEL_HEIGHT, LEFT_PANEL_LABEL_WIDTH,  
-												STANDARD_PADDING, BROWSE_BUTTON_WIDTH);
+														 STANDARD_PADDING, BROWSE_BUTTON_WIDTH);
 		topMenu.addActionListener(new SlideShowFileBrowserPanel.ResetFileBrowserListener(), SlideShowJMenuBar.NEW_FILE_LISTENER);		//---- Listen for New File Actions on MenuBar
-		//topMenu.addActionListener(new FileBrowserPanel.ResetFileBrowserListener(), SlideShowJMenuBar.OPEN_FILE_LISTENER);		//---- Listen for Open File Actions on MenuBar
 		leftGUIPanel.add(fileBrowserPanel);	
 		//----- Set the position of the file browser padding
 		leftPanelLayout.putConstraint( SpringLayout.NORTH, fileBrowserPanel, LEFT_PANEL_SPACING_BETWEEN_MENU_BAR, SpringLayout.NORTH, leftGUIPanel);
@@ -142,8 +141,6 @@ public class SlideShowGUI {
 		//----- Make the Pane storing the caption information		
 		captionPanel = new SlideShowCaptionPanel(LEFT_PANEL_WIDTH, CAPTION_BROWSER_PANEL_HEIGHT, LEFT_PANEL_LABEL_WIDTH, STANDARD_PADDING);
 		topMenu.addActionListener(new SlideShowCaptionPanel.ResetCaptionListener(), SlideShowJMenuBar.NEW_FILE_LISTENER);		//---- Listen for New File Actions on MenuBar
-		//topMenu.addActionListener(new CaptionPanel.ResetCaptionListener(), SlideShowJMenuBar.OPEN_FILE_LISTENER);		//---- Listen for Open File Actions on MenuBar	
-		//fileBrowserPanel.addBrowseFileChooserListener(new CaptionPanel.ResetCaptionListener()); 							//---- Reset the Caption when browsing for a new file.
 		leftGUIPanel.add(captionPanel);
 		//----- Set the position of the file browser padding 
 		leftPanelLayout.putConstraint( SpringLayout.NORTH, captionPanel, LEFT_PANEL_VERTICAL_SPACING, SpringLayout.SOUTH, fileBrowserPanel);
