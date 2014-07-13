@@ -83,6 +83,15 @@ public class SlideShowImageInstance {
 	
 	
 	/**
+	 * Gets the ID for the SlideShowImageInstance.
+	 * 
+	 * @return ID number of the SlideShowImageInstance.
+	 */
+	public int getImageID(){
+		return id;
+	}
+	
+	/**
 	 * Change the image path for a particular image.
 	 * 
 	 * @param imagePath  New file path for this image.
@@ -174,6 +183,36 @@ public class SlideShowImageInstance {
 	 */
 	public void setImageCaptionYLocation(int captionYLocation){
 		this.captionYLocation = captionYLocation;
+	}
+	
+	
+	/**
+	 * Overrides the equals method for the SlideShowImageInstance.
+	 */
+	@Override
+	public boolean equals(Object other){
+		
+		//--- Verify the other object is not null and has the correct class.
+		if(other == null || !(other instanceof SlideShowImageInstance)){
+			return false;
+		}
+		
+		//---- Cast the input to the SlideShowImageInstance class the function expects.
+		SlideShowImageInstance castedOther = (SlideShowImageInstance)other;
+		
+		//--- Check whether the image IDs match
+		if( this.getImageID() != castedOther.getImageID() ) return false;
+		
+		//---- Check if the image paths match
+		if( !this.getImagePath().equals( castedOther.getImagePath() ) ) return false;
+		
+		//---- Check if the image captions match
+		if( !this.getImageCaption().equals( castedOther.getImageCaption() ) ) return false;
+		
+		//---- Check if the caption locations match.
+		if( !this.getImageCaptionLocation().equals( castedOther.getImageCaptionLocation() ) ) return false;
+		
+		return true;
 	}
 	
 	
