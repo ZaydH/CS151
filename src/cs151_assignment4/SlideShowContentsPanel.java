@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
@@ -18,8 +19,11 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.event.MouseInputAdapter;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
+
+import cs151_assignment4.SlideShowImagePanel.CaptionLabelMouseInputAdapter;
 
 
 /**
@@ -205,9 +209,12 @@ public class SlideShowContentsPanel extends JPanel implements ActionListener {
 			slideShowListModel.addElement(slideShowFileContents.getImageInstance(newImageIndex));
 			slideShowList.setSelectedIndex(newImageIndex); //---- Uses base 0 so subtract one
 			slideShowList.ensureIndexIsVisible(newImageIndex); 
+			
+			//---- Set a default caption location.
+    		captionLocation = new Point(SlideShowImageInstance.DEFAULT_IMAGE_LOCATION,
+										SlideShowImageInstance.DEFAULT_IMAGE_LOCATION);
 		}
 		else if(e.getActionCommand().equals(SAVE_BUTTON_COMMAND_NAME)){
-			//TODO fix the lack of a save button command support.
 			int selectedIndex = slideShowList.getSelectedIndex();
 			//---- Check if any image was selected.
 			if(selectedIndex  == -1){
@@ -405,6 +412,38 @@ public class SlideShowContentsPanel extends JPanel implements ActionListener {
 	    	slideShowListPane.paintAll(slideShowListPane.getGraphics());
 	    }		
 	}
+	
+	
+	
+	/**
+	 * Creates a mouse motion listener to extract the caption location for saving to the file.
+	 */
+	public void addMouseInputListenerToCaption(SlideShowImagePanel imagePanel){
+	
+		//-- Create an anonymous object to listen for mouse motions.
+		MouseInputAdapter captionListener = imagePanel.new CaptionLabelMouseInputAdapter(){
+
+				@Override
+				public void mouseReleased(MouseEvent e){
+					super.mouseReleased(e);
+					
+					if(this.getDidCaptionMove()){
+						captionLocation = this.getFinalCaptionLocation();
+					}
+					
+				}
+
+		};
+		imagePanel.addCaptionMouseInputListener(captionListener);
+		
+	}	
+	
+	
+	
+	
+	
+	
+	
 	
 	/**
 	 * Helper class to monitor for changes in the list of images and then to update the caption box.

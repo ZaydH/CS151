@@ -365,7 +365,7 @@ public class SlideShowImagePanel extends JPanel {
 					super.mouseDragged(e);
 					//----- If the caption moved, update its location
 					if(getDidCaptionMove()){
-						captionLabel.setLocation(this.getLastX(), this.getLastY());
+						captionLabel.setLocation(this.getFinalCaptionLocation());
 					}
 				}
 
@@ -494,34 +494,17 @@ public class SlideShowImagePanel extends JPanel {
 				mouseOutsideValidArea = false;
 			}
 		}
-		
 		/**
-		 * This function is used to determine the initial X position of the caption before any mouse movement.
-		 * 
-		 * @return Initial X location when the mouse was clicked
+		 * Gets the initial X and Y location of the Caption.
+		 * @return Point containing initial X and Y location of the captionLabel
 		 */
-		public int getInitalX(){ return initialCaptionX; };
+		public Point getInitialCaptionLocation(){ return new Point(initialCaptionX, initialCaptionY); }
 		
 		/**
-		 * This function is used to determine the initial Y position of the caption before any mouse movement.
-		 * 
-		 * @return Initial Y location when the mouse was clicked
-		 */		
-		public int getInitalY(){ return initialCaptionY; };
-		
-		/**
-		 * This function is used to determine the final X position of the caption after any mouse movement.
-		 * 
-		 * @return Final X location when the mouse was released
-		 */	
-		public int getLastX(){ return latestCaptionX; };
-		
-		/**
-		 * This function is used to determine the final Y position of the caption after any mouse movement.
-		 * 
-		 * @return Final Y location when the mouse was released
-		 */		
-		public int getLastY(){ return latestCaptionY; };	
+		 * Gets the final X and Y location of the Caption.
+		 * @return Point containing final X and Y location of the captionLabel
+		 */
+		public Point getFinalCaptionLocation(){ return new Point(latestCaptionX, latestCaptionY); }
 		
 		/**
 		 * After the mouse has been released, this function is used to determine whether the caption moved. 
@@ -575,6 +558,15 @@ public class SlideShowImagePanel extends JPanel {
 		    	captionLabel.setLocation(selectedImage.getImageCaptionXLocation(), selectedImage.getImageCaptionYLocation());
 			}
 		};
+	}
+
+
+
+	public void addCaptionMouseInputListener(MouseInputAdapter captionListener) {
+		
+		captionLabel.addMouseListener(captionListener);
+		captionLabel.addMouseMotionListener(captionListener);
+		
 	}
 	
 }
