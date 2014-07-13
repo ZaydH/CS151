@@ -1,6 +1,7 @@
 package cs151_assignment4;
 
 import java.awt.Dimension;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -43,6 +44,7 @@ public class SlideShowContentsPanel extends JPanel implements ActionListener {
 	private static JButton addNewButton;
 	private static String captionText;
 	private static String fileBrowserText;
+	private Point captionLocation;
 	
 	
 	private static final String SAVE_BUTTON_COMMAND_NAME = "SAVE_CONTENT";
@@ -214,10 +216,9 @@ public class SlideShowContentsPanel extends JPanel implements ActionListener {
 				return;
 			}
 			
-			//TODO Fix setting of image location in Save command.
-			
 			//----- Update the image instance information
-			slideShowFileContents.setImageInstance(selectedIndex, fileBrowserText, captionText, 300, 300);
+			slideShowFileContents.setImageInstance(selectedIndex, fileBrowserText, captionText, 
+												   (int)captionLocation.getX(), (int)captionLocation.getY());
 			slideShowListModel.setElementAt(slideShowFileContents.getImageInstance(selectedIndex), selectedIndex);
 			
 		}
@@ -403,6 +404,37 @@ public class SlideShowContentsPanel extends JPanel implements ActionListener {
 	    	repaint();
 	    	slideShowListPane.paintAll(slideShowListPane.getGraphics());
 	    }		
+	}
+	
+	/**
+	 * Helper class to monitor for changes in the list of images and then to update the caption box.
+	 * 
+	 * @author Zayd
+	 *
+	 */
+	public void addListSelectionCaptionLocationListener(){
+		
+		
+		ListSelectionListener contentsPanelListSelectionListener =  new ListSelectionListener(){
+		
+										public void valueChanged(ListSelectionEvent e) {
+									    	JList imageList = (JList)(e.getSource()); //---- Get the list of images
+									    	
+									    	//---- If nothing is selected, then do nothing
+									    	if(imageList.getSelectedIndex() == -1){
+									    		captionLocation = new Point(SlideShowImageInstance.DEFAULT_IMAGE_LOCATION,
+									    									SlideShowImageInstance.DEFAULT_IMAGE_LOCATION);	
+									    		return;
+									    	}
+									    	
+									    	//---- Gets the selected image from the list.
+									    	SlideShowImageInstance selectedImage = (SlideShowImageInstance)imageList.getSelectedValue();
+									    	
+									    	//----- Updates the caption X and Y location
+									    	captionLocation = selectedImage.getImageCaptionLocation();
+										}
+									};
+		addListSelectionListener(contentsPanelListSelectionListener);
 	}
 	
 }

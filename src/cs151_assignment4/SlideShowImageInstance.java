@@ -152,7 +152,7 @@ public class SlideShowImageInstance {
 	 * 
 	 * @return Point containing X and Y location of the image caption
 	 */
-	public Point getCaptionLocation(){
+	public Point getImageCaptionLocation(){
 		return new Point(captionXLocation, captionYLocation);
 	}
 	
