@@ -18,10 +18,13 @@ import javax.activation.MimetypesFileTypeMap;
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.event.MouseInputAdapter;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
@@ -510,6 +513,34 @@ public class SlideShowImagePanel extends JPanel {
 		};
 		
 	}
-
+	
+	
+	
+	
+	/**
+	 * Helper class to monitor for changes in the list of images and then to update the caption box.
+	 * 
+	 * @author Zayd
+	 *
+	 */
+	public ListSelectionListener createListSelectionCaptionLocationListener(){
+		
+		
+		return new ListSelectionListener(){
+		
+			public void valueChanged(ListSelectionEvent e) {
+		    	JList imageList = (JList)(e.getSource()); //---- Get the list of images
+		    	
+		    	//---- If nothing is selected, then do nothing
+		    	if(imageList.getSelectedIndex() == -1) return;
+		    	
+		    	//---- Gets the selected image from the list.
+		    	SlideShowImageInstance selectedImage = (SlideShowImageInstance)imageList.getSelectedValue();
+		    	
+		    	//----- Updates the caption X and Y location
+		    	captionLabel.setLocation(selectedImage.getImageCaptionXLocation(), selectedImage.getImageCaptionYLocation());
+			}
+		};
+	}
 	
 }

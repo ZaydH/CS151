@@ -190,7 +190,9 @@ public class SlideShowGUI {
 		//---- Setup the location of the panel
 		mainGUILayout.putConstraint(SpringLayout.NORTH, imagePanel, 0, SpringLayout.NORTH, mainGUI);
 		mainGUILayout.putConstraint(SpringLayout.WEST, imagePanel, 0, SpringLayout.EAST, leftGUIPanel);
+		//---- Add a listener to reset the caption location when new panel is selected.
 		topMenu.addActionListener(imagePanel.createResetCaptionLocationListener(), SlideShowJMenuBar.NEW_FILE_LISTENER);
+		fileContentsPanel.addListSelectionListener(imagePanel.createListSelectionCaptionLocationListener());		
 		
 	}
 	

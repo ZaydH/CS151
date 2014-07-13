@@ -14,8 +14,8 @@ public class SlideShowImageInstance {
 	private int id;
 	private String imagePath;
 	private String imageCaption;
-	private int imageCaptionX;
-	private int imageCaptionY;
+	private int captionXLocation;
+	private int captionYLocation;
 	
 	public static final int PARAMETERS_PER_IMAGE_INSTANCE = 4;
 	
@@ -30,8 +30,8 @@ public class SlideShowImageInstance {
 		this.id = id;
 		this.imagePath = imageParameters[0];
 		this.imageCaption = imageParameters[1];
-		this.imageCaptionX = Integer.valueOf(imageParameters[2]);
-		this.imageCaptionY = Integer.valueOf(imageParameters[3]);
+		this.captionXLocation = Integer.valueOf(imageParameters[2]);
+		this.captionYLocation = Integer.valueOf(imageParameters[3]);
 	}
 	
 	
@@ -40,11 +40,16 @@ public class SlideShowImageInstance {
 	 * 
 	 * @param imagePath			File path for the new image.
 	 * @param imageCaption		Caption for the new image.
+	 * @param captionXLocation	X location of the image caption.
+	 * @param captionYLocation	Y location of the image caption.
+	 * 
 	 */
-	public SlideShowImageInstance(int id, String imagePath, String imageCaption){
+	public SlideShowImageInstance(int id, String imagePath, String imageCaption, int captionXLocation, int captionYLocation ){
 		this.id = id;
 		this.imagePath = imagePath;
 		this.imageCaption = imageCaption;
+		this.captionXLocation = captionXLocation;
+		this.captionYLocation = captionYLocation;
 	}
 	
 	
@@ -67,8 +72,8 @@ public class SlideShowImageInstance {
 		String[] imageParameters = new String[PARAMETERS_PER_IMAGE_INSTANCE];
 		imageParameters[0] = imagePath;
 		imageParameters[1] = imageCaption;
-		imageParameters[2] = Integer.toString(imageCaptionX);
-		imageParameters[3] = Integer.toString(imageCaptionY);
+		imageParameters[2] = Integer.toString(captionXLocation);
+		imageParameters[3] = Integer.toString(captionYLocation);
 		
 		return imageParameters;
 	}
@@ -108,6 +113,45 @@ public class SlideShowImageInstance {
 	 */
 	public String getImageCaption(){
 		return this.imageCaption;
+	}
+	
+	
+	/**
+	 * Gets the X location for this image caption on the image panel.
+	 * 
+	 * @return Integer X location of the caption.
+	 */
+	public int getImageCaptionXLocation(){
+		return this.captionXLocation;
+	}
+	
+	
+	/**
+	 * Sets the new X location for the image caption.
+	 * 
+	 * @param captionXLocation New X location for the Image
+	 */
+	public void setImageCaptionXLocation(int captionXLocation){
+		this.captionXLocation = captionXLocation;
+	}
+	
+	/**
+	 * Gets the Y location for this image caption on the image panel.
+	 * 
+	 * @return Integer Y location of the caption.
+	 */
+	public int getImageCaptionYLocation(){
+		return this.captionYLocation;
+	}
+	
+	
+	/**
+	 * Sets the new Y location for the image caption.
+	 * 
+	 * @param captionXLocation New Y location for the Image
+	 */
+	public void setImageCaptionYLocation(int captionYLocation){
+		this.captionYLocation = captionYLocation;
 	}
 	
 	

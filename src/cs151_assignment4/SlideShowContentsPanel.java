@@ -188,7 +188,7 @@ public class SlideShowContentsPanel extends JPanel implements ActionListener {
 	
 	
 	/**
-	 * Internal function to handle action listeners in this class.
+	 * Internal function to handle all action listeners (e.g. Add New button, Save Image button, etc.) for this panel.
 	 */
 	public void actionPerformed(ActionEvent e){
 		
@@ -214,8 +214,10 @@ public class SlideShowContentsPanel extends JPanel implements ActionListener {
 				return;
 			}
 			
+			//TODO Fix setting of image location in Save command.
+			
 			//----- Update the image instance information
-			slideShowFileContents.setImageInstance(selectedIndex, fileBrowserText, captionText);
+			slideShowFileContents.setImageInstance(selectedIndex, fileBrowserText, captionText, 300, 300);
 			slideShowListModel.setElementAt(slideShowFileContents.getImageInstance(selectedIndex), selectedIndex);
 			
 		}

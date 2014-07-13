@@ -37,7 +37,7 @@ public class SlideShowFileContents {
 	 * Adds a new image instance with no data.
 	 */
 	public void addNewImageInstance(){
-		allImages.add(new SlideShowImageInstance(allImages.size()+1,"",""));
+		allImages.add(new SlideShowImageInstance(allImages.size()+1,"","", 0, 0) );
 	}
 	
 	
@@ -85,9 +85,9 @@ public class SlideShowFileContents {
 	 * @param imagePath		Path to the image file
 	 * @param imageCaption	Caption for the image file.
 	 */
-	public void setImageInstance(int index, String imagePath, String imageCaption){
+	public void setImageInstance(int index, String imagePath, String imageCaption, int captionXLocation, int captionYLocation){
 		
-		allImages.set(index, new SlideShowImageInstance(index + 1, imagePath, imageCaption ) );
+		allImages.set(index, new SlideShowImageInstance(index + 1, imagePath, imageCaption, captionXLocation, captionYLocation ) );
 		
 	}
 	
@@ -114,7 +114,7 @@ public class SlideShowFileContents {
 		Scanner fileIn;
 		int numberImageFiles;
 		ArrayList<SlideShowImageInstance> bufferImageList;
-		String[] imageFileParamters = new String[2];
+		String[] imageFileParamters = new String[SlideShowImageInstance.PARAMETERS_PER_IMAGE_INSTANCE];
 		
 		//---- Check to see if the file extension is correct.
 		String lowercaseFilePath = filePath.toString().toLowerCase();
