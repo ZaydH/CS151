@@ -49,18 +49,22 @@ public class ImagePanelCaption extends JLabel {
 		this.setLocation(getDefaultXLocation(), getDefaultYLocation());
 	}	
 	
-//	
-//	/**
-//	 * Process all calls to JLabel's set location.  Handle it manually for this object.
-//	 */
-//	@Override
-//	public void setLocation(int newXLocation, int newYLocation){
-//		
-//		super.setLocation( newXLocation, newYLocation);
-//		this.setBounds((sourcePanel.getWidth() - this.getWidth())/2, sourcePanel.getHeight() - this.getHeight() - 2*captionPanelBoundary, 
-//					   this.getWidth(), this.getHeight());		
-//		
-//	}	
+	
+	/**
+	 * Process all calls to JLabel's set location.  Handle it manually for this object.
+	 */
+	@Override
+	public void setLocation(int newXLocation, int newYLocation){
+
+		//---- Check if image locations are defaults
+		if(newXLocation == SlideShowImageInstance.DEFAULT_IMAGE_LOCATION) newXLocation = getDefaultXLocation();
+		if(newYLocation == SlideShowImageInstance.DEFAULT_IMAGE_LOCATION) newYLocation = getDefaultYLocation();
+		
+		//---- Set caption location.
+		super.setLocation( newXLocation, newYLocation);
+	
+		
+	}	
 	
 	/**
 	 * Calculates and returns the minimum X location for the caption label in the image panel

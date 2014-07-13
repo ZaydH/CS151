@@ -37,7 +37,9 @@ public class SlideShowFileContents {
 	 * Adds a new image instance with no data.
 	 */
 	public void addNewImageInstance(){
-		allImages.add(new SlideShowImageInstance(allImages.size()+1,"","", 0, 0) );
+		allImages.add(new SlideShowImageInstance(allImages.size()+1, "", "", 
+												 SlideShowImageInstance.DEFAULT_IMAGE_LOCATION,
+												 SlideShowImageInstance.DEFAULT_IMAGE_LOCATION ) );
 	}
 	
 	

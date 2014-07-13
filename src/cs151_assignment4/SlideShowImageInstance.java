@@ -17,6 +17,7 @@ public class SlideShowImageInstance {
 	private int captionXLocation;
 	private int captionYLocation;
 	
+	public static final int DEFAULT_IMAGE_LOCATION = -1;
 	public static final int PARAMETERS_PER_IMAGE_INSTANCE = 4;
 	
 	/**
