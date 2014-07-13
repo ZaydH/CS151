@@ -70,6 +70,8 @@ public class SlideShowImagePanel extends JPanel {
 		super();
 		this.setLayout(null);
 		
+		//this.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+		
 		//---- Fix the size of the image panel
 		Dimension panelDimension = new Dimension(panelWidth, panelHeight);
 		this.setSize(panelDimension);
@@ -86,7 +88,7 @@ public class SlideShowImagePanel extends JPanel {
 		
 		//---- Set up a blank label.
 		captionText = "";
-		captionLabel = new ImagePanelCaption(captionText, JLabel.CENTER, this, panelBorder);
+		captionLabel = new ImagePanelCaption(captionText, JLabel.CENTER, this, (int)Math.ceil((double)panelBorder/2));
 		captionLabel.setOpaque(true);
 		captionLabel.setForeground(Color.BLACK);
 		captionLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
@@ -389,14 +391,18 @@ public class SlideShowImagePanel extends JPanel {
 		//---- Store initial information about the caption
 		private int initialCaptionX;
 		private int initialCaptionY;
+		
 		//---- Store the last mouse position
 		private int lastMouseX;
 		private int lastMouseY;
-		//---- 
+		
+		//---- Store Caption information
 		private int latestCaptionX;
 		private int latestCaptionY;
 		private boolean captionMoved;
 		
+		//----
+		boolean mouseOutsideValidArea;
 		
 		/**
 		 * Stores the initial X and Y location when the mouse is pressed.
@@ -411,37 +417,69 @@ public class SlideShowImagePanel extends JPanel {
 			//----- Get the mouse location information
 			lastMouseX = e.getXOnScreen();
 			lastMouseY = e.getYOnScreen();
+			
 			//---- By default caption not moved 
 			captionMoved = false; 
+			
+			//---- Mouse still in valid area
+			mouseOutsideValidArea = false;
 		}
 		
 		@Override
 		public void mouseDragged(MouseEvent e){
 			
+			//---- Check if the mouse position is invalid
+			if(mouseOutsideValidArea && getMousePosition(true) == null) return;
+			
+			//---- Get the caption location
 			Point captionLocation = captionLabel.getLocation();
 			int captionXLoc = (int)captionLocation.getX();
 			int captionYLoc = (int)captionLocation.getY();
 			
-			//---- Get the newX location for the caption label
-			int newX =  captionXLoc + (e.getXOnScreen() - lastMouseX);
+			
+			//---- Get the newX and newY locations for the caption label
+			int newX = captionXLoc + (e.getXOnScreen() - lastMouseX);
 			int newY = captionYLoc + (e.getYOnScreen() - lastMouseY);
-			
-			//---- Make sure X and Y are valid.
-			if( newX > captionLabel.getMinimumXLocation() && newX < captionLabel.getMaximumXLocation()
-				&& newY > captionLabel.getMinimumYLocation() && newY < captionLabel.getMaximumYLocation()){
-				
-				latestCaptionX = newX; //---- Update the caption's X location								
-				latestCaptionY = newY; //---- Update the caption's Y location
-				
-				//----- Get the mouse location information
-				lastMouseX = e.getXOnScreen();
-				lastMouseY = e.getYOnScreen();				
-			
-				//----- Check if the caption moved.  May not move if you are at the boundary.
-				if(captionXLoc != newX || captionYLoc != newY){
-					captionMoved = true; //---- Mark caption moved.
-				}
+			//---- Handle the case where the cursor just reentered the valid space
+			if(mouseOutsideValidArea){
+				//--- Handle default case where the mouse did not re-enter the valid space.
+				newX =  captionXLoc + e.getX();
+				newY =  captionYLoc + e.getY();
 			}
+
+				
+			
+			
+			//---- Update X location
+			if(newX < captionLabel.getMinimumXLocation()){
+				newX = captionLabel.getMinimumXLocation();
+			}
+			else if(newX > captionLabel.getMaximumXLocation()){
+				newX = captionLabel.getMaximumXLocation();
+			}
+			lastMouseX = e.getXOnScreen();
+			latestCaptionX = newX;
+			
+			
+			//---- Update Y location
+			if(newY < captionLabel.getMinimumYLocation()){
+				newY = captionLabel.getMinimumYLocation();
+			}
+			else if(newY > captionLabel.getMaximumYLocation()){
+				newY = captionLabel.getMaximumYLocation();
+			}
+			lastMouseY = e.getYOnScreen();
+			latestCaptionY = newY;			
+		
+			
+			//----- Check if the caption moved.  May not move if you are at the boundary.
+			if(captionXLoc != newX || captionYLoc != newY) captionMoved = true; //---- Mark caption moved.
+			
+			//---- Check if the mouse left the valid area
+			if(getMousePosition(true) == null) 
+				mouseOutsideValidArea = true;
+			else
+				mouseOutsideValidArea = false;
 		}
 		
 		/**
