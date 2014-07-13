@@ -70,8 +70,6 @@ public class SlideShowImagePanel extends JPanel {
 		super();
 		this.setLayout(null);
 		
-		//this.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-		
 		//---- Fix the size of the image panel
 		Dimension panelDimension = new Dimension(panelWidth, panelHeight);
 		this.setSize(panelDimension);
@@ -88,7 +86,7 @@ public class SlideShowImagePanel extends JPanel {
 		
 		//---- Set up a blank label.
 		captionText = "";
-		captionLabel = new ImagePanelCaption(captionText, JLabel.CENTER, this, (int)Math.ceil((double)panelBorder/2));
+		captionLabel = new ImagePanelCaption(captionText, JLabel.CENTER, this, panelBorder);
 		captionLabel.setOpaque(true);
 		captionLabel.setForeground(Color.BLACK);
 		captionLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
@@ -442,13 +440,11 @@ public class SlideShowImagePanel extends JPanel {
 			int newY = captionYLoc + (e.getYOnScreen() - lastMouseY);
 			//---- Handle the case where the cursor just reentered the valid space
 			if(mouseOutsideValidArea){
-				//--- Handle default case where the mouse did not re-enter the valid space.
-				newX =  captionXLoc + e.getX();
-				newY =  captionYLoc + e.getY();
-			}
-
 				
-			
+				//--- Handle default case where the mouse did not re-enter the valid space.
+				if(newX < captionLabel.getMinimumXLocation() || newX > captionLabel.getMaximumXLocation()) newX =  captionXLoc + (e.getX());
+				if(newY < captionLabel.getMinimumYLocation() || newY > captionLabel.getMaximumYLocation()) newY =  captionYLoc + (e.getY());
+			}
 			
 			//---- Update X location
 			if(newX < captionLabel.getMinimumXLocation()){
