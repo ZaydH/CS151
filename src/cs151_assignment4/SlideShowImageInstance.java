@@ -1,5 +1,7 @@
 package cs151_assignment4;
 
+import java.awt.Point;
+
 
 /**
  * 
@@ -144,6 +146,25 @@ public class SlideShowImageInstance {
 	public int getImageCaptionYLocation(){
 		return this.captionYLocation;
 	}
+	
+	
+	/**
+	 * 
+	 * @return Point containing X and Y location of the image caption
+	 */
+	public Point getCaptionLocation(){
+		return new Point(captionXLocation, captionYLocation);
+	}
+	
+	/**
+	 * Set the caption location using a Point object.
+	 * 
+	 * @return Point containing X and Y location of the image caption
+	 */
+	public void setCaptionLocation(Point captionLocation){
+		captionXLocation = (int)captionLocation.getX();
+		captionYLocation = (int)captionLocation.getY();		
+	}	
 	
 	
 	/**

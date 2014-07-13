@@ -424,41 +424,24 @@ public class SlideShowImagePanel extends JPanel {
 			
 			//---- Get the newX location for the caption label
 			int newX =  captionXLoc + (e.getXOnScreen() - lastMouseX);
-			
-			//---- Make sure newX is not too far to the left
-			if( newX < captionLabel.getMinimumXLocation() ){
-				newX = captionLabel.getMinimumXLocation();
-			}
-			//--- Make sure the new X location is not too far to the right
-			else if( newX > captionLabel.getMaximumXLocation()){
-				newX = captionLabel.getMaximumXLocation();
-			}
-			else{
-				lastMouseX = e.getXOnScreen() ; //-----Since X is in the valid area, update it.
-			}
-			
-			
-			//---- Get the newY location for the caption label
 			int newY = captionYLoc + (e.getYOnScreen() - lastMouseY);
-			//---- Make sure newX is not too far to the left
-			if( newY < captionLabel.getMinimumYLocation()){
-				newY = captionLabel.getMinimumYLocation();
-			}
-			//--- Make sure the new X location is not too far to the right
-			else if( newY > captionLabel.getMaximumYLocation()){
-				newY = captionLabel.getMaximumYLocation();
-			}
-			else{
-				lastMouseY = e.getYOnScreen(); //-----Since Y is in the valid area, update it.
-			}
 			
-			//----- Check if the caption moved.  May not move if you are at the boundary.
-			if(captionXLoc != newX || captionYLoc != newY){
-				captionMoved = true; //---- Mark caption moved.
+			//---- Make sure X and Y are valid.
+			if( newX > captionLabel.getMinimumXLocation() && newX < captionLabel.getMaximumXLocation()
+				&& newY > captionLabel.getMinimumYLocation() && newY < captionLabel.getMaximumYLocation()){
+				
 				latestCaptionX = newX; //---- Update the caption's X location								
 				latestCaptionY = newY; //---- Update the caption's Y location
-			}
+				
+				//----- Get the mouse location information
+				lastMouseX = e.getXOnScreen();
+				lastMouseY = e.getYOnScreen();				
 			
+				//----- Check if the caption moved.  May not move if you are at the boundary.
+				if(captionXLoc != newX || captionYLoc != newY){
+					captionMoved = true; //---- Mark caption moved.
+				}
+			}
 		}
 		
 		/**
