@@ -446,24 +446,28 @@ public class SlideShowImagePanel extends JPanel {
 				if(newY < captionLabel.getMinimumYLocation() || newY > captionLabel.getMaximumYLocation()) newY =  captionYLoc + (e.getY());
 			}
 			
+			
+			//----- Ensure the mouse is not too far away from the caption
+			Point mousePositionInPanel = getMousePosition(true);
+			if(mousePositionInPanel != null){
+				//----- Ensure the mouse and CaptionLabel are not separated too much in the X direction.
+				int mouseComponentXDistance = (int)mousePositionInPanel.getX() - newX;
+				if( mouseComponentXDistance < 0 || mouseComponentXDistance > captionLabel.getWidth()){
+					newX += mouseComponentXDistance;
+				}
+				
+				//----- Ensure the mouse and CaptionLabel are not separated too much in the Y direction.
+				int mouseComponentYDistance = (int)mousePositionInPanel.getY() - newY;
+				if( mouseComponentYDistance < 0 || mouseComponentYDistance > captionLabel.getHeight()){
+					newY += mouseComponentYDistance;
+				}
+			}
 			//---- Update X location
 			if(newX < captionLabel.getMinimumXLocation()){
 				newX = captionLabel.getMinimumXLocation();
 			}
 			else if(newX > captionLabel.getMaximumXLocation()){
 				newX = captionLabel.getMaximumXLocation();
-			}
-			else{
-				Point mousePositionInPanel = getMousePosition(true);
-				if(mousePositionInPanel != null){
-					int componentShiftDistance = (int)mousePositionInPanel.getX() - newX;
-					if( componentShiftDistance < 0){
-						newX -= componentShiftDistance;
-					}
-					else if( componentShiftDistance > captionLabel.getWidth()){
-						newX += componentShiftDistance;
-					}
-				}
 			}			
 			lastMouseX = e.getXOnScreen();
 			latestCaptionX = newX;
@@ -472,31 +476,9 @@ public class SlideShowImagePanel extends JPanel {
 			//---- Update Y location
 			if(newY < captionLabel.getMinimumYLocation()){
 				newY = captionLabel.getMinimumYLocation();
-				latestCaptionY = newY;
 			}
 			else if(newY > captionLabel.getMaximumYLocation()){
 				newY = captionLabel.getMaximumYLocation();
-				latestCaptionY = newY;
-			}
-			else{
-				Point mousePositionInPanel = getMousePosition(true);
-				if(mousePositionInPanel != null){
-					int componentShiftDistance = (int)mousePositionInPanel.getY() - newY;
-					if( componentShiftDistance < 0){
-						newY -= componentShiftDistance;
-					}
-					else if( componentShiftDistance > captionLabel.getHeight()){
-						newY += componentShiftDistance;
-					}
-					if(newY < captionLabel.getMinimumYLocation()){
-						newY = captionLabel.getMinimumYLocation();
-						latestCaptionY = newY;
-					}
-					else if(newY > captionLabel.getMaximumYLocation()){
-						newY = captionLabel.getMaximumYLocation();
-						latestCaptionY = newY;
-					}
-				}
 			}
 			lastMouseY = e.getYOnScreen();
 			latestCaptionY = newY;			
