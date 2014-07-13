@@ -72,6 +72,9 @@ public class EditJMenu extends JMenu {
 	 */
 	public void addCommandToUndo(GUICommand newCommand){
 		undoBuffer.add(newCommand);
+		
+		//---- Any time you add an item to the menu, it is guaranteed not be be empty.
+		undoMenuItem.setEnabled(true);		
 	}
 	
 	
@@ -115,7 +118,7 @@ public class EditJMenu extends JMenu {
 	 * 
 	 */
 	public void clearUndoBuffer(){
-		undoBuffer.clear();
+		undoBuffer.reset();
 		
 		//---- Disable the Undo Menu Item.
 		undoMenuItem.setEnabled(false); //---- By default enable is disabled
@@ -134,7 +137,14 @@ public class EditJMenu extends JMenu {
 			bufferItems = new ArrayList<E>(size);
 			
 			//---- Initialize the buffer as if it was a clear.  Leveraging other source code.
-			clear();
+			reset();
+			
+			//---- Populate the array with null
+			for(int i = 0; i < size; i++){
+				bufferItems.add(null);
+			}
+			
+
 		}
 		
 		/**
@@ -143,10 +153,11 @@ public class EditJMenu extends JMenu {
 		 * @param item Adds this item to the buffer
 		 */
 		public void add(E item){
-			bufferItems.set(bufferHead, item);
-			
 			//---- Update the buffer head
 			bufferHead = (++bufferHead) % bufferItems.size();
+			
+			//---- Get the item 
+			bufferItems.set(bufferHead, item);
 		
 			//---- Decide if queue is full, move the tail. Otherwise increment the item count
 			if(bufferItemCount == bufferItems.size()){
@@ -155,9 +166,6 @@ public class EditJMenu extends JMenu {
 			else{
 				bufferItemCount++;
 			}
-			
-			//---- Any time you add an item to the menu, it is guaranteed not be be empty.
-			undoMenuItem.setEnabled(true);
 		}
 		
 		public E remove(){
@@ -201,9 +209,9 @@ public class EditJMenu extends JMenu {
 		}
 		
 		
-		public void clear(){
+		public void reset(){
 			
-			bufferItems.clear();
+			//bufferItems.clear();
 			
 			//---- Initialize the locations on the buffer
 			bufferHead = -1;

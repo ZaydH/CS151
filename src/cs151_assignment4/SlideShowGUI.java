@@ -158,6 +158,7 @@ public class SlideShowGUI {
 		fileContentsPanel.addActionListener(new SlideShowFileBrowserPanel.ResetFileBrowserListener(), SlideShowContentsPanel.ADD_NEW_IMAGE_LISTENER);	//---- Listen for New Image Button
 		fileContentsPanel.addListSelectionListener(new SlideShowFileBrowserPanel.FilePathListSelectionListener());											//---- Listen for an Image to Be Selected from the List
 		fileContentsPanel.addListSelectionListener(new SlideShowCaptionPanel.CaptionListSelectionListener());												//---- Listen for an Image to Be Selected from the List
+		fileContentsPanel.setUndoBufferReference(topMenu);
 		fileBrowserPanel.addDocumentListenerForFile(new SlideShowContentsPanel.FileBrowserListener());											//---- Listen for changes in the file browser.
 		captionPanel.addDocumentListenerForCaption(new SlideShowContentsPanel.CaptionListener()); 												//---- Listen for changes in the caption
 		topMenu.addActionListener(new SlideShowContentsPanel.ResetContentsPaneListener(), SlideShowJMenuBar.NEW_FILE_LISTENER);			//---- Listen for New File Actions on MenuBar

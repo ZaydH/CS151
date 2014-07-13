@@ -100,7 +100,7 @@ public class SlideShowFileContents {
 	 */
 	public void setImageInstance(SlideShowImageInstance newInstance){
 		
-		allImages.set(newInstance.getImageID(), newInstance );
+		allImages.set(newInstance.getImageID()-1, newInstance );
 		
 	}
 	

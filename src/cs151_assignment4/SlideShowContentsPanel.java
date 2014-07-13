@@ -49,6 +49,7 @@ public class SlideShowContentsPanel extends JPanel implements ActionListener {
 	private static String captionText;
 	private static String fileBrowserText;
 	private Point captionLocation;
+	Object undoBuffer;
 	
 	
 	private static final String SAVE_BUTTON_COMMAND_NAME = "SAVE_CONTENT";
@@ -121,6 +122,7 @@ public class SlideShowContentsPanel extends JPanel implements ActionListener {
 		slideShowList.setLayoutOrientation(JList.VERTICAL); 				 //----- One item per row.	
 		slideShowList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION); //---- Allow only one image to be selected at a time.
 		loadSlideShowListFromFileContents();
+		addListSelectionCaptionLocationListener();
 		slideShowList.addListSelectionListener(new RepaintListSelectionListener());
 		
 		//---- Create the pane containing the List of Images.
@@ -225,15 +227,16 @@ public class SlideShowContentsPanel extends JPanel implements ActionListener {
 			
 			//----- Store the previous image instance
 			SlideShowImageInstance previousImageInstance = slideShowFileContents.getImageInstance(selectedIndex);
-			SlideShowImageInstance newImageInstance = new SlideShowImageInstance( selectedIndex, fileBrowserText, captionText,
+			SlideShowImageInstance newImageInstance = new SlideShowImageInstance( selectedIndex+1, fileBrowserText, captionText,
 																				  captionLocation);
 			
 			//---- If no change in the image instance, do nothing.  Do not add to undo queue.
-			if(previousImageInstance == newImageInstance) return;
+			if(previousImageInstance.equals(newImageInstance)) return;
 			
 			//----- Create a command for executing and undoing the save command.
 			GUICommand newSaveImageCommand = new SaveGUICommand(newImageInstance, previousImageInstance);
 			newSaveImageCommand.execute();
+			((SlideShowJMenuBar)undoBuffer).addCommandToUndoBuffer(newSaveImageCommand);
 			
 //			//----- Update the image instance information
 //			slideShowFileContents.setImageInstance(selectedIndex, fileBrowserText, captionText, 
@@ -487,6 +490,15 @@ public class SlideShowContentsPanel extends JPanel implements ActionListener {
 	}
 	
 	
+	/**
+	 * Sets the internal reference to the Undo Buffer.
+	 * 
+	 * @param undoBuffer  Reference to the Undo Buffer.
+	 */
+	public void setUndoBufferReference(Object undoBuffer){
+		this.undoBuffer = undoBuffer;
+	}
+	
 	
 	
 	/**
@@ -510,12 +522,11 @@ public class SlideShowContentsPanel extends JPanel implements ActionListener {
 							  SlideShowImageInstance previousImageInstance){
 			//---- Copy make clones of the input parameters.
 			this.newImageInstance = (SlideShowImageInstance)(newImageInstance.clone());
-			this.previousImageInstance = (SlideShowImageInstance)(newImageInstance.clone());
+			this.previousImageInstance = (SlideShowImageInstance)(previousImageInstance.clone());
 		}
 
 		@Override
 		public void execute() {
-			slideShowFileContents.setImageInstance(newImageInstance);
 			slideShowFileContents.setImageInstance(newImageInstance);
 			slideShowListModel.setElementAt(slideShowFileContents.getImageInstance(newImageInstance.getImageID()), 
 											newImageInstance.getImageID());
