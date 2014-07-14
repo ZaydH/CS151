@@ -191,7 +191,7 @@ public class SlideShowGUI {
 		//---- Add a listener to reset the caption location when new panel is selected.
 		topMenu.addActionListener(imagePanel.createResetCaptionLocationListener(), SlideShowJMenuBar.NEW_FILE_LISTENER);
 		fileContentsPanel.addListSelectionListener(imagePanel.createListSelectionCaptionLocationListener());
-		fileContentsPanel.addMouseInputListenerToCaption(imagePanel);
+		fileContentsPanel.addMouseInputListenerToCaptionForFileContents(imagePanel);
 		
 	}
 	

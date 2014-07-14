@@ -433,7 +433,7 @@ public class SlideShowContentsPanel extends JPanel implements ActionListener {
 	/**
 	 * Creates a mouse motion listener to extract the caption location for saving to the file.
 	 */
-	public void addMouseInputListenerToCaption(SlideShowImagePanel imagePanel){
+	public void addMouseInputListenerToCaptionForFileContents(SlideShowImagePanel imagePanel){
 	
 		//-- Create an anonymous object to listen for mouse motions.
 		MouseInputAdapter captionListener = imagePanel.new CaptionLabelMouseInputAdapter(){
