@@ -8,7 +8,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 
-public class EditJMenu extends JMenu {
+public class SlideShowEditJMenu extends JMenu {
 
 	/**
 	 * 
@@ -16,9 +16,9 @@ public class EditJMenu extends JMenu {
 	private static final long serialVersionUID = -871826944474861418L;
 	public static final int UNDO_DEPTH  = 10;
 	public static JMenuItem undoMenuItem;
-	public static UndoBuffer<GUICommand> undoBuffer; 
+	public static UndoBuffer<SlideShowGUICommand> undoBuffer; 
 	
-	public EditJMenu(String menuName, String undoMenuItemName){
+	public SlideShowEditJMenu(String menuName, String undoMenuItemName){
 		
 		//---- Create the edit menu
 		super(menuName);
@@ -31,7 +31,7 @@ public class EditJMenu extends JMenu {
 		this.add(undoMenuItem); //---- Add the menu item to the list
 		
 		//---- Initialize the undo buffer
-		undoBuffer = new UndoBuffer<GUICommand>(UNDO_DEPTH);
+		undoBuffer = new UndoBuffer<SlideShowGUICommand>(UNDO_DEPTH);
 		
 	}
 	
@@ -48,7 +48,7 @@ public class EditJMenu extends JMenu {
 									 */
 									@Override
 									public void actionPerformed(ActionEvent e){
-										GUICommand lastCommand = undoBuffer.remove();
+										SlideShowGUICommand lastCommand = undoBuffer.remove();
 										lastCommand.undo();
 										
 										//---- If the buffer is empty, disable the menu item.
@@ -70,7 +70,7 @@ public class EditJMenu extends JMenu {
 	 *  
 	 * @param newCommand  New command to be added to the UndoBuffer
 	 */
-	public void addCommandToUndo(GUICommand newCommand){
+	public void addCommandToUndo(SlideShowGUICommand newCommand){
 		undoBuffer.add(newCommand);
 		
 		//---- Any time you add an item to the menu, it is guaranteed not be be empty.

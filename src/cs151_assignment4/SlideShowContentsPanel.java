@@ -234,7 +234,7 @@ public class SlideShowContentsPanel extends JPanel implements ActionListener {
 			if(previousImageInstance.equals(newImageInstance)) return;
 			
 			//----- Create a command for executing and undoing the save command.
-			GUICommand newSaveImageCommand = new SaveGUICommand(newImageInstance, previousImageInstance);
+			SlideShowGUICommand newSaveImageCommand = new SaveGUICommand(newImageInstance, previousImageInstance);
 			newSaveImageCommand.execute();
 			((SlideShowJMenuBar)undoBuffer).addCommandToUndoBuffer(newSaveImageCommand);
 			
@@ -508,7 +508,7 @@ public class SlideShowContentsPanel extends JPanel implements ActionListener {
 	 * @author Zayd
 	 *
 	 */
-	private class SaveGUICommand implements GUICommand{
+	private class SaveGUICommand implements SlideShowGUICommand{
 		
 		private SlideShowImageInstance previousImageInstance;
 		private SlideShowImageInstance newImageInstance;

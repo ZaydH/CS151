@@ -6,7 +6,7 @@ package cs151_assignment4;
  * @author Zayd
  *
  */
-public interface GUICommand {
+public interface SlideShowGUICommand {
 
 	/**
 	 * Needs to be extended to perform the action.

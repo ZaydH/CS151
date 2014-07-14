@@ -51,7 +51,7 @@ public class SlideShowImagePanel extends JPanel {
 	private String previousImagePath;
 	private boolean imagePathIsValid;
 	private String captionText;
-	private ImagePanelCaption captionLabel;
+	private SlideShowImagePanelCaption captionLabel;
 	private final int CAPTION_OUTER_WIDTH;
 
 	/**
@@ -86,7 +86,7 @@ public class SlideShowImagePanel extends JPanel {
 		
 		//---- Set up a blank label.
 		captionText = "";
-		captionLabel = new ImagePanelCaption(captionText, JLabel.CENTER, this, panelBorder/2);
+		captionLabel = new SlideShowImagePanelCaption(captionText, JLabel.CENTER, this, panelBorder/2);
 		captionLabel.setOpaque(true);
 		captionLabel.setForeground(Color.BLACK);
 		captionLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
@@ -408,9 +408,11 @@ public class SlideShowImagePanel extends JPanel {
 		@Override
 		public void mousePressed(MouseEvent e){
 			
+			Point captionLocation = captionLabel.getLocation();
+			
 			//---- Initially latest and initial position are the same as the the caption's current position
-			latestCaptionX = initialCaptionX = captionLabel.getX();
-			latestCaptionY = initialCaptionY = captionLabel.getY();
+			latestCaptionX = initialCaptionX = (int)(captionLocation.getX());
+			latestCaptionY = initialCaptionY = (int)(captionLocation.getY());
 			
 			//----- Get the mouse location information
 			lastMouseX = e.getXOnScreen();
@@ -426,29 +428,38 @@ public class SlideShowImagePanel extends JPanel {
 		@Override
 		public void mouseDragged(MouseEvent e){
 			
+			Point mousePositionInPanel = getMousePosition(true);
+			
 			//---- Check if the mouse position is invalid
-			if(mouseOutsideValidArea && getMousePosition(true) == null) return;
+			if(mouseOutsideValidArea && mousePositionInPanel == null) return;
 			
 			//---- Get the caption location
 			Point captionLocation = captionLabel.getLocation();
 			int captionXLoc = (int)captionLocation.getX();
 			int captionYLoc = (int)captionLocation.getY();
+			int mouseXOnScreen = e.getXOnScreen();
+			int mouseYOnScreen = e.getYOnScreen();
 			
 			
 			//---- Get the newX and newY locations for the caption label
-			int newX = captionXLoc + (e.getXOnScreen() - lastMouseX);
-			int newY = captionYLoc + (e.getYOnScreen() - lastMouseY);
+			int newX = captionXLoc + (mouseXOnScreen - lastMouseX);
+			int newY = captionYLoc + (mouseYOnScreen - lastMouseY);
+			
+			//----- Store minimum and maximum X and Y locations
+			int captionMinimumXLocation = captionLabel.getMinimumXLocation();
+			int captionMaximumXLocation = captionLabel.getMaximumXLocation();
+			int captionMinimumYLocation = captionLabel.getMinimumYLocation();
+			int captionMaximumYLocation = captionLabel.getMaximumYLocation();
+			
 			//---- Handle the case where the cursor just reentered the valid space
 			if(mouseOutsideValidArea){
 				
 				//--- Handle default case where the mouse did not re-enter the valid space.
-				if(newX < captionLabel.getMinimumXLocation() || newX > captionLabel.getMaximumXLocation()) newX =  captionXLoc + (e.getX());
-				if(newY < captionLabel.getMinimumYLocation() || newY > captionLabel.getMaximumYLocation()) newY =  captionYLoc + (e.getY());
+				if(newX < captionMinimumXLocation || newX > captionMaximumXLocation) newX =  captionXLoc + (e.getX());
+				if(newY < captionMinimumYLocation || newY > captionMaximumYLocation) newY =  captionYLoc + (e.getY());
 			}
 			
-			
 			//----- Ensure the mouse is not too far away from the caption
-			Point mousePositionInPanel = getMousePosition(true);
 			if(mousePositionInPanel != null){
 				//----- Ensure the mouse and CaptionLabel are not separated too much in the X direction.
 				int mouseComponentXDistance = (int)mousePositionInPanel.getX() - newX;
@@ -463,24 +474,24 @@ public class SlideShowImagePanel extends JPanel {
 				}
 			}
 			//---- Update X location
-			if(newX < captionLabel.getMinimumXLocation()){
-				newX = captionLabel.getMinimumXLocation();
+			if(newX < captionMinimumXLocation){
+				newX = captionMinimumXLocation;
 			}
-			else if(newX > captionLabel.getMaximumXLocation()){
-				newX = captionLabel.getMaximumXLocation();
+			else if(newX > captionMaximumXLocation){
+				newX = captionMaximumXLocation;
 			}			
-			lastMouseX = e.getXOnScreen();
+			lastMouseX = mouseXOnScreen;
 			latestCaptionX = newX;
 			
 			
 			//---- Update Y location
-			if(newY < captionLabel.getMinimumYLocation()){
-				newY = captionLabel.getMinimumYLocation();
+			if(newY < captionMinimumYLocation){
+				newY = captionMinimumYLocation;
 			}
-			else if(newY > captionLabel.getMaximumYLocation()){
-				newY = captionLabel.getMaximumYLocation();
+			else if(newY > captionMaximumYLocation){
+				newY = captionMaximumYLocation;
 			}
-			lastMouseY = e.getYOnScreen();
+			lastMouseY = mouseYOnScreen;
 			latestCaptionY = newY;			
 		
 			
@@ -488,7 +499,7 @@ public class SlideShowImagePanel extends JPanel {
 			if(captionXLoc != newX || captionYLoc != newY) captionMoved = true; //---- Mark caption moved.
 			
 			//---- Check if the mouse left the valid area
-			if(getMousePosition(true) == null) 
+			if(mousePositionInPanel == null) 
 				mouseOutsideValidArea = true;
 			else{
 				mouseOutsideValidArea = false;

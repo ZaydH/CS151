@@ -27,7 +27,7 @@ public class SlideShowJMenuBar extends JMenuBar implements ActionListener {
 	 */
 	private static final long serialVersionUID = 1686924456234878847L;
 	private static JMenu fileMenu;
-	private static EditJMenu editMenu;
+	private static SlideShowEditJMenu editMenu;
 	
 	private static JFileChooser openFileChooser;
 	private static JFileChooser saveFileChooser;
@@ -70,7 +70,7 @@ public class SlideShowJMenuBar extends JMenuBar implements ActionListener {
 		
 		
 		//----- Create the Edit JMenu and define its menu items
-		editMenu = new EditJMenu("Edit", "Undo");
+		editMenu = new SlideShowEditJMenu("Edit", "Undo");
 		this.add(editMenu); //---- Add "Edit" to the menu bar
 		//---- Clear Undo Queue on New Show.
 		addActionListener(editMenu.generateClearUndoBufferActionListener(), NEW_FILE_LISTENER);		
@@ -144,7 +144,7 @@ public class SlideShowJMenuBar extends JMenuBar implements ActionListener {
 	 * 
 	 * @param newCommand	Command to be added to the UndoBuffer.
 	 */
-	public void addCommandToUndoBuffer(GUICommand newCommand){
+	public void addCommandToUndoBuffer(SlideShowGUICommand newCommand){
 		editMenu.addCommandToUndo(newCommand);
 	}
 	

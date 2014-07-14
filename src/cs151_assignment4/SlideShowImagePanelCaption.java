@@ -3,7 +3,7 @@ package cs151_assignment4;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-public class ImagePanelCaption extends JLabel {
+public class SlideShowImagePanelCaption extends JLabel {
 
 
 	/**
@@ -14,7 +14,7 @@ public class ImagePanelCaption extends JLabel {
 	int captionPanelBoundary;
 	
 	
-	public ImagePanelCaption(String captionText, int horizontalAlignment, JPanel sourcePanel, int captionPanelBoundary){
+	public SlideShowImagePanelCaption(String captionText, int horizontalAlignment, JPanel sourcePanel, int captionPanelBoundary){
 		
 		//---- Use the JLabel constructor
 		super(captionText, horizontalAlignment);
