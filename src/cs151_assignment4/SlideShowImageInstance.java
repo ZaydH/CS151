@@ -79,6 +79,8 @@ public class SlideShowImageInstance {
 	@Override
 	public String toString(){
 		String outputString = "Image: " + id + ": " + imageCaption;
+		if(captionXLocation != DEFAULT_IMAGE_LOCATION && captionYLocation != DEFAULT_IMAGE_LOCATION)
+			outputString += "  (X: " + captionXLocation + ", Y: " + captionXLocation + ")";
 		return outputString;
 	}
 	
