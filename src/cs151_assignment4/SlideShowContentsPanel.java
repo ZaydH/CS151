@@ -442,8 +442,24 @@ public class SlideShowContentsPanel extends JPanel implements ActionListener {
 				public void mouseReleased(MouseEvent e){
 					super.mouseReleased(e);
 					
-					if(this.getDidCaptionMove()){
+					int selectedIndex = slideShowList.getSelectedIndex();
+					
+					//---- Check if any image was selected and whether the caption moved
+					if(selectedIndex  > -1 && this.getDidCaptionMove()){
 						captionLocation = this.getFinalCaptionLocation();
+						
+						//----- Store the previous image instance
+						SlideShowImageInstance previousImageInstance = slideShowFileContents.getImageInstance(selectedIndex);
+						SlideShowImageInstance newImageInstance = new SlideShowImageInstance( selectedIndex+1, previousImageInstance.getImagePath(), 
+																							  previousImageInstance.getImageCaption(), captionLocation);
+						
+						//---- If no change in the image instance, do nothing.  Do not add to undo queue.
+						if(previousImageInstance.equals(newImageInstance)) return;
+						
+						//----- Create a command for executing and undoing the save command.
+						SlideShowGUICommand newSaveImageCommand = new SaveGUICommand(newImageInstance, previousImageInstance);
+						newSaveImageCommand.execute();
+						((SlideShowJMenuBar)undoBuffer).addCommandToUndoBuffer(newSaveImageCommand);						
 					}
 					
 				}
