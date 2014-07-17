@@ -10,8 +10,8 @@ public class SlideShowImagePanelCaption extends JLabel {
 	 * 
 	 */
 	private static final long serialVersionUID = -209353150182293374L;
-	JPanel sourcePanel;
-	int captionPanelBoundary;
+	private JPanel sourcePanel;
+	private int captionPanelBoundary;
 	
 	
 	public SlideShowImagePanelCaption(String captionText, int horizontalAlignment, JPanel sourcePanel, int captionPanelBoundary){
