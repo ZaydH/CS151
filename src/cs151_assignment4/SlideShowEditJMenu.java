@@ -188,15 +188,6 @@ public class SlideShowEditJMenu extends JMenu {
 			return itemtoReturn;
 		}
 		
-//		/**
-//		 * Gets the number of items currently in the buffer
-//		 * 
-//		 * @return Number of items in the buffer
-//		 */
-//		public int getBufferItemCount(){
-//			return bufferItemCount;
-//		}
-		
 		/**
 		 * Gets whether the buffer has any elements in it.
 		 * 
