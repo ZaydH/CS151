@@ -96,6 +96,7 @@ public class SlideShowContentsPanel extends JPanel implements ActionListener {
 		saveButton.setPreferredSize(buttonDimension);
 		saveButton.setMinimumSize(buttonDimension);
 		saveButton.setMaximumSize(buttonDimension);
+		saveButton.setEnabled(false);//---- By default, keep it disabled.  Until an image can be saved.
 		//--- Add button to this panel.
 		this.add(saveButton);
 		
@@ -304,6 +305,7 @@ public class SlideShowContentsPanel extends JPanel implements ActionListener {
 	 */
 	public static class SaveFileContentsPaneListener implements ActionListener {
 		
+		@Override		
 		public void actionPerformed(ActionEvent e){
 
 			//---- Do not do anything on an cancelled command
@@ -330,6 +332,7 @@ public class SlideShowContentsPanel extends JPanel implements ActionListener {
 		/**
 		 * Function handles document updates (specifically insertions) from a JTextField in the Caption Panel.
 		 */
+		@Override		
 		public void insertUpdate(DocumentEvent e){
 			extractDocumentText(e);	
 		}
@@ -337,6 +340,7 @@ public class SlideShowContentsPanel extends JPanel implements ActionListener {
 		/**
 		 * Function handles document updates (specifically removals) from a TextField in the Caption Panel.
 		 */
+		@Override 
 		public void removeUpdate(DocumentEvent e){
 			extractDocumentText(e);
 		}
@@ -346,6 +350,7 @@ public class SlideShowContentsPanel extends JPanel implements ActionListener {
 		 *  changedUpdate does not Apply for Text Fields.  
 		 *  This function is implemented due to the interface type's requirements. It does nothing.
 		 */
+		@Override		
 		public void changedUpdate(DocumentEvent e){
 		}		
 		
@@ -490,10 +495,14 @@ public class SlideShowContentsPanel extends JPanel implements ActionListener {
 									    	
 									    	//---- If nothing is selected, then do nothing
 									    	if(imageList.getSelectedIndex() == -1){
+									    		saveButton.setEnabled(false);
 									    		captionLocation = new Point(SlideShowImageInstance.DEFAULT_IMAGE_LOCATION,
 									    									SlideShowImageInstance.DEFAULT_IMAGE_LOCATION);	
 									    		return;
 									    	}
+									    	
+									    	//----- Keep the save button enabled whenever an image is selected.
+									    	saveButton.setEnabled(true);
 									    	
 									    	//---- Gets the selected image from the list.
 									    	SlideShowImageInstance selectedImage = (SlideShowImageInstance)imageList.getSelectedValue();

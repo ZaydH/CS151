@@ -93,6 +93,7 @@ public class SlideShowFileBrowserPanel extends JPanel  implements ActionListener
 		browseButton = new JButton("Browse");
 		browseButton.setActionCommand(BROWSE_COMMAND_NAME);
 		browseButton.addActionListener(this);
+		browseButton.setEnabled(false);
 		this.add(browseButton);
 		
 		//---- Set the size information for the browse buttons.
@@ -227,8 +228,12 @@ public class SlideShowFileBrowserPanel extends JPanel  implements ActionListener
 	    	JList imageList = (JList)(e.getSource()); //---- Get the list of images
 	    	
 	    	//---- If nothing is selected, then do nothing
-	    	if(imageList.getSelectedIndex() == -1) return;
+	    	if(imageList.getSelectedIndex() == -1){
+	    		browseButton.setEnabled(false);
+	    		return;
+	    	}
 	    	
+    		browseButton.setEnabled(true);	    	
 	    	SlideShowImageInstance imageInstance = (SlideShowImageInstance)imageList.getSelectedValue();
 	    	filePathTextField.setText(imageInstance.getImagePath());
 	    	

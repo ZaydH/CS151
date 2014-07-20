@@ -74,6 +74,7 @@ public class SlideShowCaptionPanel extends JPanel  {
 		
 		//---- Create and Add the Caption Field
 		captionTextField = new JTextField("", JTextField.TRAILING);
+		captionTextField.setEnabled(false); //---- By default on creation text field is disabled		
 		this.add(captionTextField);
 		
 
@@ -137,8 +138,12 @@ public class SlideShowCaptionPanel extends JPanel  {
 	    	JList imageList = (JList)(e.getSource()); //---- Get the list of images
 	    	
 	    	//---- If nothing is selected, then do nothing
-	    	if(imageList.getSelectedIndex() == -1) return;
+	    	if(imageList.getSelectedIndex() == -1){
+	    		captionTextField.setEnabled(false);
+	    		return;
+	    	}
 	    	
+	    	captionTextField.setEnabled(true);
 	    	SlideShowImageInstance imageInstance = (SlideShowImageInstance)imageList.getSelectedValue();
 	    	captionTextField.setText(imageInstance.getImageCaption());
 	    	
