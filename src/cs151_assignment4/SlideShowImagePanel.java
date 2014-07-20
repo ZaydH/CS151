@@ -53,6 +53,7 @@ public class SlideShowImagePanel extends JPanel {
 	private String captionText;
 	private SlideShowImagePanelCaption captionLabel;
 	private final int CAPTION_OUTER_WIDTH;
+	private boolean allowCaptionMovement = false;
 
 	/**
 	 * 
@@ -361,10 +362,11 @@ public class SlideShowImagePanel extends JPanel {
 
 				@Override
 				public void mouseDragged(MouseEvent e){
+					if(!allowCaptionMovement) return;
 					//---- Calculate the new caption locations
 					super.mouseDragged(e);
 					//----- If the caption moved, update its location
-					if(getDidCaptionMove()){
+					if(getDidCaptionMove() && allowCaptionMovement){
 						captionLabel.setLocation(this.getFinalCaptionLocation());
 					}
 				}
@@ -560,7 +562,12 @@ public class SlideShowImagePanel extends JPanel {
 		    	JList imageList = (JList)(e.getSource()); //---- Get the list of images
 		    	
 		    	//---- If nothing is selected, then do nothing
-		    	if(imageList.getSelectedIndex() == -1) return;
+		    	if(imageList.getSelectedIndex() == -1){ 
+		    		allowCaptionMovement = false; //---- Caption can only move when an image is selected.
+		    		return;
+		    	}
+		    	
+		    	allowCaptionMovement = true; //---- Image is selected so allow caption movement
 		    	
 		    	//---- Gets the selected image from the list.
 		    	SlideShowImageInstance selectedImage = (SlideShowImageInstance)imageList.getSelectedValue();
