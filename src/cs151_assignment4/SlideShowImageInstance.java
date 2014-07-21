@@ -80,7 +80,7 @@ public class SlideShowImageInstance {
 	public String toString(){
 		String outputString = "Image: " + id + ": " + imageCaption;
 		if(captionXLocation != DEFAULT_IMAGE_LOCATION && captionYLocation != DEFAULT_IMAGE_LOCATION)
-			outputString += "  (X: " + captionXLocation + ", Y: " + captionXLocation + ")";
+			outputString += "  (X: " + captionXLocation + ", Y: " + captionYLocation + ")";
 		return outputString;
 	}
 	
