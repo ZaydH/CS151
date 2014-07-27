@@ -35,16 +35,12 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 public class SlideNavigatorPanel extends JPanel  {
 	
 
-	private static JFileChooser fileChooser;
+	private static final long serialVersionUID = 5421452027701678411L;
+
 	private static JButton playPauseButton;
 	private static JButton previousSlideButton;
 	private static JButton nextSlideButton;
-	//private static JTextField filePathTextField;
-	private static final String FILE_PATH_LABEL_STRING = "Image:";
 	private SpringLayout slideNavigatorLayout;
-	
-	private final static String BROWSE_COMMAND_NAME = "FileBrowse";
-	private static final long serialVersionUID = 5421452027701678411L;
 	
 	public final static String PREVIOUS_BUTTON_TEXT = "Previous";
 	public final static String NEXT_BUTTON_TEXT = "Next";

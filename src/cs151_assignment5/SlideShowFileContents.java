@@ -6,8 +6,6 @@ import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import javax.swing.JOptionPane;
-
 
 /**
  * This class the set of images for the class and manages their import and export.
@@ -20,6 +18,7 @@ public class SlideShowFileContents {
 
 	private ArrayList<SlideShowImageInstance> allImages;
 	public static final String FILE_EXTENSION = "slideshow";
+	public static final String FILE_KEY_SEPARATOR = "^";
 	
 	
 	/**
@@ -95,9 +94,9 @@ public class SlideShowFileContents {
 	 * 
 	 * @param newInstance New Image instance to be used to override the previous instance
 	 */
-	public void setImageInstance(SlideShowImageInstance newInstance){
+	public void setImageInstance(int index, SlideShowImageInstance newInstance){
 		
-		allImages.set(newInstance.getImageID()-1, newInstance );
+		allImages.set(index, newInstance );
 		
 	}
 	
@@ -122,13 +121,15 @@ public class SlideShowFileContents {
 	public boolean readSlideShowFile(File filePath){
 		
 		Scanner fileIn;
-		int numberImageFiles;
-		ArrayList<SlideShowImageInstance> bufferImageList;
-		String[] imageFileParamters = new String[SlideShowImageInstance.PARAMETERS_PER_IMAGE_INSTANCE];
+		ArrayList<SlideShowImageInstance> bufferImageList = new ArrayList<SlideShowImageInstance>();
+		String[] imageFileParameters;
+		String fileLine;
+		int imageCnt=1;
 		
 		//---- Check to see if the file extension is correct.
 		String lowercaseFilePath = filePath.toString().toLowerCase();
 		if(!lowercaseFilePath.endsWith("." + FILE_EXTENSION)){
+			@SuppressWarnings("unused")
 			Thread t = new JOptionPaneThreaded("Incorrect File Extension.  Please specify a valid file and try again.");
 			return false;
 		}
@@ -136,53 +137,42 @@ public class SlideShowFileContents {
 		//----- Once the file extension has been verified, try opening the file.
 		try{
 			fileIn = new Scanner(new FileReader(filePath));
-			
 
-			//----- Ensure the first element of the file is the number of elements.
-			if(!fileIn.hasNextInt()){
-				new JOptionPaneThreaded("Invalid file format.  Please specify a valid file and try again.");
+			if( !fileIn.hasNextLine() ){
+				new JOptionPaneThreaded("A slideshow must have at least one image.", "INSUFFICIENT IMAGES ERROR");
 				fileIn.close(); //---- Close the scanner.
+				return false;
 			}
-
-			//---- Get the number of files in the list.
-			//numberImageFiles = Integer.parseInt(fileIn.nextLine());
-			numberImageFiles = fileIn.nextInt();
-			if(numberImageFiles > 0) fileIn.nextLine();//---- Read the newline.
 			
-			//---- Create the ArrayList.
-			if(numberImageFiles > 0) bufferImageList = new ArrayList<SlideShowImageInstance>(numberImageFiles);
-			else bufferImageList = new ArrayList<SlideShowImageInstance>();
-			
-			//----- Read the image information from the file.
-			for(int i = 0; i < numberImageFiles; i++){
+			//---- Read until the end of the file.
+			while( !fileIn.hasNextLine() ){
 				
-				//----- Iterate through the elements in a possible 
-				for(int j = 0; j < SlideShowImageInstance.PARAMETERS_PER_IMAGE_INSTANCE; j++){
-					//---- Verify the file is still valid.
-					if(!fileIn.hasNextLine()){
-						new JOptionPaneThreaded("The slideshow file appears to be missing data or is corrupted.\n"
-												+ "Please specify a new file and try again.");
-						fileIn.close(); //---- Close the scanner.
-						return false;
-					}
-					else{
-						//---- Load image parameters.
-						imageFileParamters[j] = fileIn.nextLine();
-						if(imageFileParamters[j].equals(" ")) imageFileParamters[j] = "";//---- Handle the null space case needed by the parser
-					}
+				fileLine = fileIn.nextLine(); //--- Read the next line.
+				imageFileParameters = fileLine.split(FILE_KEY_SEPARATOR,-1); //--- Split the string.
+				
+				//---- Ensure the string split properly.
+				if(imageFileParameters.length != SlideShowImageInstance.PARAMETERS_PER_IMAGE_INSTANCE ){
+					new JOptionPaneThreaded("Fatal Error: Row #" + imageCnt + " of the image file has the incorrect "
+											+ "number of parameters.", "FILE FORMAT ERROR");
+					fileIn.close(); //---- Close the scanner.
+					return false;
 				}
 				
-				//---- Add the item to the list.
-				bufferImageList.add(new SlideShowImageInstance(i+1, imageFileParamters));
-			}
-			
-			
-			//---- Ensure the file length is as expected.  If there is more text, thats a problem so ignore the file.
-			if(fileIn.hasNextLine()){
-				new JOptionPaneThreaded("The slideshow file appears to have too much data or is corrupted.\n"
-										+ "Please specify a new file and try again.");				
-				fileIn.close();
-				return false;
+				//---- Ensure the index, X, and Y all resolve.
+				try{
+					bufferImageList.add( new SlideShowImageInstance(imageFileParameters) );
+				}
+				catch(NumberFormatException e){
+					new JOptionPaneThreaded("The slideshow file appears to be corrupted.\n"
+											+ "Some of the parameters (e.g. image ID, X Location, Y Location, etc.)\b"
+											+ "could not be parsed.  Check the file, and try again.");
+					fileIn.close(); //---- Close the scanner.
+					return false;
+				}
+				
+				
+				//---- Increment the number of images.
+				imageCnt++;
 			}
 			
 			//---- Valid file so update the file information.

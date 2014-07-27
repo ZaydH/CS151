@@ -20,23 +20,29 @@ public class SlideShowImageInstance {
 	private int captionYLocation;
 	
 	public static final int DEFAULT_IMAGE_LOCATION = -1;
-	public static final int PARAMETERS_PER_IMAGE_INSTANCE = 4;
+	public static final int PARAMETERS_PER_IMAGE_INSTANCE = 5;
 	
 	/**
 	 * Constructor to specify a slide show using an array.
 	 * 
 	 * @param imageParameters	Array of size PARAMETERS_PER_IMAGE_INSTANCE that contains the information on the Slide Show Image. 
-	 * 							Parameter 0 is the image path. Parameter 1 is the image caption. 
-	 * 							Parameter 2 is the caption's X location. Parameter 3 is the caption's Y location
+	 * 							Parameter 0 is the image id.
+	 * 							Parameter 1 is the image caption. 
+	 * 							Parameter 2 is the caption's X location. 
+	 * 							Parameter 3 is the caption's Y location
+	 * 							Parameter 4 is the image path.  
 	 */
-	public SlideShowImageInstance(int id, String[] imageParameters){
-		this.id = id;
-		this.imagePath = imageParameters[0];
-		this.imageCaption = imageParameters[1];
-		this.captionXLocation = Integer.valueOf(imageParameters[2]);
-		this.captionYLocation = Integer.valueOf(imageParameters[3]);
+	public SlideShowImageInstance(String[] imageParameters) throws NumberFormatException {
+		
+		int paramCnt = 0;
+		
+		this.id = Integer.valueOf(imageParameters[paramCnt++]);
+		this.imageCaption = imageParameters[paramCnt++];
+		this.captionXLocation = Integer.valueOf(imageParameters[paramCnt++]);
+		this.captionYLocation = Integer.valueOf(imageParameters[paramCnt++]);
+		this.imagePath = imageParameters[paramCnt++];
+		
 	}
-	
 	
 	/**
 	 * Creates a new slide show instance with the specified file path and caption information.
@@ -102,9 +108,9 @@ public class SlideShowImageInstance {
 	
 	
 	/**
-	 * Gets the ID for the SlideShowImageInstance.
+	 * Gets the id for the SlideShowImageInstance.
 	 * 
-	 * @return ID number of the SlideShowImageInstance.
+	 * @return id number of the SlideShowImageInstance.
 	 */
 	public int getImageID(){
 		return id;
