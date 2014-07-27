@@ -8,6 +8,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.SpringLayout;
+import javax.swing.event.ChangeListener;
 
 
 
@@ -105,11 +106,25 @@ public class SlideShowSliderPanel extends JPanel  {
 			
 			@Override
 			public void run(){
+				//----- Enable the slider and force an update on its state for all other objects.
 				delaySlider.setEnabled(true);
+				int sliderCurrentValue = delaySlider.getValue();
+				delaySlider.setValue( delaySlider.getMinimum() );
+				delaySlider.setValue( sliderCurrentValue );
 			}
 		}
 		
 		return new EnableSliderActionListener();
 	}	
+	
+	
+	/**
+	 * Adds the input ChangeListener to the JSlider.
+	 * 
+	 * @param listener Listener that will be added to the slider.
+	 */
+	public void addSliderListener(ChangeListener listener){
+		delaySlider.addChangeListener(listener);
+	}
 	
 }

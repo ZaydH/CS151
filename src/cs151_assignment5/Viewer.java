@@ -168,6 +168,7 @@ public class Viewer {
 		mainGUILayout.putConstraint(SpringLayout.NORTH, imagePanel, 0, SpringLayout.NORTH, mainGUI);
 		mainGUILayout.putConstraint(SpringLayout.WEST, imagePanel, 0, SpringLayout.EAST, leftGUIPanel);
 		topMenu.addOpenFileChooserActionListener( imagePanel.createOpenFileChooserListener() );
+		sliderPanel.addSliderListener( imagePanel.createSliderChangeListener() );
 		
 		//----- Add Listeners to open 
 		imagePanel.addSuccessfulFileOpenActionListener( slideNavigatorPanel.createNavigationButtonEnableListener() );
