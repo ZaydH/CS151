@@ -329,6 +329,16 @@ public class SlideShowImagePanel extends JPanel {
 					//----- Read the specified image file.
 					if(slideShowFileContents.readSlideShowFile(fc.getSelectedFile())){
 						
+						//---- Ensure the thread is stopped.
+						try{
+							stopSlideshow();
+							while(slideshowPlayThread!= null && slideshowPlayThread.isAlive()){
+									this.sleep(10 /*ms*/);
+							}
+						}
+						catch(InterruptedException e){	
+						}
+						
 						//---- This is used to signal other components to enable on a successful file open.
 						fileOpenSuccessful.doClick();
 						
@@ -337,6 +347,8 @@ public class SlideShowImagePanel extends JPanel {
 
 						//--- Update information for the current image.
 						updateCurrentImageInformation();
+						repaint();
+						revalidate();
 						
 					}//---- if(slideShowFileContents.readSlideShowFile(fc.getSelectedFile()))
 				}//---public void run(){
@@ -464,8 +476,15 @@ public class SlideShowImagePanel extends JPanel {
 				//---- Determine if the playback thread is running. 
 				//---- If it is running, interrupt to transition slide.
 				boolean slideshowRunning = (slideshowPlayThread!= null) && (slideshowPlayThread.isAlive());
-				if(slideshowRunning)
-					slideshowPlayThread.interrupt();
+				stopSlideshow();
+				try{
+					while(slideshowPlayThread!= null && slideshowPlayThread.isAlive()){
+							Thread.sleep(10 /*ms*/);
+					}
+				}
+				catch(InterruptedException e){
+					
+				}
 				
 				//---- Call the thread to switch slides.
 				@SuppressWarnings("unused")
@@ -477,6 +496,41 @@ public class SlideShowImagePanel extends JPanel {
 		};
 		
 	}
+	
+	
+	/**
+	 * Starts the slideshow in the image panel.
+	 */
+	public void startSlideshow(){
+		
+		try{
+
+			//----- Ensure a slideshow is notrunning.
+			stopSlideshow();
+			while(slideshowPlayThread!= null && slideshowPlayThread.isAlive()){
+					Thread.sleep(10 /*ms*/);
+			}
+			
+			//---- Start a new thread
+			slideshowPlayThread = new SlideshowPlaybackThread();
+			
+		}
+		catch(InterruptedException e){
+			
+		}
+	}
+	
+	
+	/**
+	 * Starts the slideshow in the image panel.
+	 */
+	public void stopSlideshow(){
+		//----- Ensure the slideshow is running.
+		if(slideshowPlayThread != null && slideshowPlayThread.isAlive()){
+			slideshowPlayThread.interrupt();
+		}
+	}
+
 	
 	
 	/**
@@ -509,6 +563,7 @@ public class SlideShowImagePanel extends JPanel {
 						currentSlideIndex = nextSlideIndex();
 						updateCurrentImageInformation();
 					}
+					firstLoop = false; //--- Guaranteed not to be first loop.
 					
 					//--- Repaint the GUI.
 					revalidate();

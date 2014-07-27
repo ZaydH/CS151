@@ -28,12 +28,15 @@ public class SlideNavigatorPanel extends JPanel  {
 	private static JButton previousSlideButton;
 	private static JButton nextSlideButton;
 	private SpringLayout slideNavigatorLayout;
+	private SlideShowImagePanel imagePanel;
 	
 	public final static String PREVIOUS_BUTTON = "Previous";
 	public final static String NEXT_BUTTON = "Next";
 	public final static String PAUSE_BUTTON = "Pause";
 	public final static String PLAY_BUTTON = "Play";
 	
+//	public final static String PLAY_SLIDESHOW_ACTION = "playSlideshow";
+//	public final static String PAUSE_SLIDESHOW_ACTION = "pauseSlideshow";
 	public final static String NEXT_SLIDE_ACTION = "nextSlide";
 	public final static String PREVIOUS_SLIDE_ACTION = "previousSlide";
 	
@@ -63,7 +66,7 @@ public class SlideNavigatorPanel extends JPanel  {
 		
 		//---- Create the play/pause button.
 		playPauseButton = new JButton( PLAY_BUTTON );
-		playPauseButton.setAction( createPlayPauseButtonAbstractAction() );
+		playPauseButton.addActionListener( createPlayPauseButtonActionListener() );
 		Dimension playPauseButtonDimension = new Dimension(playPauseButtonWidth, playPauseButtonHeight);
 		playPauseButton.setSize(playPauseButtonDimension);
 		playPauseButton.setPreferredSize(playPauseButtonDimension);
@@ -105,33 +108,27 @@ public class SlideNavigatorPanel extends JPanel  {
 
 
 	}
+	
+	
+	/**
+	 * 
+	 * Gets a reference of the image panel for this class to use to start and stop the slideshow.
+	 * 
+	 * @param imagePanel	Reference to the GUI's image panel.
+	 */
+	public void setImagePanelReference( SlideShowImagePanel imagePanel){
+		this.imagePanel = imagePanel;
+	}
 
 	
 	/**
 	 * Factory Method to construct and return action elements for play/pause buttons.
 	 * 
-	 * @return  Abstract Action for the Play Pause Button
+	 * @return  ActionListener for the Play Pause Button
 	 */
-	private AbstractAction createPlayPauseButtonAbstractAction(){
+	private ActionListener createPlayPauseButtonActionListener(){
 		
-		/**
-		 * Action class for the pause/play buttons. 
-		 * 
-		 * @author Zayd
-		 *
-		 */
-		class PlayPauseAbstractAction extends AbstractAction {
-			
-			private static final long serialVersionUID = -3419452042957390414L;
-			private String currentButtonState;
-			
-			/**
-			 * Store the local button state to ensure it is not reset out of sync.
-			 */
-			public PlayPauseAbstractAction(){
-				super(PLAY_BUTTON);
-				this.currentButtonState = PLAY_BUTTON;
-			}
+		return new ActionListener(){
 			
 			/**
 			 * Toggle the string for the pause button.
@@ -139,19 +136,18 @@ public class SlideNavigatorPanel extends JPanel  {
 			public void actionPerformed(ActionEvent e){
 				
 				//----- Select the opposite of the current button state
-				if(currentButtonState.equals(PLAY_BUTTON))
-					currentButtonState = PAUSE_BUTTON;
-				else
-					currentButtonState = PLAY_BUTTON;
-				
-				//---- Update the button.
-				playPauseButton.setText(currentButtonState);
+				if(playPauseButton.getText().equals(PLAY_BUTTON)){
+					playPauseButton.setText( PAUSE_BUTTON );
+					imagePanel.startSlideshow();
+				}
+				else{
+					playPauseButton.setText( PLAY_BUTTON );
+					imagePanel.stopSlideshow();
+				}
+
 			}	
 			
 		};
-		
-		//---- Construct the class defined above then return it.S
-		return new PlayPauseAbstractAction();
 		
 	}
 	
@@ -193,6 +189,7 @@ public class SlideNavigatorPanel extends JPanel  {
 			
 			@Override
 			public void run(){
+				playPauseButton.setText( PLAY_BUTTON );
 				playPauseButton.setEnabled(true);
 				previousSlideButton.setEnabled(true);
 				nextSlideButton.setEnabled(true);

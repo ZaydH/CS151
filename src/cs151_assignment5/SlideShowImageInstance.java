@@ -35,7 +35,7 @@ public class SlideShowImageInstance {
 	public SlideShowImageInstance(String[] imageParameters) throws NumberFormatException {
 		
 		int paramCnt = 0;
-		//---- May need to cast the strings.  If an invalid cast, it throughs NumberFormatException.
+		//---- May need to cast the strings.  If an invalid cast, it throws NumberFormatException.
 		this.id = Integer.valueOf(imageParameters[paramCnt++]);
 		this.imageCaption = imageParameters[paramCnt++];
 		this.captionXLocation = Integer.valueOf(imageParameters[paramCnt++]);

@@ -172,7 +172,7 @@ public class Viewer {
 		slideNavigatorPanel.addSlideTransitionButtonListener( SlideNavigatorPanel.PREVIOUS_BUTTON, imagePanel.createSwitchSlideActionListener() );
 		//---- Creates a listener for the slider.
 		sliderPanel.addSliderListener( imagePanel.createSliderChangeListener() );
-		
+		slideNavigatorPanel.setImagePanelReference(imagePanel);
 		
 		//----- Add Listeners to open 
 		imagePanel.addSuccessfulFileOpenActionListener( slideNavigatorPanel.createNavigationButtonEnableListener() );
