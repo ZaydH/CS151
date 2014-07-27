@@ -84,7 +84,7 @@ public class SlideShowSliderPanel extends JPanel  {
 		captionSpringLayout.putConstraint(SpringLayout.WEST, delayLabel, 0, SpringLayout.WEST, delaySlider);		//---- Space "padding" pixels from the top of the panel
 		
 		//--- Place the components vertically
-		captionSpringLayout.putConstraint(SpringLayout.NORTH, delayLabel, padding, SpringLayout.SOUTH, this);		//---- Space "padding" pixels from the top of the panel
+		captionSpringLayout.putConstraint(SpringLayout.NORTH, delayLabel, padding, SpringLayout.NORTH, this);		//---- Space "padding" pixels from the top of the panel
 		captionSpringLayout.putConstraint(SpringLayout.NORTH, delaySlider, padding, SpringLayout.SOUTH, delayLabel);		//---- Space "padding" pixels from the top of the panel
 		
 	}

@@ -73,7 +73,16 @@ public class SlideShowJMenuBar extends JMenuBar implements ActionListener {
 	 */
 	public void actionPerformed(ActionEvent e){
 		if(e.getActionCommand().equals("fileMenuOpen")){
-			openFileChooser.showOpenDialog(null);
+			
+			//----- Run the file chooser thread
+			class FileChooserThread extends Thread{
+				public void run(){
+					openFileChooser.showOpenDialog(null);
+					this.start();
+				}
+			}
+			//---- Create the thread to display the JFileChooser.
+			Thread fileChooserThread = new FileChooserThread();
 		}
 		else if(e.getActionCommand().equals("fileMenuExit")){
 			menuExitAction();
@@ -87,5 +96,11 @@ public class SlideShowJMenuBar extends JMenuBar implements ActionListener {
 	private void menuExitAction(){
 		System.exit(0); //---- Kill the program
 	}	
+	
+	
+	
+	
+	
+	
 	
 }

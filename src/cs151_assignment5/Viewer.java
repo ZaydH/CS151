@@ -25,7 +25,7 @@ public class Viewer {
 	private static SlideShowJMenuBar topMenu;
 	
 	private static JPanel leftGUIPanel;
-	private static SlideShowSliderPanel slidePanel;
+	private static SlideShowSliderPanel sliderPanel;
 	private static SlideNavigatorPanel slideNavigatorPanel;
 	//private static SlideShowContentsPanel fileContentsPanel;
 	
@@ -139,28 +139,26 @@ public class Viewer {
 		
 		
 		//----- Make the Pane storing the caption information		
-		slidePanel = new SlideShowslidePanel(LEFT_PANEL_WIDTH, SLIDER_PANEL_HEIGHT, LEFT_PANEL_LABEL_WIDTH, STANDARD_PADDING);
-		leftGUIPanel.add(slidePanel);
+		sliderPanel = new SlideShowSliderPanel(LEFT_PANEL_WIDTH, SLIDER_PANEL_HEIGHT, SLIDE_NAVIGATION_MAIN_BUTTON_WIDTH,  
+				   						 	  SLIDE_NAVIGATION_BUTTON_HEIGHT, STANDARD_PADDING);
+		leftGUIPanel.add(sliderPanel);
 		//----- Set the position of the file browser padding 
-		leftPanelLayout.putConstraint( SpringLayout.NORTH, slidePanel, LEFT_PANEL_VERTICAL_SPACING, SpringLayout.SOUTH, slideNavigatorPanel);
-		leftPanelLayout.putConstraint( SpringLayout.HORIZONTAL_CENTER, slidePanel, 0, SpringLayout.HORIZONTAL_CENTER, leftGUIPanel);
+		leftPanelLayout.putConstraint( SpringLayout.NORTH, sliderPanel, STANDARD_PADDING, SpringLayout.SOUTH, slideNavigatorPanel);
+		leftPanelLayout.putConstraint( SpringLayout.HORIZONTAL_CENTER, sliderPanel, 0, SpringLayout.HORIZONTAL_CENTER, leftGUIPanel);
 
-		public SlideShowSliderPanel(int panelWidth, int panelHeight, int labelWidth, int padding, 
-				int sliderWidth, int sliderHeight)
-		
 //		//---- Create the file contents panel.
 //		fileContentsPanel = new SlideShowContentsPanel(LEFT_PANEL_WIDTH, FILE_CONTENTS_PANEL_HEIGHT, STANDARD_PADDING, SLIDE_NAVIGATION_PANEL_HEIGHT - 2*STANDARD_PADDING );
 //		leftGUIPanel.add(fileContentsPanel);
 //		//----- Set the position of the file browser padding 
-//		leftPanelLayout.putConstraint( SpringLayout.NORTH, fileContentsPanel, LEFT_PANEL_VERTICAL_SPACING, SpringLayout.SOUTH, slidePanel);
+//		leftPanelLayout.putConstraint( SpringLayout.NORTH, fileContentsPanel, LEFT_PANEL_VERTICAL_SPACING, SpringLayout.SOUTH, sliderPanel);
 //		leftPanelLayout.putConstraint( SpringLayout.HORIZONTAL_CENTER, fileContentsPanel, 0, SpringLayout.HORIZONTAL_CENTER, leftGUIPanel);
 //		//----- Setup the listeners
-//		//fileContentsPanel.addActionListener(new SlideShowslidePanel.ResetCaptionListener(), SlideShowContentsPanel.ADD_NEW_IMAGE_LISTENER); 			//---- Listen for New Image Button
+//		//fileContentsPanel.addActionListener(new SlideShowsliderPanel.ResetCaptionListener(), SlideShowContentsPanel.ADD_NEW_IMAGE_LISTENER); 			//---- Listen for New Image Button
 //		//fileContentsPanel.addActionListener(new SlideShowslideNavigatorPanel.ResetFileBrowserListener(), SlideShowContentsPanel.ADD_NEW_IMAGE_LISTENER);	//---- Listen for New Image Button
 //		fileContentsPanel.addListSelectionListener(new SlideShowslideNavigatorPanel.FilePathListSelectionListener());											//---- Listen for an Image to Be Selected from the List
-//		fileContentsPanel.addListSelectionListener(new SlideShowslidePanel.CaptionListSelectionListener());												//---- Listen for an Image to Be Selected from the List
+//		fileContentsPanel.addListSelectionListener(new SlideShowsliderPanel.CaptionListSelectionListener());												//---- Listen for an Image to Be Selected from the List
 //		slideNavigatorPanel.addDocumentListenerForFile(new SlideShowContentsPanel.FileBrowserListener());											//---- Listen for changes in the file browser.
-//		slidePanel.addDocumentListenerForCaption(new SlideShowContentsPanel.CaptionListener()); 												//---- Listen for changes in the caption
+//		sliderPanel.addDocumentListenerForCaption(new SlideShowContentsPanel.CaptionListener()); 												//---- Listen for changes in the caption
 		//topMenu.addActionListener(new SlideShowContentsPanel.OpenFileContentsPaneListener());		//---- Listen for New File Actions on MenuBar
 		
 		//---- Add the Left GUI Panel to the GUI.
