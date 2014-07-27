@@ -29,10 +29,13 @@ public class SlideNavigatorPanel extends JPanel  {
 	private static JButton nextSlideButton;
 	private SpringLayout slideNavigatorLayout;
 	
-	public final static String PREVIOUS_BUTTON_TEXT = "Previous";
-	public final static String NEXT_BUTTON_TEXT = "Next";
-	public final static String PAUSE_BUTTON_TEXT = "Pause";
-	public final static String PLAY_BUTTON_TEXT = "Play";
+	public final static String PREVIOUS_BUTTON = "Previous";
+	public final static String NEXT_BUTTON = "Next";
+	public final static String PAUSE_BUTTON = "Pause";
+	public final static String PLAY_BUTTON = "Play";
+	
+	public final static String NEXT_SLIDE_ACTION = "nextSlide";
+	public final static String PREVIOUS_SLIDE_ACTION = "previousSlide";
 	
 	
 	/**
@@ -59,7 +62,7 @@ public class SlideNavigatorPanel extends JPanel  {
 		
 		
 		//---- Create the play/pause button.
-		playPauseButton = new JButton( PLAY_BUTTON_TEXT );
+		playPauseButton = new JButton( PLAY_BUTTON );
 		playPauseButton.setAction( createPlayPauseButtonAbstractAction() );
 		Dimension playPauseButtonDimension = new Dimension(playPauseButtonWidth, playPauseButtonHeight);
 		playPauseButton.setSize(playPauseButtonDimension);
@@ -73,7 +76,7 @@ public class SlideNavigatorPanel extends JPanel  {
 
 		
 		//---- Create the previous button.
-		previousSlideButton = new JButton( PREVIOUS_BUTTON_TEXT );
+		previousSlideButton = new JButton( PREVIOUS_BUTTON );
 		//previousSlideButton.setAction( createPlayPauseButtonAbstractAction() );
 		Dimension previousNextButtonsDimension = new Dimension((playPauseButtonWidth - spaceBetweenButtons) /2, playPauseButtonHeight);
 		previousSlideButton.setSize(previousNextButtonsDimension);
@@ -81,19 +84,21 @@ public class SlideNavigatorPanel extends JPanel  {
 		previousSlideButton.setMinimumSize(previousNextButtonsDimension);
 		previousSlideButton.setMaximumSize(previousNextButtonsDimension);
 		previousSlideButton.setEnabled(false);
+		previousSlideButton.setActionCommand(PREVIOUS_SLIDE_ACTION);
 		this.add(previousSlideButton);
 		slideNavigatorLayout.putConstraint(SpringLayout.NORTH, previousSlideButton, 3*padding, SpringLayout.SOUTH, playPauseButton);
 		slideNavigatorLayout.putConstraint(SpringLayout.WEST, previousSlideButton, 0, SpringLayout.WEST, playPauseButton);
 
 		
 		//---- Create the previous button.
-		nextSlideButton = new JButton( NEXT_BUTTON_TEXT );
+		nextSlideButton = new JButton( NEXT_BUTTON );
 		//previousSlideButton.setAction( createPlayPauseButtonAbstractAction() );
 		nextSlideButton.setSize(previousNextButtonsDimension);
 		nextSlideButton.setPreferredSize(previousNextButtonsDimension);
 		nextSlideButton.setMinimumSize(previousNextButtonsDimension);
 		nextSlideButton.setMaximumSize(previousNextButtonsDimension);
 		nextSlideButton.setEnabled(false);
+		nextSlideButton.setActionCommand(NEXT_SLIDE_ACTION);
 		this.add(nextSlideButton);
 		slideNavigatorLayout.putConstraint(SpringLayout.NORTH, nextSlideButton, 3*padding, SpringLayout.SOUTH, playPauseButton);
 		slideNavigatorLayout.putConstraint(SpringLayout.EAST, nextSlideButton, 0, SpringLayout.EAST, playPauseButton);
@@ -124,8 +129,8 @@ public class SlideNavigatorPanel extends JPanel  {
 			 * Store the local button state to ensure it is not reset out of sync.
 			 */
 			public PlayPauseAbstractAction(){
-				super(PLAY_BUTTON_TEXT);
-				this.currentButtonState = PLAY_BUTTON_TEXT;
+				super(PLAY_BUTTON);
+				this.currentButtonState = PLAY_BUTTON;
 			}
 			
 			/**
@@ -134,10 +139,10 @@ public class SlideNavigatorPanel extends JPanel  {
 			public void actionPerformed(ActionEvent e){
 				
 				//----- Select the opposite of the current button state
-				if(currentButtonState.equals(PLAY_BUTTON_TEXT))
-					currentButtonState = PAUSE_BUTTON_TEXT;
+				if(currentButtonState.equals(PLAY_BUTTON))
+					currentButtonState = PAUSE_BUTTON;
 				else
-					currentButtonState = PLAY_BUTTON_TEXT;
+					currentButtonState = PLAY_BUTTON;
 				
 				//---- Update the button.
 				playPauseButton.setText(currentButtonState);
@@ -150,6 +155,22 @@ public class SlideNavigatorPanel extends JPanel  {
 		
 	}
 	
+	
+	/**
+	 * Adds action listeners to the next or previous slide buttons.
+	 * 
+	 * @param slideButton Name of the button to have the listener attached to.
+	 */
+	public void addSlideTransitionButtonListener(String slideButton, ActionListener listener){
+		
+		if(slideButton.equals(NEXT_BUTTON))
+			nextSlideButton.addActionListener(listener);
+		else if(slideButton.equals(PREVIOUS_BUTTON))
+			previousSlideButton.addActionListener(listener);
+		else
+			assert false : "Error: Invalid button name for slide button.";
+		
+	}
 	
 	/**
 	 * Creates an ActionListener that once the GUI enters a valid state the GUI buttons are enabled.

@@ -50,7 +50,6 @@ public class Viewer {
 	private static final int LEFT_PANEL_WIDTH = 400;
 	private static final int GUI_WIDTH = LEFT_PANEL_WIDTH + PANELS_HEIGHT;
 	private static final int RIGHT_PANEL_WIDTH = GUI_WIDTH-LEFT_PANEL_WIDTH;
-	//private static final int LEFT_PANEL_LABEL_WIDTH = 70;
 	private static final int SLIDE_NAVIGATION_MAIN_BUTTON_WIDTH = 3 * LEFT_PANEL_WIDTH  /4;
 
 	private static final int SPACE_BETWEEN_SLIDE_NAVIGATION_BUTTONS = 20;
@@ -168,7 +167,12 @@ public class Viewer {
 		mainGUILayout.putConstraint(SpringLayout.NORTH, imagePanel, 0, SpringLayout.NORTH, mainGUI);
 		mainGUILayout.putConstraint(SpringLayout.WEST, imagePanel, 0, SpringLayout.EAST, leftGUIPanel);
 		topMenu.addOpenFileChooserActionListener( imagePanel.createOpenFileChooserListener() );
+		//---- Create action listeners to listen for next and previous slide calls.
+		slideNavigatorPanel.addSlideTransitionButtonListener( SlideNavigatorPanel.NEXT_BUTTON, imagePanel.createSwitchSlideActionListener() );
+		slideNavigatorPanel.addSlideTransitionButtonListener( SlideNavigatorPanel.PREVIOUS_BUTTON, imagePanel.createSwitchSlideActionListener() );
+		//---- Creates a listener for the slider.
 		sliderPanel.addSliderListener( imagePanel.createSliderChangeListener() );
+		
 		
 		//----- Add Listeners to open 
 		imagePanel.addSuccessfulFileOpenActionListener( slideNavigatorPanel.createNavigationButtonEnableListener() );

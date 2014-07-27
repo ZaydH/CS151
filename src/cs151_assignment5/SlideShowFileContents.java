@@ -164,7 +164,7 @@ public class SlideShowFileContents {
 				}
 				catch(NumberFormatException e){
 					new JOptionPaneThreaded("The slideshow file appears to be corrupted.\n"
-											+ "Some of the parameters (e.g. image ID, X Location, Y Location, etc.)\b"
+											+ "Some of the parameters (e.g. image ID, X Location, Y Location, etc.)\n"
 											+ "could not be parsed.  Check the file, and try again.");
 					fileIn.close(); //---- Close the scanner.
 					return false;

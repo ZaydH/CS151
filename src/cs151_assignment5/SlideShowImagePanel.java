@@ -44,9 +44,10 @@ public class SlideShowImagePanel extends JPanel {
 	private static String imagePath;
 	private static JButton fileOpenSuccessful; //---- This is used to signal other components to enable on a successful file open.
 	private static JLabel captionLabel;
-	private static int currentSlideIndex = 0;
+	private static volatile int currentSlideIndex = 0;
 	private static SlideShowFileContents slideShowFileContents;
-	private static int slideDelay = -1; //--- Delay in milliseconds
+	private static volatile int slideDelay = -1; //--- Delay in milliseconds
+	private SlideshowPlaybackThread slideshowPlayThread;
 
 	/**
 	 * 
@@ -261,6 +262,28 @@ public class SlideShowImagePanel extends JPanel {
 	}
 	
 	
+	/**
+	 * Creates and returns a listener to update the measure delay based off the slider state.
+	 * 
+	 * @return Listener that updates the slide measure delay.
+	 */
+	public ChangeListener createSliderChangeListener(){
+		
+		return new ChangeListener(){
+			
+			@Override
+			public void stateChanged(ChangeEvent e){
+				//--- Get the slider object
+				JSlider slider = (JSlider)e.getSource();
+				//----- Only update the slide delay when the slider is released.
+				if (!slider.getValueIsAdjusting())
+					slideDelay = slider.getValue();
+			}
+			
+		};
+		
+	}
+	
 	
 	/**
 	 * 
@@ -311,16 +334,9 @@ public class SlideShowImagePanel extends JPanel {
 						
 						//---- Display the first slide.
 						currentSlideIndex = 0;
-						SlideShowImageInstance imageInstance = slideShowFileContents.getImageInstance( currentSlideIndex );
-						
-						//----- Set the image path
-						imagePath = imageInstance.getImagePath();
-						
-						//---- Setup the caption label.
-						captionLabel.setText( imageInstance.getImageCaption() );
-						calculateFontSize();
-						setCaptionLocation(imageInstance.getImageCaptionXLocation(), imageInstance.getImageCaptionYLocation());
-						captionLabel.setVisible(true);
+
+						//--- Update information for the current image.
+						updateCurrentImageInformation();
 						
 					}//---- if(slideShowFileContents.readSlideShowFile(fc.getSelectedFile()))
 				}//---public void run(){
@@ -334,24 +350,20 @@ public class SlideShowImagePanel extends JPanel {
 	
 	
 	/**
-	 * Creates and returns a listener to update the measure delay based off the slider state.
-	 * 
-	 * @return Listener that updates the slide measure delay.
+	 * Updates all attributes of the current image.
 	 */
-	public ChangeListener createSliderChangeListener(){
+	private void updateCurrentImageInformation(){
 		
-		return new ChangeListener(){
-			
-			@Override
-			public void stateChanged(ChangeEvent e){
-				//--- Get the slider object
-				JSlider slider = (JSlider)e.getSource();
-				//----- Only update the slide delay when the slider is released.
-				if (!slider.getValueIsAdjusting())
-					slideDelay = slider.getValue();
-			}
-			
-		};
+		SlideShowImageInstance imageInstance = slideShowFileContents.getImageInstance( currentSlideIndex );
+		
+		//----- Set the image path
+		imagePath = imageInstance.getImagePath();
+		
+		//---- Setup the caption label.
+		captionLabel.setText( imageInstance.getImageCaption() );
+		calculateFontSize();
+		setCaptionLocation(imageInstance.getImageCaptionXLocation(), imageInstance.getImageCaptionYLocation());
+		captionLabel.setVisible(true);
 		
 	}
 	
@@ -362,7 +374,7 @@ public class SlideShowImagePanel extends JPanel {
 	 * 
 	 * @return Index of the slide in the 
 	 */
-	private int calculatePreviousSlideIndex(){
+	private int previousSlideIndex(){
 		
 		int previousIndex = currentSlideIndex - 1;
 		//--- Check if needs to wrap around
@@ -379,9 +391,9 @@ public class SlideShowImagePanel extends JPanel {
 	 * 
 	 * @return Index of the slide in the 
 	 */
-	private int calculateNextSlideIndex(){
+	private int nextSlideIndex(){
 		
-		int nextIndex = currentSlideIndex - 1;
+		int nextIndex = currentSlideIndex + 1;
 		//--- Check if needs to wrap around
 		if(nextIndex == slideShowFileContents.getNumberOfImageInstances())
 			nextIndex = 0;
@@ -389,6 +401,131 @@ public class SlideShowImagePanel extends JPanel {
 		//---- return the previous index.
 		return nextIndex;
 	}	
+	
+	
+	
+	/**
+	 * Creates and returns an ActionListener that allows users to switch slides.
+	 * It automatically adjusts read
+	 * 
+	 * @return ActionListener that can listen for either next or previous slide button presses.
+	 */
+	public ActionListener createSwitchSlideActionListener(){
+		
+		return new ActionListener(){
+				
+			public void actionPerformed(ActionEvent actionEvent){		
+	
+				/**
+				 * Nested class that allows you to create a thread to update the slide information,
+				 * 
+				 * @author Zayd
+				 */
+				class SwitchSlideThread extends Thread {
+					
+					private ActionEvent actionEvent;
+					private boolean slideshowRunning;
+					
+					/**
+					 * Constructor for the thread that simultaneously starts it.
+					 */
+					public SwitchSlideThread(ActionEvent e, boolean slideshowRunning){
+						super();
+						this.actionEvent = e;
+						this.slideshowRunning = slideshowRunning;
+						this.start();
+					}
+					
+					@Override
+					public void run(){
+						
+						//---- Extract the action command.
+						String actionCommand = actionEvent.getActionCommand();
+						
+						//--- Depending on whether the action is previous or next, update 
+						if(actionCommand.equals(SlideNavigatorPanel.PREVIOUS_SLIDE_ACTION))
+							currentSlideIndex = previousSlideIndex();
+						else if(actionCommand.equals( SlideNavigatorPanel.NEXT_SLIDE_ACTION ))
+							currentSlideIndex = nextSlideIndex();
+						
+						//--- Update the image information and repaint the GUI.
+						updateCurrentImageInformation();
+						revalidate();
+						repaint();
+					
+						
+						//---- if the slide was running restart it.
+						if(slideshowRunning)
+							slideshowPlayThread = new SlideshowPlaybackThread();						
+						
+					}
+				}
+				
+				//---- Determine if the playback thread is running. 
+				//---- If it is running, interrupt to transition slide.
+				boolean slideshowRunning = (slideshowPlayThread!= null) && (slideshowPlayThread.isAlive());
+				if(slideshowRunning)
+					slideshowPlayThread.interrupt();
+				
+				//---- Call the thread to switch slides.
+				@SuppressWarnings("unused")
+				SwitchSlideThread switchSlideThread = new SwitchSlideThread(actionEvent, slideshowRunning);
+
+				
+			}
+			
+		};
+		
+	}
+	
+	
+	/**
+	 * 
+	 * Class that extends Thread and is used to loop the slideshow.
+	 * 
+	 * @author Zayd
+	 *
+	 */
+	private class SlideshowPlaybackThread extends Thread{
+		
+		/**
+		 *  Constructor for the thread and automatically starts it.
+		 */
+		public SlideshowPlaybackThread(){
+			super();
+			this.start();
+		}
+		
+		@Override
+		public void run(){
+			
+			boolean firstLoop = true;
+			
+			try{
+				//---- Keep looping images until the thread is interrupted.
+				while(!this.isInterrupted()){
+				
+					if(!firstLoop){
+						currentSlideIndex = nextSlideIndex();
+						updateCurrentImageInformation();
+					}
+					
+					//--- Repaint the GUI.
+					revalidate();
+					repaint();
+					
+					//---- Sleep for the specified delay.
+					Thread.sleep(slideDelay);
+				}
+			}
+			catch(InterruptedException e){
+				return;
+			}
+			
+		}
+		
+	}
+	
 	
 	
 
