@@ -129,7 +129,7 @@ public class SlideShowFileContents {
 		//---- Check to see if the file extension is correct.
 		String lowercaseFilePath = filePath.toString().toLowerCase();
 		if(!lowercaseFilePath.endsWith("." + FILE_EXTENSION)){
-			new JOptionPaneThreaded("Incorrect File Extension.  Please specify a valid file and try again.");
+			Thread t = new JOptionPaneThreaded("Incorrect File Extension.  Please specify a valid file and try again.");
 			return false;
 		}
 		
@@ -160,8 +160,8 @@ public class SlideShowFileContents {
 				for(int j = 0; j < SlideShowImageInstance.PARAMETERS_PER_IMAGE_INSTANCE; j++){
 					//---- Verify the file is still valid.
 					if(!fileIn.hasNextLine()){
-						JOptionPane.showMessageDialog(null, "The slideshow file appears to be missing data or is corrupted.\n"
-															+ "Please specify a new file and try again.");
+						new JOptionPaneThreaded("The slideshow file appears to be missing data or is corrupted.\n"
+												+ "Please specify a new file and try again.");
 						fileIn.close(); //---- Close the scanner.
 						return false;
 					}
@@ -197,32 +197,6 @@ public class SlideShowFileContents {
 
 	}
 	
-	
-	private class JOptionPaneThreaded extends Thread {
-		
-		private String paneMessage;
-		
-		/**
-		 * Sole constructor for the JOptionPaneThread.  It will automatically open the JOptionPane.
-		 * 
-		 * @param paneMessage  Message that will be displayed by the pane.
-		 */
-		public JOptionPaneThreaded(String paneMessage){
-			this.paneMessage = paneMessage;
-			this.start();
-		}
-		
-		/**
-		 * Displays a JOptionPane with the specified message.
-		 */
-		@Override
-		public void run(){
-			
-			JOptionPane.showMessageDialog(null, paneMessage);
-			
-		}
-		
-	}
 	
 	
 
