@@ -145,21 +145,6 @@ public class Viewer {
 		//----- Set the position of the file browser padding 
 		leftPanelLayout.putConstraint( SpringLayout.NORTH, sliderPanel, STANDARD_PADDING, SpringLayout.SOUTH, slideNavigatorPanel);
 		leftPanelLayout.putConstraint( SpringLayout.HORIZONTAL_CENTER, sliderPanel, 0, SpringLayout.HORIZONTAL_CENTER, leftGUIPanel);
-
-//		//---- Create the file contents panel.
-//		fileContentsPanel = new SlideShowContentsPanel(LEFT_PANEL_WIDTH, FILE_CONTENTS_PANEL_HEIGHT, STANDARD_PADDING, SLIDE_NAVIGATION_PANEL_HEIGHT - 2*STANDARD_PADDING );
-//		leftGUIPanel.add(fileContentsPanel);
-//		//----- Set the position of the file browser padding 
-//		leftPanelLayout.putConstraint( SpringLayout.NORTH, fileContentsPanel, LEFT_PANEL_VERTICAL_SPACING, SpringLayout.SOUTH, sliderPanel);
-//		leftPanelLayout.putConstraint( SpringLayout.HORIZONTAL_CENTER, fileContentsPanel, 0, SpringLayout.HORIZONTAL_CENTER, leftGUIPanel);
-//		//----- Setup the listeners
-//		//fileContentsPanel.addActionListener(new SlideShowsliderPanel.ResetCaptionListener(), SlideShowContentsPanel.ADD_NEW_IMAGE_LISTENER); 			//---- Listen for New Image Button
-//		//fileContentsPanel.addActionListener(new SlideShowslideNavigatorPanel.ResetFileBrowserListener(), SlideShowContentsPanel.ADD_NEW_IMAGE_LISTENER);	//---- Listen for New Image Button
-//		fileContentsPanel.addListSelectionListener(new SlideShowslideNavigatorPanel.FilePathListSelectionListener());											//---- Listen for an Image to Be Selected from the List
-//		fileContentsPanel.addListSelectionListener(new SlideShowsliderPanel.CaptionListSelectionListener());												//---- Listen for an Image to Be Selected from the List
-//		slideNavigatorPanel.addDocumentListenerForFile(new SlideShowContentsPanel.FileBrowserListener());											//---- Listen for changes in the file browser.
-//		sliderPanel.addDocumentListenerForCaption(new SlideShowContentsPanel.CaptionListener()); 												//---- Listen for changes in the caption
-		//topMenu.addActionListener(new SlideShowContentsPanel.OpenFileContentsPaneListener());		//---- Listen for New File Actions on MenuBar
 		
 		//---- Add the Left GUI Panel to the GUI.
 		mainGUI.add(leftGUIPanel);
@@ -182,7 +167,7 @@ public class Viewer {
 		//---- Setup the location of the panel
 		mainGUILayout.putConstraint(SpringLayout.NORTH, imagePanel, 0, SpringLayout.NORTH, mainGUI);
 		mainGUILayout.putConstraint(SpringLayout.WEST, imagePanel, 0, SpringLayout.EAST, leftGUIPanel);
-		topMenu.addOpenFileChooserActionListener(new SlideShowImagePanel.OpenFileContentsPaneListener() );
+		topMenu.addOpenFileChooserActionListener( imagePanel.createOpenFileChooserListener() );
 //		fileContentsPanel.addListSelectionListener(imagePanel.createListSelectionCaptionLocationListener());
 		
 	}

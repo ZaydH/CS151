@@ -18,7 +18,7 @@ public class SlideShowFileContents {
 
 	private ArrayList<SlideShowImageInstance> allImages;
 	public static final String FILE_EXTENSION = "slideshow";
-	public static final String FILE_KEY_SEPARATOR = "^";
+	public static final String FILE_KEY_SEPARATOR = "\\^";
 	
 	
 	/**
@@ -145,10 +145,10 @@ public class SlideShowFileContents {
 			}
 			
 			//---- Read until the end of the file.
-			while( !fileIn.hasNextLine() ){
+			while( fileIn.hasNextLine() ){
 				
 				fileLine = fileIn.nextLine(); //--- Read the next line.
-				imageFileParameters = fileLine.split(FILE_KEY_SEPARATOR,-1); //--- Split the string.
+				imageFileParameters = fileLine.split( FILE_KEY_SEPARATOR ); //--- Split the string.
 				
 				//---- Ensure the string split properly.
 				if(imageFileParameters.length != SlideShowImageInstance.PARAMETERS_PER_IMAGE_INSTANCE ){

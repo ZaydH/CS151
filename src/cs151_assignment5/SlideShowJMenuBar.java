@@ -76,9 +76,13 @@ public class SlideShowJMenuBar extends JMenuBar implements ActionListener {
 			
 			//----- Run the file chooser thread
 			class FileChooserThread extends Thread{
+				//--- Automatically starts the thread once created.
+				public FileChooserThread(){
+					this.start();
+				}
+				
 				public void run(){
 					openFileChooser.showOpenDialog(null);
-					this.start();
 				}
 			}
 			

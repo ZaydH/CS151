@@ -2,14 +2,11 @@ package cs151_assignment5;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
-import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -19,16 +16,7 @@ import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-import javax.swing.event.MouseInputAdapter;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.Document;
 
 
 
@@ -48,9 +36,10 @@ public class SlideShowImagePanel extends JPanel {
 	//SpringLayout imagePanelLayout;
 	private static final long serialVersionUID = 6847898081534233006L;
 	private int panelBorder; 
-	private String imagePath;
-	private String captionText;
-	private JLabel captionLabel;
+	private static String imagePath;
+	private static String captionText;
+	private static JLabel captionLabel;
+	private static int currentSlideIndex = 0;
 	private static SlideShowFileContents slideShowFileContents;
 
 	/**
@@ -87,7 +76,7 @@ public class SlideShowImagePanel extends JPanel {
 		captionLabel.setOpaque(true);
 		captionLabel.setForeground(Color.BLACK);
 		captionLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-		captionLabel.setVisible(true);
+		captionLabel.setVisible(false);
 		this.add(captionLabel);
 		
 		//----- Define the caption's size
@@ -190,6 +179,49 @@ public class SlideShowImagePanel extends JPanel {
 	}
 	
 	
+	
+	/**
+	 * Sets the location of the caption. 
+	 * If a location would cause the caption to appear off screen, the
+	 * function adjusts the location to ensure the caption remains in the panel boundaries.
+	 * 
+	 * @param xLocation		Specified X-Location
+	 * @param yLocation		Specified Y-Location
+	 */
+	private void setCaptionLocation(int xLocation, int yLocation ){
+		
+		//---- Ensure the X location is valid.
+		if( xLocation < panelBorder)
+			xLocation = panelBorder;
+		else if(xLocation > this.getWidth() - captionLabel.getWidth() - panelBorder)
+			xLocation = this.getWidth() - captionLabel.getWidth() - panelBorder;
+		
+		//---- Ensure the Y location is valid.
+		if( yLocation < panelBorder)
+			yLocation = panelBorder;
+		else if(yLocation > this.getHeight() - captionLabel.getHeight() - panelBorder)
+			yLocation = this.getHeight() - captionLabel.getHeight() - panelBorder;
+		
+		//--- Update the caption location.
+		captionLabel.setLocation(xLocation, yLocation);
+		
+	}
+	
+	
+	
+	/**
+	 * Creates an ActionListener for the open JFileChooser.
+	 * 
+	 * @return	ActionListener for the open file JFileChooser.
+	 */
+	public ActionListener createOpenFileChooserListener(){
+		
+		return new OpenFileContentsPaneListener();
+		
+	}
+	
+	
+	
 	/**
 	 * 
 	 * Listener used to Open a SlideShowFile.
@@ -197,19 +229,50 @@ public class SlideShowImagePanel extends JPanel {
 	 * @author Zayd
 	 *
 	 */
-	public static class OpenFileContentsPaneListener implements ActionListener {
+	public class OpenFileContentsPaneListener extends Thread implements ActionListener {
 		
+		private ActionEvent actionEvent;
+		
+		/**
+		 * Action listener stores the action event and th
+		 */
 		public void actionPerformed(ActionEvent e){
+			this.actionEvent = e;
+			this.start();
+		}
+		
+		//----- Parse the file as a thread.
+		public void run(){
 
 			//---- Do not do anything on an cancelled command
-			if(e.getSource() instanceof JFileChooser && e.getActionCommand().equals(JFileChooser.CANCEL_SELECTION) ){
+			if(actionEvent.getSource() instanceof JFileChooser && actionEvent.getActionCommand().equals(JFileChooser.CANCEL_SELECTION) ){
 				return;
 			}			
 			
-			final JFileChooser fc = (JFileChooser)e.getSource();//---- Get the file chooser.
-			slideShowFileContents.readSlideShowFile(fc.getSelectedFile());
+			final JFileChooser fc = (JFileChooser)actionEvent.getSource();//---- Get the file chooser.
+			
+			//----- Read the specified image file.
+			if(slideShowFileContents.readSlideShowFile(fc.getSelectedFile())){
+				
+				//---- Display the first slide.
+				currentSlideIndex = 0;
+				SlideShowImageInstance imageInstance = slideShowFileContents.getImageInstance( currentSlideIndex );
+				
+				//----- Set the image path
+				imagePath = imageInstance.getImagePath();
+				
+				//---- Setup the caption label.
+				captionLabel.setText( imageInstance.getImageCaption() );
+				setCaptionLocation(imageInstance.getImageCaptionXLocation(), imageInstance.getImageCaptionYLocation());
+				captionLabel.setVisible(true);
+				
+			}			
+			
 		}
 		
 	}	
+	
+	
+
 	
 }
