@@ -17,7 +17,7 @@ import javax.swing.SpringLayout;
  *
  */
 
-public class SlideShowGUI {
+public class Viewer {
 
 	
 	private static JFrame mainGUI;

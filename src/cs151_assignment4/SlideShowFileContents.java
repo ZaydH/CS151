@@ -22,7 +22,7 @@ import javax.swing.JOptionPane;
 public class SlideShowFileContents {
 
 	private ArrayList<SlideShowImageInstance> allImages;
-	public static final String FILE_EXTENSION = "show";
+	public static final String FILE_EXTENSION = "slideshow";
 	
 	
 	/**

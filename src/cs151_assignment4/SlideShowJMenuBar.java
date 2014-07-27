@@ -30,12 +30,6 @@ public class SlideShowJMenuBar extends JMenuBar implements ActionListener {
 	private static SlideShowEditJMenu editMenu;
 	
 	private static JFileChooser openFileChooser;
-	private static JFileChooser saveFileChooser;
-	
-	
-	public static final int NEW_FILE_LISTENER = 0;
-	public static final int OPEN_FILE_LISTENER = 1;
-	public static final int SAVE_FILE_LISTENER = 2;
 	
 	
 	/**
@@ -47,7 +41,7 @@ public class SlideShowJMenuBar extends JMenuBar implements ActionListener {
 		
 		//----- Create the File JMenu and define its menu items
 		fileMenu = new JMenu("File");
-		String[] fileMenuLabels = { "New", "Open", "Save", "Exit" };
+		String[] fileMenuLabels = { "Open", "Exit" };
 		//----- Add the menu items to the File Menu
 		for(int i = 0; i < fileMenuLabels.length; i++){
 			
@@ -63,21 +57,6 @@ public class SlideShowJMenuBar extends JMenuBar implements ActionListener {
 																		SlideShowFileContents.FILE_EXTENSION );//---- File extension is "show". Use for all file tools
 		openFileChooser = new JFileChooser();
 		openFileChooser.setFileFilter( fileNameExtensionFiter );		
-	
-		//----- Create the Save File Chooser
-		saveFileChooser = new JFileChooser();
-		saveFileChooser.setFileFilter( fileNameExtensionFiter );
-		
-		
-		//----- Create the Edit JMenu and define its menu items
-		editMenu = new SlideShowEditJMenu("Edit", "Undo");
-		this.add(editMenu); //---- Add "Edit" to the menu bar
-		//---- Clear Undo Queue on New Show.
-		addActionListener(editMenu.generateClearUndoBufferActionListener(), NEW_FILE_LISTENER);		
-		//---- Generate action listeners for the edit menu to clear the undo buffer when a new show is opened or saved.
-		addActionListener(editMenu.generateFileChooserClearUndoBufferActionListener(), OPEN_FILE_LISTENER);
-		addActionListener(editMenu.generateFileChooserClearUndoBufferActionListener(), SAVE_FILE_LISTENER);
-		
 		
 	}
 	
@@ -89,41 +68,16 @@ public class SlideShowJMenuBar extends JMenuBar implements ActionListener {
 	 * @param listener		ActionListener to be added.
 	 * @param objectType	Type of Listener to be added.  
 	 */
-	public void addActionListener( ActionListener listener, int objectType ){
-		
-		switch(objectType){
-			case NEW_FILE_LISTENER:
-				//---- Iterate through all the menu items
-				for(Component menuComponent : fileMenu.getMenuComponents()){
-					
-					JMenuItem menuItem = (JMenuItem)menuComponent;
-					//---- Check if the "New" Menu Item
-					if(objectType == NEW_FILE_LISTENER && menuItem.getText().toLowerCase().equals("new")){
-						menuItem.addActionListener(listener);
-						return;
-					}
-				}
-				return;
-			case OPEN_FILE_LISTENER:
-				openFileChooser.addActionListener(listener);
-				return;
-			case SAVE_FILE_LISTENER:
-				saveFileChooser.addActionListener(listener);
-				return;
-		}
+	public void addOpenFileChooserActionListener( ActionListener listener ){
+		openFileChooser.addActionListener(listener);
 	}
 		
 	/**
 	 * Action Listener for the Menu bar.  Menu items that have effects are Open, Save, and Exit.
 	 */
 	public void actionPerformed(ActionEvent e){
-		if(e.getActionCommand().equals("fileMenuNew")){
-		}
-		else if(e.getActionCommand().equals("fileMenuOpen")){
+		if(e.getActionCommand().equals("fileMenuOpen")){
 			openFileChooser.showOpenDialog(null);
-		}
-		else if(e.getActionCommand().equals("fileMenuSave")){
-			saveFileChooser.showSaveDialog(null);
 		}
 		else if(e.getActionCommand().equals("fileMenuExit")){
 			menuExitAction();
@@ -137,15 +91,5 @@ public class SlideShowJMenuBar extends JMenuBar implements ActionListener {
 	private void menuExitAction(){
 		System.exit(0); //---- Kill the program
 	}	
-	
-	
-	/**
-	 * Enables the adding of commands to the undo buffer.
-	 * 
-	 * @param newCommand	Command to be added to the UndoBuffer.
-	 */
-	public void addCommandToUndoBuffer(SlideShowGUICommand newCommand){
-		editMenu.addCommandToUndo(newCommand);
-	}
 	
 }
