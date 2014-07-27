@@ -2,6 +2,7 @@ package cs151_assignment5;
 
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
@@ -65,6 +66,7 @@ public class SlideNavigatorPanel extends JPanel  {
 		playPauseButton.setPreferredSize(playPauseButtonDimension);
 		playPauseButton.setMinimumSize(playPauseButtonDimension);
 		playPauseButton.setMaximumSize(playPauseButtonDimension);
+		playPauseButton.setEnabled(false);
 		this.add(playPauseButton);
 		slideNavigatorLayout.putConstraint(SpringLayout.NORTH, playPauseButton, padding, SpringLayout.NORTH, this);
 		slideNavigatorLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, playPauseButton, 0, SpringLayout.HORIZONTAL_CENTER, this);
@@ -78,6 +80,7 @@ public class SlideNavigatorPanel extends JPanel  {
 		previousSlideButton.setPreferredSize(previousNextButtonsDimension);
 		previousSlideButton.setMinimumSize(previousNextButtonsDimension);
 		previousSlideButton.setMaximumSize(previousNextButtonsDimension);
+		previousSlideButton.setEnabled(false);
 		this.add(previousSlideButton);
 		slideNavigatorLayout.putConstraint(SpringLayout.NORTH, previousSlideButton, 3*padding, SpringLayout.SOUTH, playPauseButton);
 		slideNavigatorLayout.putConstraint(SpringLayout.WEST, previousSlideButton, 0, SpringLayout.WEST, playPauseButton);
@@ -90,6 +93,7 @@ public class SlideNavigatorPanel extends JPanel  {
 		nextSlideButton.setPreferredSize(previousNextButtonsDimension);
 		nextSlideButton.setMinimumSize(previousNextButtonsDimension);
 		nextSlideButton.setMaximumSize(previousNextButtonsDimension);
+		nextSlideButton.setEnabled(false);
 		this.add(nextSlideButton);
 		slideNavigatorLayout.putConstraint(SpringLayout.NORTH, nextSlideButton, 3*padding, SpringLayout.SOUTH, playPauseButton);
 		slideNavigatorLayout.putConstraint(SpringLayout.EAST, nextSlideButton, 0, SpringLayout.EAST, playPauseButton);
@@ -145,6 +149,37 @@ public class SlideNavigatorPanel extends JPanel  {
 		return new PlayPauseAbstractAction();
 		
 	}
+	
+	
+	/**
+	 * Creates an ActionListener that once the GUI enters a valid state the GUI buttons are enabled.
+	 * 
+	 * @return	ActionListener that when an event occurs enables the buttons.
+	 */
+	public ActionListener createNavigationButtonEnableListener(){
 
+		/**
+		 * Class that creates a threaded ActionListener to enable the navigation buttons.
+		 * 
+		 * @author Zayd
+		 */
+		class EnableNavationButtonListener extends Thread implements ActionListener {
+			
+			@Override
+			public void actionPerformed(ActionEvent e){
+				this.run();
+			}
+			
+			@Override
+			public void run(){
+				playPauseButton.setEnabled(true);
+				previousSlideButton.setEnabled(true);
+				nextSlideButton.setEnabled(true);
+			}
+	
+		}
+		
+		return new EnableNavationButtonListener();
+	}
 	
 }

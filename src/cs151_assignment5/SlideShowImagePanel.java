@@ -2,6 +2,7 @@ package cs151_assignment5;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Toolkit;
@@ -14,9 +15,13 @@ import java.io.IOException;
 import javax.activation.MimetypesFileTypeMap;
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
+import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JSlider;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 
 
@@ -37,10 +42,11 @@ public class SlideShowImagePanel extends JPanel {
 	private static final long serialVersionUID = 6847898081534233006L;
 	private int panelBorder; 
 	private static String imagePath;
-	private static String captionText;
+	private static JButton fileOpenSuccessful; //---- This is used to signal other components to enable on a successful file open.
 	private static JLabel captionLabel;
 	private static int currentSlideIndex = 0;
 	private static SlideShowFileContents slideShowFileContents;
+	private static int slideDelay = -1; //--- Delay in milliseconds
 
 	/**
 	 * 
@@ -72,12 +78,16 @@ public class SlideShowImagePanel extends JPanel {
 		imagePath = "";
 		
 		//---- Set up a blank label.
-		captionLabel = new JLabel(captionText, JLabel.CENTER);
+		captionLabel = new JLabel( "", JLabel.CENTER);
 		captionLabel.setOpaque(true);
 		captionLabel.setForeground(Color.BLACK);
 		captionLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		captionLabel.setVisible(false);
 		this.add(captionLabel);
+		
+		//---- This is used to signal other components to enable on a successful file open.
+		fileOpenSuccessful = new JButton("false");
+		
 		
 		//----- Define the caption's size
 		Dimension captionLabelDimension = new Dimension( captionWidth, captionHeight );
@@ -140,7 +150,6 @@ public class SlideShowImagePanel extends JPanel {
 			
 			captionLabel.revalidate();
 			captionLabel.repaint();
-			//captionLabel.paint(g);
 			super.paintComponents(g);
 			return;
 		}
@@ -148,7 +157,6 @@ public class SlideShowImagePanel extends JPanel {
 			drawImagePanelBackground(g);
 			captionLabel.revalidate();
 			captionLabel.repaint();
-			//captionLabel.paint(g);
 			super.paintComponents(g);
 			return;
 		}			
@@ -208,6 +216,28 @@ public class SlideShowImagePanel extends JPanel {
 	}
 	
 	
+	/**
+	 * Calculates and sets the font size to ensure it fits in the JLabel.
+	 */
+	private void calculateFontSize(){
+		
+		//---- Calculate the font parameters
+		Font captionLabelFont = captionLabel.getFont();
+		
+		//----- Determine if any changes are needed to font due to the width
+		int captionLabelTextWidth = captionLabel.getFontMetrics(captionLabelFont).stringWidth( captionLabel.getText() );
+		int captionFixedWidth = captionLabel.getWidth();
+		double widthFontRatio = (double)captionFixedWidth/captionLabelTextWidth;
+		int widthFontSize = (int)Math.floor(widthFontRatio * captionLabelFont.getSize()); //---- Calculate the new font size if only width is considered
+		
+		//----- Use the smaller of component height or font size
+		int newFontSize = (widthFontSize < captionLabel.getHeight())? widthFontSize : (int)(0.8*captionLabel.getHeight()) ;
+		newFontSize *= 0.9;//---- Give extra padding on the sides.
+		captionLabel.setFont( new Font(captionLabelFont.getFontName(), Font.PLAIN, newFontSize) ); //--- Update the font with the new size.
+		
+	}
+	
+	
 	
 	/**
 	 * Creates an ActionListener for the open JFileChooser.
@@ -221,6 +251,16 @@ public class SlideShowImagePanel extends JPanel {
 	}
 	
 	
+	/**
+	 * Adds listeners to determine when a show file was successfully opened.
+	 * 
+	 * @param listener  Listener that will use this field to determine when to be enabled.
+	 */
+	public void addSuccessfulFileOpenActionListener(ActionListener listener){
+		fileOpenSuccessful.addActionListener( listener );
+	}
+	
+	
 	
 	/**
 	 * 
@@ -229,7 +269,7 @@ public class SlideShowImagePanel extends JPanel {
 	 * @author Zayd
 	 *
 	 */
-	public class OpenFileContentsPaneListener extends Thread implements ActionListener {
+	public class OpenFileContentsPaneListener implements ActionListener {
 		
 		private ActionEvent actionEvent;
 		
@@ -238,41 +278,81 @@ public class SlideShowImagePanel extends JPanel {
 		 */
 		public void actionPerformed(ActionEvent e){
 			this.actionEvent = e;
-			this.start();
-		}
+			
+			/**
+			 * Class checks the JFileChooser results and if appropriate opens and parses the input file.
+			 * 
+			 * @author Zayd
+			 *
+			 */
+			class OpenFileContentsThread extends Thread{
+			
+				//---- Constructor automatically starts the thread.
+				public OpenFileContentsThread(){
+					super();
+					this.start();
+				}
+				
+				//----- Parse the file as a thread.
+				public void run(){
 		
-		//----- Parse the file as a thread.
-		public void run(){
-
-			//---- Do not do anything on an cancelled command
-			if(actionEvent.getSource() instanceof JFileChooser && actionEvent.getActionCommand().equals(JFileChooser.CANCEL_SELECTION) ){
-				return;
-			}			
-			
-			final JFileChooser fc = (JFileChooser)actionEvent.getSource();//---- Get the file chooser.
-			
-			//----- Read the specified image file.
-			if(slideShowFileContents.readSlideShowFile(fc.getSelectedFile())){
-				
-				//---- Display the first slide.
-				currentSlideIndex = 0;
-				SlideShowImageInstance imageInstance = slideShowFileContents.getImageInstance( currentSlideIndex );
-				
-				//----- Set the image path
-				imagePath = imageInstance.getImagePath();
-				
-				//---- Setup the caption label.
-				captionLabel.setText( imageInstance.getImageCaption() );
-				setCaptionLocation(imageInstance.getImageCaptionXLocation(), imageInstance.getImageCaptionYLocation());
-				captionLabel.setVisible(true);
-				
-			}			
-			
-		}
+					//---- Do not do anything on an cancelled command
+					if(actionEvent.getSource() instanceof JFileChooser && actionEvent.getActionCommand().equals(JFileChooser.CANCEL_SELECTION) ){
+						return;
+					}			
+					
+					final JFileChooser fc = (JFileChooser)actionEvent.getSource();//---- Get the file chooser.
+					
+					//----- Read the specified image file.
+					if(slideShowFileContents.readSlideShowFile(fc.getSelectedFile())){
+						
+						//---- This is used to signal other components to enable on a successful file open.
+						fileOpenSuccessful.doClick();
+						
+						//---- Display the first slide.
+						currentSlideIndex = 0;
+						SlideShowImageInstance imageInstance = slideShowFileContents.getImageInstance( currentSlideIndex );
+						
+						//----- Set the image path
+						imagePath = imageInstance.getImagePath();
+						
+						//---- Setup the caption label.
+						captionLabel.setText( imageInstance.getImageCaption() );
+						calculateFontSize();
+						setCaptionLocation(imageInstance.getImageCaptionXLocation(), imageInstance.getImageCaptionYLocation());
+						captionLabel.setVisible(true);
+						
+					}//---- if(slideShowFileContents.readSlideShowFile(fc.getSelectedFile()))
+				}//---public void run(){
+			}//----class OpenFileContentsThread extends Thread{
 		
+			//---- Create the thread and it auto starts
+			OpenFileContentsThread fileContentsThread = new OpenFileContentsThread();
+		}//---public void actionPerformed(ActionEvent e){
 	}	
 	
 	
-
+	/**
+	 * Creates and returns a listener to update the measure delay based off the slider state.
+	 * 
+	 * @return Listener that updates the slide measure delay.
+	 */
+	public ChangeListener createSliderChangeListener(){
+		
+		return new ChangeListener(){
+			
+			@Override
+			public void stateChanged(ChangeEvent e){
+				//--- Get the slider object
+				JSlider slider = (JSlider)e.getSource();
+				//----- Only update the slide delay when the slider is released.
+				if (!slider.getValueIsAdjusting())
+					slideDelay = slider.getValue();
+			}
+			
+		};
+		
+	}
 	
+
 }

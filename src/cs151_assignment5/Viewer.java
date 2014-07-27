@@ -162,13 +162,16 @@ public class Viewer {
 	private static void createImagePanel(){
 		
 		//---- Add the Image Panel on the right
-		imagePanel = new SlideShowImagePanel(RIGHT_PANEL_WIDTH, PANELS_HEIGHT, 2 * STANDARD_PADDING, IMAGE_CAPTION_WIDTH, IMAGE_CAPTION_HEIGHT);
+		imagePanel = new SlideShowImagePanel(RIGHT_PANEL_WIDTH, PANELS_HEIGHT, 2 * STANDARD_PADDING, IMAGE_CAPTION_WIDTH, IMAGE_CAPTION_HEIGHT);		
 		mainGUI.add(imagePanel);
 		//---- Setup the location of the panel
 		mainGUILayout.putConstraint(SpringLayout.NORTH, imagePanel, 0, SpringLayout.NORTH, mainGUI);
 		mainGUILayout.putConstraint(SpringLayout.WEST, imagePanel, 0, SpringLayout.EAST, leftGUIPanel);
 		topMenu.addOpenFileChooserActionListener( imagePanel.createOpenFileChooserListener() );
-//		fileContentsPanel.addListSelectionListener(imagePanel.createListSelectionCaptionLocationListener());
+		
+		//----- Add Listeners to open 
+		imagePanel.addSuccessfulFileOpenActionListener( slideNavigatorPanel.createNavigationButtonEnableListener() );
+		imagePanel.addSuccessfulFileOpenActionListener( sliderPanel.createSliderEnableListener() );
 		
 	}
 	

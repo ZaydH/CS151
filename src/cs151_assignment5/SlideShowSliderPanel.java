@@ -1,6 +1,8 @@
 package cs151_assignment5;
 
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -66,7 +68,8 @@ public class SlideShowSliderPanel extends JPanel  {
 		delaySlider.setSize(sliderDimension);
 		delaySlider.setPreferredSize(sliderDimension);
 		delaySlider.setMinimumSize(sliderDimension);
-		delaySlider.setMaximumSize(sliderDimension);	
+		delaySlider.setMaximumSize(sliderDimension);
+		delaySlider.setEnabled(false);
 		this.add(delaySlider);
 		
 
@@ -81,6 +84,32 @@ public class SlideShowSliderPanel extends JPanel  {
 	}
 	
 
-	
+	/**
+	 * Creates an ActionListener that once the GUI enters a valid state the GUI buttons are enabled.
+	 * 
+	 * @return	ActionListener that when an event occurs enables the buttons.
+	 */
+	public ActionListener createSliderEnableListener(){
+
+		/**
+		 * Class that creates a threaded ActionListener to enable the navigation buttons.
+		 * 
+		 * @author Zayd
+		 */
+		class EnableSliderActionListener extends Thread implements ActionListener {
+			
+			@Override
+			public void actionPerformed(ActionEvent e){
+				this.run();
+			}
+			
+			@Override
+			public void run(){
+				delaySlider.setEnabled(true);
+			}
+		}
+		
+		return new EnableSliderActionListener();
+	}	
 	
 }
