@@ -1,6 +1,5 @@
 package cs151_assignment4;
 
-import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -27,7 +26,6 @@ public class SlideShowJMenuBar extends JMenuBar implements ActionListener {
 	 */
 	private static final long serialVersionUID = 1686924456234878847L;
 	private static JMenu fileMenu;
-	private static SlideShowEditJMenu editMenu;
 	
 	private static JFileChooser openFileChooser;
 	

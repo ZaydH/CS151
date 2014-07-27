@@ -131,7 +131,6 @@ public class Viewer {
 		//---- Add the fileBrowserPanel
 		fileBrowserPanel = new SlideShowFileBrowserPanel(LEFT_PANEL_WIDTH, FILE_BROWSER_PANEL_HEIGHT, LEFT_PANEL_LABEL_WIDTH,  
 														 STANDARD_PADDING, BROWSE_BUTTON_WIDTH);
-		topMenu.addActionListener(new SlideShowFileBrowserPanel.ResetFileBrowserListener(), SlideShowJMenuBar.NEW_FILE_LISTENER);		//---- Listen for New File Actions on MenuBar
 		leftGUIPanel.add(fileBrowserPanel);	
 		//----- Set the position of the file browser padding
 		leftPanelLayout.putConstraint( SpringLayout.NORTH, fileBrowserPanel, LEFT_PANEL_SPACING_BETWEEN_MENU_BAR, SpringLayout.NORTH, leftGUIPanel);
@@ -140,7 +139,6 @@ public class Viewer {
 		
 		//----- Make the Pane storing the caption information		
 		captionPanel = new SlideShowCaptionPanel(LEFT_PANEL_WIDTH, CAPTION_BROWSER_PANEL_HEIGHT, LEFT_PANEL_LABEL_WIDTH, STANDARD_PADDING);
-		topMenu.addActionListener(new SlideShowCaptionPanel.ResetCaptionListener(), SlideShowJMenuBar.NEW_FILE_LISTENER);		//---- Listen for New File Actions on MenuBar
 		leftGUIPanel.add(captionPanel);
 		//----- Set the position of the file browser padding 
 		leftPanelLayout.putConstraint( SpringLayout.NORTH, captionPanel, LEFT_PANEL_VERTICAL_SPACING, SpringLayout.SOUTH, fileBrowserPanel);
@@ -158,12 +156,9 @@ public class Viewer {
 		fileContentsPanel.addActionListener(new SlideShowFileBrowserPanel.ResetFileBrowserListener(), SlideShowContentsPanel.ADD_NEW_IMAGE_LISTENER);	//---- Listen for New Image Button
 		fileContentsPanel.addListSelectionListener(new SlideShowFileBrowserPanel.FilePathListSelectionListener());											//---- Listen for an Image to Be Selected from the List
 		fileContentsPanel.addListSelectionListener(new SlideShowCaptionPanel.CaptionListSelectionListener());												//---- Listen for an Image to Be Selected from the List
-		fileContentsPanel.setUndoBufferReference(topMenu);
 		fileBrowserPanel.addDocumentListenerForFile(new SlideShowContentsPanel.FileBrowserListener());											//---- Listen for changes in the file browser.
 		captionPanel.addDocumentListenerForCaption(new SlideShowContentsPanel.CaptionListener()); 												//---- Listen for changes in the caption
-		topMenu.addActionListener(new SlideShowContentsPanel.ResetContentsPaneListener(), SlideShowJMenuBar.NEW_FILE_LISTENER);			//---- Listen for New File Actions on MenuBar
-		topMenu.addActionListener(new SlideShowContentsPanel.OpenFileContentsPaneListener(), SlideShowJMenuBar.OPEN_FILE_LISTENER);		//---- Listen for New File Actions on MenuBar
-		topMenu.addActionListener(new SlideShowContentsPanel.SaveFileContentsPaneListener(), SlideShowJMenuBar.SAVE_FILE_LISTENER);		//---- Listen for New File Actions on MenuBar	
+		//topMenu.addActionListener(new SlideShowContentsPanel.OpenFileContentsPaneListener());		//---- Listen for New File Actions on MenuBar
 		
 		//---- Add the Left GUI Panel to the GUI.
 		mainGUI.add(leftGUIPanel);
@@ -189,9 +184,8 @@ public class Viewer {
 		mainGUILayout.putConstraint(SpringLayout.NORTH, imagePanel, 0, SpringLayout.NORTH, mainGUI);
 		mainGUILayout.putConstraint(SpringLayout.WEST, imagePanel, 0, SpringLayout.EAST, leftGUIPanel);
 		//---- Add a listener to reset the caption location when new panel is selected.
-		topMenu.addActionListener(imagePanel.createResetCaptionLocationListener(), SlideShowJMenuBar.NEW_FILE_LISTENER);
+		topMenu.addActionListener(imagePanel.createResetCaptionLocationListener());
 		fileContentsPanel.addListSelectionListener(imagePanel.createListSelectionCaptionLocationListener());
-		fileContentsPanel.addMouseInputListenerToCaptionForFileContents(imagePanel);
 		
 	}
 	

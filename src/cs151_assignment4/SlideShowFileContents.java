@@ -1,11 +1,8 @@
 package cs151_assignment4;
 
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -131,8 +128,8 @@ public class SlideShowFileContents {
 		
 		//---- Check to see if the file extension is correct.
 		String lowercaseFilePath = filePath.toString().toLowerCase();
-		if(!lowercaseFilePath.endsWith(".show")){
-			JOptionPane.showMessageDialog(null, "Incorrect File Extension.  Please specify a valid file and try again.");
+		if(!lowercaseFilePath.endsWith("." + FILE_EXTENSION)){
+			new JOptionPaneThreaded("Incorrect File Extension.  Please specify a valid file and try again.");
 			return false;
 		}
 		
@@ -143,7 +140,7 @@ public class SlideShowFileContents {
 
 			//----- Ensure the first element of the file is the number of elements.
 			if(!fileIn.hasNextInt()){
-				JOptionPane.showMessageDialog(null, "Invalid file format.  Please specify a valid file and try again.");
+				new JOptionPaneThreaded("Invalid file format.  Please specify a valid file and try again.");
 				fileIn.close(); //---- Close the scanner.
 			}
 
@@ -182,8 +179,8 @@ public class SlideShowFileContents {
 			
 			//---- Ensure the file length is as expected.  If there is more text, thats a problem so ignore the file.
 			if(fileIn.hasNextLine()){
-				JOptionPane.showMessageDialog(null, "The slideshow file appears to have too much data or is corrupted.\n"
-													+ "Please specify a new file and try again.");				
+				new JOptionPaneThreaded("The slideshow file appears to have too much data or is corrupted.\n"
+										+ "Please specify a new file and try again.");				
 				fileIn.close();
 				return false;
 			}
@@ -194,61 +191,90 @@ public class SlideShowFileContents {
 			return true;
 		}
 		catch(FileNotFoundException e){
-			JOptionPane.showMessageDialog(null, "No file with the specified name exists.  Please specify a valid file and try again.");
+			new JOptionPaneThreaded("No file with the specified name exists.  Please specify a valid file and try again.");
 			return false;
 		}
 
 	}
 	
 	
-	/**
-	 * Exports the slideshow information to a file.
-	 * 
-	 * @param filePath		File Path to write the Slide Show File to.
-	 */
-	public void writeSlideShowFile(File file){
-		
-		try{
-			
-			//---- Automatically add a file extension if it is not there.
-			String filePath = file.getAbsolutePath();
-			if(!filePath.toLowerCase().endsWith("." + FILE_EXTENSION.toLowerCase())){
-				filePath += "." + FILE_EXTENSION;
-			}
-			
-			//---- Open the file out
-			BufferedWriter fileOut = new BufferedWriter(new FileWriter(filePath));
-			
-			//---- Write to a file.
-			String outputStr;
-			outputStr = Integer.toString(allImages.size());
-			fileOut.write(outputStr,0,outputStr.length()); //---- First line is the number of images.
-			
-			//---- Iterate through all the images.
-			for(int i = 0; i < allImages.size(); i++){
-				
-				//---- Get the image parameters.
-				String[] imageParameters  = allImages.get(i).getAllImageInstanceParameters();
-				
-				//---- Iterate through all image parameters
-				for(int j = 0; j < imageParameters.length; j++){
-					fileOut.newLine();
-					if(!imageParameters[j].equals("")){
-						fileOut.write(imageParameters[j], 0, imageParameters[j].length());//---- Precede with a new line to ensure no blank line at the end of the file.
-					}
-					else{
-						fileOut.write(" ", 0, 1);//---- Precede with a new line to ensure no blank line at the end of the file.
-					}
-						
-				}
-			}
-			
-			fileOut.close(); //--- Close the file writing.
-		}
-		catch(IOException e){
-			JOptionPane.showMessageDialog(null, "An IO Exception occured when writing the SlideShow file.  The SlideShow file may be corrupted or invalid.");
-		}
+//	/**
+//	 * Exports the slideshow information to a file.
+//	 * 
+//	 * @param filePath		File Path to write the Slide Show File to.
+//	 */
+//	public void writeSlideShowFile(File file){
+//		
+//		try{
+//			
+//			//---- Automatically add a file extension if it is not there.
+//			String filePath = file.getAbsolutePath();
+//			if(!filePath.toLowerCase().endsWith("." + FILE_EXTENSION.toLowerCase())){
+//				filePath += "." + FILE_EXTENSION;
+//			}
+//			
+//			//---- Open the file out
+//			BufferedWriter fileOut = new BufferedWriter(new FileWriter(filePath));
+//			
+//			//---- Write to a file.
+//			String outputStr;
+//			outputStr = Integer.toString(allImages.size());
+//			fileOut.write(outputStr,0,outputStr.length()); //---- First line is the number of images.
+//			
+//			//---- Iterate through all the images.
+//			for(int i = 0; i < allImages.size(); i++){
+//				
+//				//---- Get the image parameters.
+//				String[] imageParameters  = allImages.get(i).getAllImageInstanceParameters();
+//				
+//				//---- Iterate through all image parameters
+//				for(int j = 0; j < imageParameters.length; j++){
+//					fileOut.newLine();
+//					if(!imageParameters[j].equals("")){
+//						fileOut.write(imageParameters[j], 0, imageParameters[j].length());//---- Precede with a new line to ensure no blank line at the end of the file.
+//					}
+//					else{
+//						fileOut.write(" ", 0, 1);//---- Precede with a new line to ensure no blank line at the end of the file.
+//					}
+//						
+//				}
+//			}
+//			
+//			fileOut.close(); //--- Close the file writing.
+//		}
+//		catch(IOException e){
+//			JOptionPane.showMessageDialog(null, "An IO Exception occured when writing the SlideShow file.  The SlideShow file may be corrupted or invalid.");
+//		}
+//	
+//	}
 	
+	
+	private class JOptionPaneThreaded extends Thread {
+		
+		private String paneMessage;
+		
+		/**
+		 * Sole constructor for the JOptionPaneThread.  It will automatically open the JOptionPane.
+		 * 
+		 * @param paneMessage  Message that will be displayed by the pane.
+		 */
+		public JOptionPaneThreaded(String paneMessage){
+			this.paneMessage = paneMessage;
+			this.start();
+		}
+		
+		/**
+		 * Displays a JOptionPane with the specified message.
+		 */
+		@Override
+		public void run(){
+			
+			JOptionPane.showMessageDialog(null, paneMessage);
+			
+		}
+		
 	}
+	
+	
 
 }

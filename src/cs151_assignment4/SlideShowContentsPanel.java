@@ -196,57 +196,57 @@ public class SlideShowContentsPanel extends JPanel implements ActionListener {
 	}
 	
 	
-	/**
-	 * Internal function to handle all action listeners (e.g. Add New button, Save Image button, etc.) for this panel.
-	 */
-	public void actionPerformed(ActionEvent e){
-		
-		if(e.getActionCommand().equals(ADD_NEW_BUTTON_COMMAND_NAME)){
-			
-			
-			//---- Create a new image
-			slideShowFileContents.addNewImageInstance();		
-			int newImageIndex = slideShowFileContents.getNumberOfImageInstances()-1;
-			
-			//--- Add the element and select it and make sure it is visible.
-			slideShowListModel.addElement(slideShowFileContents.getImageInstance(newImageIndex));
-			slideShowList.setSelectedIndex(newImageIndex); //---- Uses base 0 so subtract one
-			slideShowList.ensureIndexIsVisible(newImageIndex); 
-			
-			//---- Set a default caption location.
-    		captionLocation = new Point(SlideShowImageInstance.DEFAULT_IMAGE_LOCATION,
-										SlideShowImageInstance.DEFAULT_IMAGE_LOCATION);
-		}
-		else if(e.getActionCommand().equals(SAVE_BUTTON_COMMAND_NAME)){
-			int selectedIndex = slideShowList.getSelectedIndex();
-			//---- Check if any image was selected.
-			if(selectedIndex  == -1){
-				JOptionPane.showMessageDialog(null, "Before a changes can be saved to a slideshow, a specific image must be selected \n"
-													+ "from the list of images.  Please select an image from the list, and try again.");
-				return;
-			}
-			
-			//----- Store the previous image instance
-			SlideShowImageInstance previousImageInstance = slideShowFileContents.getImageInstance(selectedIndex);
-			SlideShowImageInstance newImageInstance = new SlideShowImageInstance( selectedIndex+1, fileBrowserText, captionText,
-																				  captionLocation);
-			
-			//---- If no change in the image instance, do nothing.  Do not add to undo queue.
-			if(previousImageInstance.equals(newImageInstance)) return;
-			
-			//----- Create a command for executing and undoing the save command.
-			SlideShowGUICommand newSaveImageCommand = new SaveGUICommand(newImageInstance, previousImageInstance);
-			newSaveImageCommand.execute();
-			((SlideShowJMenuBar)undoBuffer).addCommandToUndoBuffer(newSaveImageCommand);
-			
-//			//----- Update the image instance information
-//			slideShowFileContents.setImageInstance(selectedIndex, fileBrowserText, captionText, 
-//												   (int)captionLocation.getX(), (int)captionLocation.getY());
-//			slideShowListModel.setElementAt(slideShowFileContents.getImageInstance(selectedIndex), selectedIndex);
-			
-		}
-		
-	}
+//	/**
+//	 * Internal function to handle all action listeners (e.g. Add New button, Save Image button, etc.) for this panel.
+//	 */
+//	public void actionPerformed(ActionEvent e){
+//		
+//		if(e.getActionCommand().equals(ADD_NEW_BUTTON_COMMAND_NAME)){
+//			
+//			
+//			//---- Create a new image
+//			slideShowFileContents.addNewImageInstance();		
+//			int newImageIndex = slideShowFileContents.getNumberOfImageInstances()-1;
+//			
+//			//--- Add the element and select it and make sure it is visible.
+//			slideShowListModel.addElement(slideShowFileContents.getImageInstance(newImageIndex));
+//			slideShowList.setSelectedIndex(newImageIndex); //---- Uses base 0 so subtract one
+//			slideShowList.ensureIndexIsVisible(newImageIndex); 
+//			
+//			//---- Set a default caption location.
+//    		captionLocation = new Point(SlideShowImageInstance.DEFAULT_IMAGE_LOCATION,
+//										SlideShowImageInstance.DEFAULT_IMAGE_LOCATION);
+//		}
+//		else if(e.getActionCommand().equals(SAVE_BUTTON_COMMAND_NAME)){
+//			int selectedIndex = slideShowList.getSelectedIndex();
+//			//---- Check if any image was selected.
+//			if(selectedIndex  == -1){
+//				JOptionPane.showMessageDialog(null, "Before a changes can be saved to a slideshow, a specific image must be selected \n"
+//													+ "from the list of images.  Please select an image from the list, and try again.");
+//				return;
+//			}
+//			
+//			//----- Store the previous image instance
+//			SlideShowImageInstance previousImageInstance = slideShowFileContents.getImageInstance(selectedIndex);
+//			SlideShowImageInstance newImageInstance = new SlideShowImageInstance( selectedIndex+1, fileBrowserText, captionText,
+//																				  captionLocation);
+//			
+//			//---- If no change in the image instance, do nothing.  Do not add to undo queue.
+//			if(previousImageInstance.equals(newImageInstance)) return;
+//			
+//			//----- Create a command for executing and undoing the save command.
+//			SlideShowGUICommand newSaveImageCommand = new SaveGUICommand(newImageInstance, previousImageInstance);
+//			newSaveImageCommand.execute();
+//			((SlideShowJMenuBar)undoBuffer).addCommandToUndoBuffer(newSaveImageCommand);
+//			
+////			//----- Update the image instance information
+////			slideShowFileContents.setImageInstance(selectedIndex, fileBrowserText, captionText, 
+////												   (int)captionLocation.getX(), (int)captionLocation.getY());
+////			slideShowListModel.setElementAt(slideShowFileContents.getImageInstance(selectedIndex), selectedIndex);
+//			
+//		}
+//		
+//	}
 
 	
 	/**
@@ -294,30 +294,6 @@ public class SlideShowContentsPanel extends JPanel implements ActionListener {
 		}
 		
 	}	
-	
-	
-	/**
-	 * 
-	 * Listener used to Save a SlideShow to a File.
-	 * 
-	 * @author Zayd
-	 *
-	 */
-	public static class SaveFileContentsPaneListener implements ActionListener {
-		
-		@Override		
-		public void actionPerformed(ActionEvent e){
-
-			//---- Do not do anything on an cancelled command
-			if(e.getSource() instanceof JFileChooser && e.getActionCommand().equals(JFileChooser.CANCEL_SELECTION) ){
-				return;
-			}			
-			
-			final JFileChooser fc = (JFileChooser)e.getSource();//---- Get the file chooser.
-			slideShowFileContents.writeSlideShowFile(fc.getSelectedFile());
-		}
-		
-	}		
 	
 	
 	
@@ -435,44 +411,44 @@ public class SlideShowContentsPanel extends JPanel implements ActionListener {
 	
 	
 	
-	/**
-	 * Creates a mouse motion listener to extract the caption location for saving to the file.
-	 */
-	public void addMouseInputListenerToCaptionForFileContents(SlideShowImagePanel imagePanel){
-	
-		//-- Create an anonymous object to listen for mouse motions.
-		MouseInputAdapter captionListener = imagePanel.new CaptionLabelMouseInputAdapter(){
-
-				@Override
-				public void mouseReleased(MouseEvent e){
-					super.mouseReleased(e);
-					
-					int selectedIndex = slideShowList.getSelectedIndex();
-					
-					//---- Check if any image was selected and whether the caption moved
-					if(selectedIndex  > -1 && this.getDidCaptionMove()){
-						captionLocation = this.getFinalCaptionLocation();
-						
-						//----- Store the previous image instance
-						SlideShowImageInstance previousImageInstance = slideShowFileContents.getImageInstance(selectedIndex);
-						SlideShowImageInstance newImageInstance = new SlideShowImageInstance( selectedIndex+1, previousImageInstance.getImagePath(), 
-																							  previousImageInstance.getImageCaption(), captionLocation);
-						
-						//---- If no change in the image instance, do nothing.  Do not add to undo queue.
-						if(previousImageInstance.equals(newImageInstance)) return;
-						
-						//----- Create a command for executing and undoing the save command.
-						SlideShowGUICommand newSaveImageCommand = new SaveGUICommand(newImageInstance, previousImageInstance);
-						newSaveImageCommand.execute();
-						((SlideShowJMenuBar)undoBuffer).addCommandToUndoBuffer(newSaveImageCommand);						
-					}
-					
-				}
-
-		};
-		imagePanel.addCaptionMouseInputListener(captionListener);
-		
-	}	
+//	/**
+//	 * Creates a mouse motion listener to extract the caption location for saving to the file.
+//	 */
+//	public void addMouseInputListenerToCaptionForFileContents(SlideShowImagePanel imagePanel){
+//	
+//		//-- Create an anonymous object to listen for mouse motions.
+//		MouseInputAdapter captionListener = imagePanel.new CaptionLabelMouseInputAdapter(){
+//
+//				@Override
+//				public void mouseReleased(MouseEvent e){
+//					super.mouseReleased(e);
+//					
+//					int selectedIndex = slideShowList.getSelectedIndex();
+//					
+//					//---- Check if any image was selected and whether the caption moved
+//					if(selectedIndex  > -1 && this.getDidCaptionMove()){
+//						captionLocation = this.getFinalCaptionLocation();
+//						
+//						//----- Store the previous image instance
+//						SlideShowImageInstance previousImageInstance = slideShowFileContents.getImageInstance(selectedIndex);
+//						SlideShowImageInstance newImageInstance = new SlideShowImageInstance( selectedIndex+1, previousImageInstance.getImagePath(), 
+//																							  previousImageInstance.getImageCaption(), captionLocation);
+//						
+//						//---- If no change in the image instance, do nothing.  Do not add to undo queue.
+//						if(previousImageInstance.equals(newImageInstance)) return;
+//						
+//						//----- Create a command for executing and undoing the save command.
+//						SlideShowGUICommand newSaveImageCommand = new SaveGUICommand(newImageInstance, previousImageInstance);
+//						newSaveImageCommand.execute();
+//						((SlideShowJMenuBar)undoBuffer).addCommandToUndoBuffer(newSaveImageCommand);						
+//					}
+//					
+//				}
+//
+//		};
+//		imagePanel.addCaptionMouseInputListener(captionListener);
+//		
+//	}	
 	
 
 	
@@ -512,63 +488,6 @@ public class SlideShowContentsPanel extends JPanel implements ActionListener {
 										}
 									};
 		addListSelectionListener(contentsPanelListSelectionListener);
-	}
-	
-	
-	/**
-	 * Sets the internal reference to the Undo Buffer.
-	 * 
-	 * @param undoBuffer  Reference to the Undo Buffer.
-	 */
-	public void setUndoBufferReference(Object undoBuffer){
-		this.undoBuffer = undoBuffer;
-	}
-	
-	
-	
-	/**
-	 * 
-	 * This class is used to Save and Unsave Image Instance Saves.
-	 * 
-	 * @author Zayd
-	 *
-	 */
-	private class SaveGUICommand implements SlideShowGUICommand{
-		
-		private SlideShowImageInstance previousImageInstance;
-		private SlideShowImageInstance newImageInstance;
-		
-		/**
-		 * 
-		 * @param newImageInstance		New Image Image Instance to be set.
-		 * @param previousImageInstance	Previous Image Image Instance to be set.
-		 */
-		public SaveGUICommand(SlideShowImageInstance newImageInstance, 
-							  SlideShowImageInstance previousImageInstance){
-			//---- Copy make clones of the input parameters.
-			this.newImageInstance = (SlideShowImageInstance)(newImageInstance.clone());
-			this.previousImageInstance = (SlideShowImageInstance)(previousImageInstance.clone());
-		}
-
-		@Override
-		public void execute() {
-			slideShowFileContents.setImageInstance(newImageInstance);
-			slideShowListModel.setElementAt(slideShowFileContents.getImageInstance(newImageInstance.getImageID()-1), 
-											newImageInstance.getImageID()-1);
-		}
-
-		@Override
-		public void undo() {			
-			slideShowFileContents.setImageInstance(previousImageInstance);
-			slideShowListModel.setElementAt(slideShowFileContents.getImageInstance(previousImageInstance.getImageID()-1), 
-											previousImageInstance.getImageID()-1);
-			//---- Deselect then reselect the list item to get GUI to refresh
-			if(previousImageInstance.getImageID() - 1 == slideShowList.getSelectedIndex()){
-				slideShowList.clearSelection();
-				slideShowList.setSelectedIndex(previousImageInstance.getImageID() - 1);
-			}
-		}
-		
 	}
 	
 }

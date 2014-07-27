@@ -52,7 +52,7 @@ public class SlideShowImagePanel extends JPanel {
 	private boolean imagePathIsValid;
 	private String captionText;
 	private SlideShowImagePanelCaption captionLabel;
-	private final int CAPTION_OUTER_WIDTH;
+	//private final int CAPTION_OUTER_WIDTH;
 	private boolean allowCaptionMovement = false;
 
 	/**
@@ -102,7 +102,6 @@ public class SlideShowImagePanel extends JPanel {
 		captionLabel.setMaximumSize(captionLabelDimension);
 		
 		//---- Set the caption label position
-		CAPTION_OUTER_WIDTH = panelBorder;
 		captionLabel.setToDefaultLocation();
 		this.addMouseInputListenerToCaption();
 		
