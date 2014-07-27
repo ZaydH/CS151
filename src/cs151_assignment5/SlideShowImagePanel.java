@@ -327,6 +327,7 @@ public class SlideShowImagePanel extends JPanel {
 			}//----class OpenFileContentsThread extends Thread{
 		
 			//---- Create the thread and it auto starts
+			@SuppressWarnings("unused")
 			OpenFileContentsThread fileContentsThread = new OpenFileContentsThread();
 		}//---public void actionPerformed(ActionEvent e){
 	}	
@@ -353,6 +354,42 @@ public class SlideShowImagePanel extends JPanel {
 		};
 		
 	}
+	
+	
+	/**
+	 * Calculates the index of the slide before the current one.
+	 * If the current slide is the first presentation, it wraps around to the last slide.
+	 * 
+	 * @return Index of the slide in the 
+	 */
+	private int calculatePreviousSlideIndex(){
+		
+		int previousIndex = currentSlideIndex - 1;
+		//--- Check if needs to wrap around
+		if(previousIndex < 0)
+			previousIndex =slideShowFileContents.getNumberOfImageInstances() -1;
+				
+		//---- return the previous index.
+		return previousIndex;
+	}
+	
+	/**
+	 * Calculates the index of the slide after the current one.
+	 * If the current slide is the last presentation, it wraps around to the first slide.
+	 * 
+	 * @return Index of the slide in the 
+	 */
+	private int calculateNextSlideIndex(){
+		
+		int nextIndex = currentSlideIndex - 1;
+		//--- Check if needs to wrap around
+		if(nextIndex == slideShowFileContents.getNumberOfImageInstances())
+			nextIndex = 0;
+				
+		//---- return the previous index.
+		return nextIndex;
+	}	
+	
 	
 
 }
