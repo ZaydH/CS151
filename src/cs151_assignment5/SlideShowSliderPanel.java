@@ -31,6 +31,9 @@ public class SlideShowSliderPanel extends JPanel  {
 	private static JLabel delayLabel;
 	private static JSlider delaySlider;
 	
+	private static final int SLIDER_MINIMUM_VALUE = 10 /*ms*/;
+	private static final int SLIDER_MAXIMUM_VALUE = 10000 /*ms*/;
+	
 	
 	/**
 	 * Primary constructor for the Panel Containing the Picture Caption and the Caption Label ("Caption:").
@@ -64,7 +67,7 @@ public class SlideShowSliderPanel extends JPanel  {
 		
 		
 		//---- Create and Add the Caption Field
-		delaySlider = new JSlider(10 /* ms */, 10000 /* ms */);
+		delaySlider = new JSlider( SLIDER_MINIMUM_VALUE, SLIDER_MAXIMUM_VALUE );
 		Dimension sliderDimension = new Dimension( sliderWidth, sliderHeight );
 		delaySlider.setSize(sliderDimension);
 		delaySlider.setPreferredSize(sliderDimension);
@@ -108,9 +111,9 @@ public class SlideShowSliderPanel extends JPanel  {
 			public void run(){
 				//----- Enable the slider and force an update on its state for all other objects.
 				delaySlider.setEnabled(true);
-				int sliderCurrentValue = delaySlider.getValue();
+				//int sliderCurrentValue = delaySlider.getValue();
 				delaySlider.setValue( delaySlider.getMinimum() );
-				delaySlider.setValue( sliderCurrentValue );
+				delaySlider.setValue( (SLIDER_MINIMUM_VALUE + SLIDER_MAXIMUM_VALUE)/2 );
 			}
 		}
 		

@@ -80,9 +80,9 @@ public class SlideShowImagePanel extends JPanel {
 		
 		//---- Set up a blank label.
 		captionLabel = new JLabel( "", JLabel.CENTER);
-		captionLabel.setOpaque(true);
+		//captionLabel.setOpaque(true);
 		captionLabel.setForeground(Color.BLACK);
-		captionLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+		//captionLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		captionLabel.setVisible(false);
 		this.add(captionLabel);
 		
