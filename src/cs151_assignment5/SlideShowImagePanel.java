@@ -554,6 +554,7 @@ public class SlideShowImagePanel extends JPanel {
 		public void run(){
 			
 			boolean firstLoop = true;
+			long waitStartTimeNano;
 			
 			try{
 				//---- Keep looping images until the thread is interrupted.
@@ -569,8 +570,17 @@ public class SlideShowImagePanel extends JPanel {
 					revalidate();
 					repaint();
 					
-					//---- Sleep for the specified delay.
-					Thread.sleep(slideDelay);
+					//---- Get the start time for the thread and let it sleep to give other threads a chance.
+					waitStartTimeNano = System.nanoTime();
+					Thread.sleep(5 /*ms*/);
+					
+					//-----Periodically check if the thread can terminate.
+					while( (System.nanoTime() - waitStartTimeNano) / 1000000 < slideDelay){
+						Thread.sleep(10 /*ms*/);
+					}
+					
+//					//---- Sleep for the specified delay.
+//					Thread.sleep(slideDelay);
 				}
 			}
 			catch(InterruptedException e){
