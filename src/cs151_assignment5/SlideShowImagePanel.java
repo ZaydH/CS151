@@ -11,10 +11,10 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.concurrent.locks.ReentrantLock;
 
 import javax.activation.MimetypesFileTypeMap;
 import javax.imageio.ImageIO;
-import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
@@ -45,6 +45,7 @@ public class SlideShowImagePanel extends JPanel {
 	private static JButton fileOpenSuccessful; //---- This is used to signal other components to enable on a successful file open.
 	private static JLabel captionLabel;
 	private static volatile int currentSlideIndex = 0;
+	private static ReentrantLock currentSlideLock;
 	private static SlideShowFileContents slideShowFileContents;
 	private static volatile int slideDelay = -1; //--- Delay in milliseconds
 	private SlideshowPlaybackThread slideshowPlayThread;
@@ -99,6 +100,9 @@ public class SlideShowImagePanel extends JPanel {
 		
 		//----- Initialize the slide show file contents
 		slideShowFileContents = new SlideShowFileContents();
+		
+		//----- Initialize a lock to prevent two things accessing the slide at once.
+		currentSlideLock = new ReentrantLock();
 		
 		this.setLayout(null);
 		
@@ -392,7 +396,7 @@ public class SlideShowImagePanel extends JPanel {
 		//--- Check if needs to wrap around
 		if(previousIndex < 0)
 			previousIndex =slideShowFileContents.getNumberOfImageInstances() -1;
-				
+		
 		//---- return the previous index.
 		return previousIndex;
 	}
@@ -454,6 +458,9 @@ public class SlideShowImagePanel extends JPanel {
 						//---- Extract the action command.
 						String actionCommand = actionEvent.getActionCommand();
 						
+						//----- Ensures the function has lock before incrementing/decrementing the index.
+						currentSlideLock.lock();		
+						
 						//--- Depending on whether the action is previous or next, update 
 						if(actionCommand.equals(SlideNavigatorPanel.PREVIOUS_SLIDE_ACTION))
 							currentSlideIndex = previousSlideIndex();
@@ -462,6 +469,11 @@ public class SlideShowImagePanel extends JPanel {
 						
 						//--- Update the image information and repaint the GUI.
 						updateCurrentImageInformation();
+						
+						//----- Releases the lock now that decrementing is completed.
+						currentSlideLock.unlock();
+						
+						//---- Update the GUI.
 						revalidate();
 						repaint();
 					
@@ -560,11 +572,18 @@ public class SlideShowImagePanel extends JPanel {
 				//---- Keep looping images until the thread is interrupted.
 				while(!this.isInterrupted()){
 				
+					
+					//----- Ensures the function has lock before incrementing/decrementing the index.
+					currentSlideLock.lock();
+					
 					if(!firstLoop){
 						currentSlideIndex = nextSlideIndex();
 						updateCurrentImageInformation();
 					}
 					firstLoop = false; //--- Guaranteed not to be first loop.
+					
+					//----- Release the lock after repainting.
+					currentSlideLock.unlock();
 					
 					//--- Repaint the GUI.
 					revalidate();
